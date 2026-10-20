@@ -1,10 +1,5 @@
-import AxeBuilder from "@axe-core/playwright";
-import { expect, test, type Page } from "@playwright/test";
-
-const axe = async (page: Page) => {
-  const { violations } = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag22aa"]).analyze();
-  expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(", ")}`)).toEqual([]);
-};
+import { expect, test } from "@playwright/test";
+import { aiPanel, axe } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/advisor");
@@ -21,7 +16,7 @@ test("preset → submit shows a rules-only result with the AI 'not enabled' stat
   await expect(page.getByRole("heading", { name: "Ranked styles" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Trade-off comparison" })).toBeVisible();
   await expect(page.getByRole("columnheader", { name: "Space-based architecture" })).toBeVisible();
-  await expect(page.getByText("AI not enabled yet")).toBeVisible();
+  await expect(aiPanel(page).getByText("AI not enabled yet")).toBeVisible();
   await axe(page);
 
   const download = page.waitForEvent("download");
@@ -68,11 +63,11 @@ test("opting out of AI says nothing was sent", async ({ page }) => {
   await page.getByRole("button", { name: "Startup MVP" }).click();
   await page.getByText("Don't use AI for this request").click();
   await page.getByRole("button", { name: "Get recommendation" }).click();
-  await expect(page.getByText("AI turned off for this request")).toBeVisible();
+  await expect(aiPanel(page).getByText("AI turned off for this request")).toBeVisible();
   await expect(page.getByText(/Your answers pull in different directions/)).toBeVisible();
 });
 
-test("landing and methodology pages render and are accessible", async ({ page }) => {
+test("landing, methodology, about and privacy pages render and are accessible", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await axe(page);
@@ -80,4 +75,9 @@ test("landing and methodology pages render and are accessible", async ({ page })
   await expect(page.getByRole("heading", { name: "How it works", level: 1 })).toBeVisible();
   await expect(page.getByText("R11. Strict ACID transactions")).toBeVisible();
   await axe(page);
+  for (const path of ["/about", "/privacy"]) {
+    await page.goto(path);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await axe(page);
+  }
 });

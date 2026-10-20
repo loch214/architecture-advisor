@@ -107,6 +107,7 @@ src/
     page.tsx                   # landing
     advisor/page.tsx           # form + result (client component)
     methodology/page.tsx       # how scoring works (static, from KB)
+    about/page.tsx privacy/page.tsx  # static info pages
     styles/[id]/page.tsx       # style catalog (v1.1)
     api/explain/route.ts       # POST: AI explanation
   modules/

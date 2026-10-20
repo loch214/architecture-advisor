@@ -25,6 +25,11 @@ const MESSAGES: Partial<Record<AiBlock["status"], { title: string; body: string;
   },
 };
 
+/** One short line for screen readers when the AI part settles (read out by the result page's live region). */
+export function aiAnnouncement(ai: AiBlock): string {
+  return MESSAGES[ai.status]?.title ?? (ai.explanation ? "AI explanation ready." : "");
+}
+
 const REUSE_NOTES = {
   identical: "Explanation reused from an identical request.",
   similar: "Explanation adapted from a similar request.",

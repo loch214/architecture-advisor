@@ -23,7 +23,7 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.85 0 0);
   --ring: oklch(0.556 0.15 255);
-  --info: oklch(0.55 0.14 255);
+  --info: oklch(0.5 0.14 255);
   --info-muted: oklch(0.96 0.025 255);
   --warning: oklch(0.5 0.12 70);
   --warning-muted: oklch(0.97 0.05 85);

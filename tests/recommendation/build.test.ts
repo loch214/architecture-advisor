@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { kb } from "@/modules/knowledge-base";
-import { buildResult, finalScores, withAi, type AiBlock } from "@/modules/recommendation";
+import { buildResult, finalScores, topPickChange, withAi, type AiBlock } from "@/modules/recommendation";
 import { score } from "@/modules/scoring";
 import { exampleA, exampleB } from "../scoring/fixtures";
 
@@ -60,5 +60,22 @@ describe("finalScores / withAi", () => {
     const merged = withAi(r, ai, kb);
     expect(merged.rules).toBe(r.rules);
     expect(merged.final.find((f) => f.styleId === "serverless")).toMatchObject({ aiDelta: -5, finalScore: 65.625 });
+  });
+});
+
+describe("topPickChange", () => {
+  it("is undefined when the AI kept the rule engine's #1", () => {
+    const r = buildResult(exampleB, kb, ctx, disabled);
+    const ai: AiBlock = {
+      status: "ok",
+      adjustments: [{ styleId: "serverless", delta: 5, reason: "x", basis: "inputs" }],
+    };
+    expect(topPickChange(withAi(r, ai, kb))).toBeUndefined();
+  });
+
+  it("names both styles when a different style ends up first", () => {
+    const r = buildResult(exampleB, kb, ctx, disabled);
+    const swapped = { ...r, final: [r.final[1]!, r.final[0]!, ...r.final.slice(2)] };
+    expect(topPickChange(swapped)).toEqual({ ruleTop: "space-based", finalTop: "serverless" });
   });
 });

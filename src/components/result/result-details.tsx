@@ -55,7 +55,7 @@ export function Adjustments({ result }: { result: AdvisorResult }) {
     <Section
       id="adjustments-heading"
       title="Adjustments made"
-      description="Rules adjust the base scores for situations a simple average can't capture. Each style's total is capped at ±30 points."
+      description="Rules add or take away points when a plain average of the book ratings misses something about your situation. Rules can move a style by at most 30 points in total."
     >
       {modifying.length === 0 ? (
         <p className="text-sm text-muted-foreground">No rules changed any score.</p>

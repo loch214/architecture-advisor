@@ -107,7 +107,7 @@ export function AdvisorForm({
       </div>
 
       {shownIssues.length > 0 && (
-        <Alert variant="destructive" ref={summaryRef} tabIndex={-1} className="outline-none">
+        <Alert variant="destructive" role="alert" ref={summaryRef} tabIndex={-1} className="outline-none">
           <CircleAlertIcon aria-hidden />
           <AlertTitle>
             {shownIssues.length === 1 ? "One thing to fix" : `${shownIssues.length} things to fix`} before moving on

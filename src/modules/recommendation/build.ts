@@ -73,3 +73,13 @@ export function withAi(result: AdvisorResult, ai: AiBlock, kb: KnowledgeBase): A
   const versions = { ...result.versions, prompt: ai.promptVersion };
   return { ...result, versions, ai, final: finalScores(result.rules, ai.adjustments, kb) };
 }
+
+/**
+ * When the AI's adjustments moved a different style to #1, returns the rule engine's top pick and the new
+ * one (UI_UX "AI changed the order" banner). Undefined when the top pick is unchanged.
+ */
+export function topPickChange(result: AdvisorResult): { ruleTop: string; finalTop: string } | undefined {
+  const ruleTop = result.rules.ranked[0]?.styleId;
+  const finalTop = result.final[0]?.styleId;
+  return ruleTop && finalTop && ruleTop !== finalTop ? { ruleTop, finalTop } : undefined;
+}
