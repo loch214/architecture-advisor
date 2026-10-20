@@ -36,7 +36,7 @@ The knowledge base is built from established literature (detailed per-item sourc
 | Elasticity | 1 | 1 | 1 | 2 | 3 | 5 | 4 |
 | Fault tolerance | 1 | 1 | 1 | 3 | 5 | 2 | 5 |
 
-Pipeline and orchestration-driven SOA ratings come from the 1st edition (from memory, flagged). Serverless, cell-based, peer-to-peer and edge are our own reviewed estimates.
+Pipeline and orchestration-driven SOA ratings come from the 1st edition. Pipeline values are partly corroborated by secondary book summaries; SOA values could not be confirmed online (both flagged, see `KNOWLEDGE_BASE_DRAFT.md` §8, 2026-10-20 research). Serverless, cell-based, peer-to-peer and edge are our own reviewed estimates.
 
 ---
 
@@ -47,9 +47,9 @@ Pipeline and orchestration-driven SOA ratings come from the 1st edition (from me
 | **Richards & Ford characteristic ratings** | Star ratings per style per characteristic (book figures) | The core scoring matrix |
 | **Weighted scoring / weighted sum** | Multiply each criterion's score by its importance, add up | The base formula: simple, explainable, testable |
 | **AHP** (Analytic Hierarchy Process) | Compare criteria in pairs to derive weights. Used in several academic style-selection papers | Rejected for v1: pairwise comparison of 13 attributes = 78 questions. Too heavy for beginners |
-| **ATAM utility tree** (L08) | Break broad qualities into concrete scenarios, rank by importance and difficulty | Importance levels; future "write a QA scenario" helper |
-| **QA scenarios** (L02) | Six-part testable requirement (source, stimulus, environment, artifact, response, measure) | Future feature; v1 free text can hint at them |
-| **ADRs** (L07) | Short records of a decision, its drivers, options and consequences | Future: export a result as an ADR draft. Also how we document this app |
+| **ATAM utility tree** (Bass et al.) | Break broad qualities into concrete scenarios, rank by importance and difficulty | Importance levels; future "write a QA scenario" helper |
+| **QA scenarios** (Bass et al.) | Six-part testable requirement (source, stimulus, environment, artifact, response, measure) | Future feature; v1 free text can hint at them |
+| **ADRs** (Nygard) | Short records of a decision, its drivers, options and consequences | Future: export a result as an ADR draft. Also how we document this app |
 
 ### Similar tools
 - **Academic prototypes:** recommender tools using quality attributes + AHP, AHP-DEA, and statistical approaches (e.g. TJEECS vol. 33 iss. 3; Gothenburg AHP thesis; IAJIT 2012/2021). Mostly papers, not public, maintained web apps.
@@ -132,3 +132,7 @@ Non-commercial clause: fine for a free portfolio tool. If you ever add ads or pa
 - [AHP style selection thesis (Gothenburg)](https://gupea.ub.gu.se/items/3ffb8290-9ce5-4384-8990-c82099a209d5)
 - [Architecture style selection using statistics (IAJIT)](https://ccis2k.org/iajit/index.php/archive/volume-9-2012/may-2012-no-3/item/1157-architecture-style-selection-using-statistics-of-quality-attributes-to-reduce-production-costs)
 - [Pattern knowledge base study (Utrecht)](https://utrecht-main-test.atmire.com/items/b73b99e7-87c5-4c5f-bcae-4da595ff5781)
+
+### Re-check 2026-10-20 (Q19, build session 2)
+- Gemini: [model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite) confirms `gemini-3.5-flash-lite` (stable). [Google Cloud model page](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite): custom temperature/top-K/top-P ignored, frequency/presence penalties rejected. Free-tier numbers still unpublished; [aiplug.work (Sep 2026)](https://aiplug.work/en/blog/gemini-free-tier-limits) 15 RPM / 500 RPD, [aipromptshub](https://aipromptshub.co/blog/gemini-api-free-tier-rate-limits) 15 RPM / 1,000 RPD.
+- Groq `openai/gpt-oss-120b` free plan: 30 RPM, 1,000 RPD, 8K TPM, 200K TPD, limits per organisation ([benchlm.ai](https://benchlm.ai/free-tier/groq), [klymentiev.com](https://klymentiev.com/blog/groq-pricing), [eesel.ai](https://www.eesel.ai/blog/groq-pricing)).

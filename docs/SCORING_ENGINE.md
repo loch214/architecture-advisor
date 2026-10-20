@@ -23,7 +23,7 @@ Critical is 5, not 4, on purpose: it makes a must-have clearly outweigh several 
 w[a] = levelValue( max(userLevel[a], maxFloorFromDrivers[a], maxFloorFromRules[a]) )
 ```
 - Unset attributes default to `low` (1). Every attribute counts a little, so ties break sensibly.
-- If a floor raises a level the user set lower, we record an **input conflict**, e.g. "You marked scalability Low but expect rapid growth. We used Medium." The user sees it and can change the driver.
+- If a floor raises a level the user **explicitly** set lower, we record an **input conflict** (floors that raise an attribute the user left unset are recorded in `floors[]` but aren't conflicts, otherwise every default "Low" would be one), e.g. "You marked scalability Low but expect rapid growth. We used Medium." The user sees it and can change the driver.
 
 ## Step 3: Base score
 For style `s`, with KB score `x[s][a]` in 1–5:
@@ -66,27 +66,35 @@ Sort by: `final` desc → `base` desc → `simplicity` score desc (prefer the si
 - All drivers required, but "Not sure" is a valid answer.
 - Free text: max 1,000 characters. **Not used by the rule engine at all**, only by the AI.
 
-## Types (sketch)
+## Types (as implemented in `src/modules/scoring/types.ts`)
 ```ts
 interface UserInput {
-  attributes: Record<AttributeId, Level>;
-  drivers: Record<DriverId, string>;              // option id, incl. "unsure"
-  characteristics: Record<CharId, boolean | string>;
-  notes: string;                                  // AI only
+  attributes: Partial<Record<AttributeId, Level>>; // unset = "low"; set = user's explicit choice
+  drivers: Record<DriverId, string>;              // every driver required; "unsure" is valid
+  characteristics: Record<CharId, boolean | string>; // missing → false / KB default
+  notes: string;                                  // AI only; the engine never reads it
 }
 interface StyleResult {
-  styleId: StyleId; base: number; modifier: number; final: number;
-  rank: number; fit: "strong" | "good" | "possible" | "weak";
-  contributions: Record<AttributeId, number>;
+  styleId; base; modifier /* capped */; modifierUncapped; final;
+  rank; fit: "strong" | "good" | "possible" | "weak";
+  contributions: Record<AttributeId, number>;     // w·x/Σw, sums to the weighted average
+  ruleEffects: { ruleId: string; points: number }[];
   firedRuleIds: string[];
 }
 interface RuleResult {
-  kbVersion: string; engineVersion: string;
-  effectiveWeights: Record<AttributeId, number>;
-  ranked: StyleResult[]; excluded: { styleId: StyleId; ruleIds: string[] }[];
-  conflicts: Conflict[]; warnings: string[]; topAttributes: AttributeId[];
+  kbVersion; engineVersion;
+  effectiveLevels: Record<AttributeId, Level>; effectiveWeights: Record<AttributeId, number>;
+  floors: { attribute; level; from: FloorSource[] }[];       // every driver or rule flooring it, each with its own level
+  ranked: StyleResult[];
+  excluded: { styleId; ruleIds: string[]; reasons: string[] }[];
+  firedRules: { ruleId; name; branch: "when" | "otherwise"; explanation; effects }[];
+  notes: { ruleId; message }[];                                // N1, N2 (no score change)
+  conflicts: { attribute; userLevel; usedLevel; from; message }[];
+  warnings: { code: "too-many-critical" | "rule-warning"; message; ruleId? }[]; // N3 is a rule warning
+  topAttributes: AttributeId[];   // effective weight ≥ High, highest first, ties in KB order
 }
 ```
+Implementation notes: base and final are rounded to 6 decimals internally so equal sums tie exactly (display rounds to 1). Rules run in `rules.json` order. Rules with an `otherwise` branch carry an `otherwiseExplanation` shown when that branch fires. `score()` validates first and throws `InvalidInputError`; `checkInput()` returns the issues for the form. `previewFloors(partialInput, kb)` returns floors and conflicts for a half-filled form (unanswered drivers = "unsure"); the form's floor chips use it.
 
 ---
 

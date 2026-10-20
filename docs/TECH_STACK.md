@@ -8,13 +8,13 @@
 | Language | **TypeScript** (strict) | Shared types between engine, KB, API and UI |
 | Validation | **Zod** | One schema for KB files, form input, API body, AI response |
 | UI | **Tailwind CSS + shadcn/ui** (copy-in accessible components built on Radix) | Fast, accessible form controls (segmented controls, tooltips, tabs); no heavy UI library |
-| Forms | React Hook Form + Zod resolver | Multi-step form with validation |
+| Forms | Plain React state + the engine's `checkInput()` (decided in build session 2) | One validator shared by form, engine and API; no extra dependency. React Hook Form was the original plan |
 | AI | **Vercel AI SDK** (`ai`, `@ai-sdk/google`, `@ai-sdk/groq`) | One API for several providers, `generateObject` with schemas, abort/timeout support |
 | Cache / rate limit | **Upstash Redis** + `@upstash/ratelimit` (free: 256 MB, 500K commands/month) | Shared across serverless instances; HTTP-based (works in serverless) |
 | Tests | **Vitest**, fast-check (property tests), Playwright (a few E2E), Testing Library | Fast unit tests for the engine; real-browser check of main flow |
 | Architecture checks | dependency-cruiser, `server-only` | Fitness functions (see ARCHITECTURE §8) |
 | Lint/format | ESLint + Prettier | — |
-| CI | GitHub Actions (free for public repos) | Lint, typecheck, test, fitness functions on every push; Vercel deploys previews per PR |
+| Checks | `npm run check` locally (no CI server, owner decision Q23) | Lint, typecheck, tests, fitness functions in one command; Vercel still builds a preview per push |
 | Hosting | **Vercel Hobby** | Free, previews per branch, serverless functions up to 300 s |
 | Future DB + auth | **Supabase** (Postgres + Auth) *or* Neon + Auth.js | See below |
 

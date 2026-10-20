@@ -1,0 +1,250 @@
+[
+  {
+    "id": "ddd",
+    "name": "Domain-Driven Design",
+    "kind": "approach",
+    "aliases": [
+      "ddd",
+      "domain-driven design",
+      "domain driven design",
+      "bounded context",
+      "bounded contexts"
+    ],
+    "answer": "A design approach for finding module or service boundaries around business areas. It's not a style; it supports modular monoliths and microservices.",
+    "relatedStyles": [
+      "modular-monolith",
+      "microservices"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "micro-frontends",
+    "name": "Micro-frontends",
+    "kind": "frontend-style",
+    "aliases": [
+      "micro-frontends",
+      "micro frontends",
+      "microfrontends",
+      "micro-frontend"
+    ],
+    "answer": "Splitting one web frontend so several teams can own and deploy parts of it. Worth it only when several teams share one large frontend; otherwise it adds complexity.",
+    "relatedStyles": [],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "client-server",
+    "name": "Client–server / two-tier",
+    "kind": "classic-style",
+    "aliases": [
+      "client-server",
+      "client server",
+      "two-tier",
+      "2-tier"
+    ],
+    "answer": "A classic style: clients talk to one server. Mostly covered here by layered architecture (one server plus clients).",
+    "relatedStyles": [
+      "layered"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "actor-model",
+    "name": "Actor model",
+    "kind": "approach",
+    "aliases": [
+      "actor model",
+      "actors",
+      "akka",
+      "orleans"
+    ],
+    "answer": "A concurrency model where actors keep their own state and talk by messages. It can implement event-driven or space-like systems; useful for highly concurrent, stateful work.",
+    "relatedStyles": [
+      "event-driven",
+      "space-based"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "blackboard",
+    "name": "Blackboard",
+    "kind": "classic-style",
+    "aliases": [
+      "blackboard"
+    ],
+    "answer": "A rare classic style where specialist components cooperate through a shared data store (used in some AI and speech systems). Closest here: event-driven.",
+    "relatedStyles": [
+      "event-driven"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "lambda-kappa",
+    "name": "Lambda / Kappa architecture",
+    "kind": "data-architecture",
+    "aliases": [
+      "lambda architecture",
+      "kappa architecture"
+    ],
+    "answer": "Data-processing architectures for analytics (batch plus stream, or stream only). They're out of scope here: we rank application styles, not analytics platforms.",
+    "relatedStyles": [
+      "pipeline",
+      "event-driven"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "data-lake",
+    "name": "Data lake / lakehouse / data mesh",
+    "kind": "data-architecture",
+    "aliases": [
+      "data lake",
+      "lakehouse",
+      "data mesh",
+      "data warehouse"
+    ],
+    "answer": "Data architectures for analytics and reporting. Out of scope here; they sit beside whichever application style you choose.",
+    "relatedStyles": [],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "ai-apps",
+    "name": "LLM / RAG / agentic AI apps",
+    "kind": "topic",
+    "aliases": [
+      "llm",
+      "rag",
+      "chatbot",
+      "agentic",
+      "ai agent",
+      "ai agents",
+      "genai",
+      "machine learning"
+    ],
+    "answer": "AI features are components, not a style: they can sit inside any style. Plan for slow or failing responses, cost and swapping providers.",
+    "relatedStyles": [],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "kubernetes",
+    "name": "Kubernetes / Docker",
+    "kind": "technology",
+    "aliases": [
+      "kubernetes",
+      "k8s",
+      "docker",
+      "containers"
+    ],
+    "answer": "Container platforms for deploying and scaling software. They're deployment technology, not an architectural style; commonly used with microservices or service-based.",
+    "relatedStyles": [
+      "microservices",
+      "service-based"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "stacks",
+    "name": "MERN / MEAN / Spring / .NET",
+    "kind": "technology",
+    "aliases": [
+      "mern",
+      "mean stack",
+      "spring boot",
+      "spring",
+      ".net",
+      "dotnet",
+      "django",
+      "rails",
+      "laravel",
+      "express"
+    ],
+    "answer": "These are technology stacks, not architectural styles. Any of them can implement most styles; choose the style first, then the stack.",
+    "relatedStyles": [],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "multi-tenant",
+    "name": "Multi-tenant SaaS",
+    "kind": "topic",
+    "aliases": [
+      "multi-tenant",
+      "multitenant",
+      "saas"
+    ],
+    "answer": "A system characteristic, not a style. If failures must be limited to some tenants, tick \"Failures must only affect a subset of customers\".",
+    "relatedStyles": [
+      "cell-based"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "mobile-backend",
+    "name": "Mobile backend",
+    "kind": "topic",
+    "aliases": [
+      "mobile backend",
+      "mobile app",
+      "ios",
+      "android"
+    ],
+    "answer": "A system characteristic, not a style. Managed backends (BaaS) map to serverless; offline-first apps may point to edge or peer-to-peer.",
+    "relatedStyles": [
+      "serverless"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "offline-first",
+    "name": "Offline-first",
+    "kind": "topic",
+    "aliases": [
+      "offline-first",
+      "offline first",
+      "works offline"
+    ],
+    "answer": "A system characteristic: the app keeps working without a network and syncs later. See the edge and peer-to-peer options in step 3.",
+    "relatedStyles": [
+      "edge",
+      "peer-to-peer"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  }
+]

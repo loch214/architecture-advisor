@@ -2,7 +2,7 @@
 
 Human-readable source for the JSON knowledge base (structure in `KNOWLEDGE_BASE_SCHEMA.md`). All descriptions are written in our own words.
 
-**Status:** reviewed by Claude on 2026-10-21 at the owner's request, against the course material and published sources. Calibrated with a scoring simulation (see §8). The owner can still override anything. Items marked ⚠ are the ones most worth a human look.
+**Status:** reviewed by Claude on 2026-10-21 at the owner's request, against published sources. Converted to JSON (`src/modules/knowledge-base/data/`, KB v1.0.0) in build session 1; research findings for Q14/Q15 in §8. Calibrated with a scoring simulation (see §8). The owner can still override anything. Items marked ⚠ are the ones most worth a human look.
 
 ## Source tags
 | Tag | Meaning |
@@ -77,12 +77,12 @@ Columns: Simp, Mod, Main, Test, Depl, Evol, Perf, Scal, Elas, Avail, Cost, Sec, 
 | Layered | book:RF-Fig 10-6 | GK | Responsiveness is 3 in the book (I'd guessed 2 in v1; corrected) |
 | Modular monolith | book:RF-Fig 11-7 | GK | ⚠ The book rates modularity, maintainability, testability, deployability and evolvability only **2**. Lower than common opinion, but we follow the source. R18 (below) carries the book's "start here when direction is uncertain" advice |
 | Microkernel | book:RF-Fig 13-9 | GK | — |
-| Pipeline | GK (R&F 1st ed. ratings from memory: simplicity 5, modularity 3, testability 3, deployability 2, evolvability 3, performance 2, scalability/elasticity/fault tolerance 1, cost $) | GK | ⚠ Not in our primary sources and not yet found online. Maintainability 3 is our estimate. Worth checking against the book's pipeline chapter |
+| Pipeline | GK (R&F 1st ed. ratings: simplicity 5, modularity 3, testability 3, deployability 2, evolvability 3, performance 2, scalability/elasticity/fault tolerance 1, cost $) | GK | ⚠ Partly corroborated online (2026-10-20, §8): secondary summaries of the 1st ed. agree on cost $, simplicity 5, deployability 2, elasticity/scalability 1, fault tolerance 1, modularity/testability/evolvability 3. The book figure itself couldn't be opened. Maintainability 3 is our estimate (the 1st ed. doesn't rate it). Kept, flagged |
 | Service-based | book:RF-Fig 14-8 | GK | — |
 | Event-driven | book:RF-Fig 15-39 | GK | — |
 | Space-based | book:RF-Fig 16-18 | GK | — |
 | Microservices | book:RF-Fig 18-16 | GK | — |
-| SOA | GK (R&F 1st ed. from memory) | GK | Rarely recommended by design |
+| SOA | GK (R&F 1st ed. from memory) | GK | ⚠ No published per-characteristic table found online (2026-10-20, §8). Secondary write-ups agree qualitatively: complex, expensive, poor testability/deployability, fairly scalable/elastic. Kept, flagged. Rarely recommended by design |
 | Serverless | GK; ref:Roberts, ref:serverless-tradeoffs, ref:PrimeVideo | GK | ⚠ All ours. **Lowered in calibration** (simplicity 3→2, testability 3→2, deployability 5→4, performance 3→2, cost 4→3, security 4→3): v1 values made serverless win ordinary student and prototype scenarios |
 | Cell-based | GK; ref:AWS-cells | GK | Fault *isolation* (not just tolerance) is the point; expensive and complex |
 | Peer-to-peer | GK | GK | Niche; gated by R16 |
@@ -310,6 +310,21 @@ A scratch simulation ran all golden scenarios (`TESTING_STRATEGY.md`).
 2. **Fixes:** serverless toned down; R1 strengthened for service-based/serverless; budget-very-limited and team-1–3 floors raised to Critical; R18 and R19 added (book advice on monoliths); R8 raised to +25. ✓
 3. **Result:** all 16 golden scenarios match expectations (G10 "startup MVP with spiky traffic and tiny budget" is a deliberate conflict case, where service-based and serverless tie).
 
+### Build session 1 (2026-10-20): research and first real tests
+**No score or rule value changed.** Findings:
+
+4. **Q14, pipeline.** WebSearch only (O'Reilly and most sites were unreachable from the build container, so no page could be opened directly). Secondary summaries of the R&F 1st ed. pipeline chapter (ref:RF-summaries: kb.segersian.com "Pipeline", bagerbach.com book notes) agree with our values on cost (low), simplicity (high), deployability 2, elasticity and scalability 1, fault tolerance 1, and give modularity, testability and evolvability 3 and reliability 3. One Medium chapter summary disagrees (modularity 5, deployability/testability 3) and was treated as an outlier. → Values kept; source note upgraded from "from memory" to "corroborated by secondary summaries"; still `flagged` until someone checks the book.
+5. **Q14, orchestration-driven SOA.** No per-characteristic ratings found. One book summary (danlebrero.com, 2021) says the style gets the lowest star total of all styles in the book (22 vs microservices 40), which fits our low row. Qualitative sources (InfoWorld, doubleSlash blog, LinkedIn articles on SOA) agree: complex, expensive, poor testability and deployability, fairly scalable and elastic, orchestrator as bottleneck. → Kept as flagged estimates.
+6. **Q15, modular monolith.** Searched for independent ratings (Head First Software Architecture ch. 7 has its own star ratings but they aren't reproduced online; ardalis.com "Goldilocks architecture"; Milanović; Shopify's modular monolith as described by encore.dev; arXiv 2401.11867 "Modular Monolith: A Software Architecture Trend"). None gives numbers. They agree on direction: better modularity and maintainability than an unstructured monolith *only if boundaries are enforced*; deployability and scaling stay whole-app. One summary of the book calls modularity a "primary strength", which is relative to layered (2 vs 1). → No strong cited evidence against Fig 11-7, so we keep the book's 2s.
+7. **Spot-checks.** Serverless (Netguru 2026, tianpan.co 2026, redwerk 2026): cold starts, lock-in, steady-load cost and harder debugging all confirmed; our lowered values stand. Cell-based (AWS cell-based guidance on GitHub, kerneltalks series): blast-radius isolation vs duplicated fixed cost and operational overhead confirmed. Edge (arXiv 2505.01821 survey, Forrester): latency and offline strengths, device security and sync weaknesses confirmed. Peer-to-peer: no source contradicted the GK row. → No changes.
+8. **Golden scenarios as real tests.** The planning simulation didn't keep its inputs, so the build wrote them (`tests/scoring/golden.ts`). Worked examples A and B reproduce every documented number. All 16 pass. Two sensitivities found (G7: microservices ties pipeline if the user rates maintainability + testability High; G11: microservices beats cell-based with clear domains, 30+ devs and deployability High). Inputs chosen to match each scenario's title; sensitivities logged as Q20 for the owner rather than changing rules without a source.
+9. **Review status in the JSON.** Following Q2 (KB review delegated to Claude), every GK/DESIGN item is `reviewed: true`, so the release gate passes. Items the draft marks ⚠ carry `flagged: true` (pipeline and SOA book-derived scores, all serverless scores) so the methodology page can show them as estimates.
+
+### Build session 2 (2026-10-20): Q20 decision
+**No score or rule value changed.**
+
+10. **Q20 resolved: keep R7 (+20) and R14 (+15).** G7 sensitivity: maintainability and testability are where R&F rate pipeline weakly (testability 3, maintainability our flagged estimate) and microservices strongly, so a user who makes them High *should* see microservices close; the result page shows both with reasons. G11 sensitivity: AWS's cell-based guidance and practitioner write-ups (ref:AWS-cells; Rackspace, "Cell-Based Architecture on AWS") describe each cell as a full copy of the application stack behind a thin router, i.e. cells usually *wrap* services, so microservices ranking a close second is consistent. No source gives a specific larger bonus, so raising either rule would be an unsourced change.
+
 ---
 
 ## 9. References (public)
@@ -323,3 +338,7 @@ A scratch simulation ran all golden scenarios (`TESTING_STRATEGY.md`).
 - **TeamTopologies:** M. Skelton, M. Pais, *Team Topologies* (team cognitive load, Conway's law)
 - **microservices.io:** C. Richardson, pattern catalog
 - **Nx micro-frontends:** nx.dev micro-frontend architecture guide
+- **RF-summaries:** secondary summaries of R&F 1st ed. ratings: kb.segersian.com, "Pipeline" (architecture styles notes); C. Bagerbach, "Notes on Fundamentals of Software Architecture" (bagerbach.com); D. Lebrero, "Book notes: Fundamentals of Software Architecture" (danlebrero.com, 2021)
+- **modular-monolith refs (Q15, no numeric ratings):** S. Smith, "Introducing Modular Monoliths: The Goldilocks Architecture" (ardalis.com); M. Milanović, "What Is a Modular Monolith?" (techworld-with-milan); encore.dev, "Microservices vs modular monolith" (Shopify example); arXiv 2401.11867, "Modular Monolith: A Software Architecture Trend"; Gandhi, Richards, Ford, *Head First Software Architecture*, O'Reilly 2024, ch. 7
+- **spot-check refs:** AWS Solutions Library, "Guidance for Cell-Based Architecture on AWS" (GitHub); arXiv 2505.01821, edge–cloud collaborative computing survey; Netguru serverless computing architecture guide (2026)
+- **Q20 refs (session 2):** AWS Solutions, "Guidance for Cell-Based Architecture on AWS" (aws.amazon.com/solutions/guidance/cell-based-architecture-on-aws); Rackspace, "Cell-Based Architecture on AWS" (rackspace.com/blog/cell-based-architecture-aws): each cell runs a full copy of the application behind a thin routing layer

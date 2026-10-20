@@ -1,0 +1,785 @@
+[
+  {
+    "id": "R1",
+    "name": "Operational maturity",
+    "explanation": "Your team is new to running distributed systems, which these styles depend on (automation, monitoring, messaging).",
+    "when": {
+      "eq": [
+        "driver.experience",
+        "beginner"
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "microservices",
+        "points": -15
+      },
+      {
+        "type": "modify",
+        "style": "cell-based",
+        "points": -15
+      },
+      {
+        "type": "modify",
+        "style": "space-based",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "soa",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "peer-to-peer",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "edge",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "service-based",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "serverless",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "event-driven",
+        "points": -5
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.18"
+    }
+  },
+  {
+    "id": "R1b",
+    "name": "Tiny beginner team",
+    "explanation": "A team of 1–3 beginners would carry the whole operational load of many services.",
+    "when": {
+      "all": [
+        {
+          "eq": [
+            "driver.experience",
+            "beginner"
+          ]
+        },
+        {
+          "eq": [
+            "driver.team-size",
+            "1-3"
+          ]
+        }
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "microservices",
+        "points": -5
+      },
+      {
+        "type": "modify",
+        "style": "cell-based",
+        "points": -5
+      }
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "TeamTopologies"
+    }
+  },
+  {
+    "id": "R2",
+    "name": "No clear domains",
+    "explanation": "The system doesn't split into clear business areas, so service boundaries would be guesswork.",
+    "when": {
+      "eq": [
+        "char.domains-clear",
+        "no"
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "microservices",
+        "points": -15
+      },
+      {
+        "type": "modify",
+        "style": "service-based",
+        "points": -5
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.18"
+    }
+  },
+  {
+    "id": "R3",
+    "name": "Many teams and clear domains",
+    "explanation": "Clear business areas plus many people make domain-partitioned styles a natural fit (one team per area).",
+    "when": {
+      "all": [
+        {
+          "eq": [
+            "char.domains-clear",
+            "yes"
+          ]
+        },
+        {
+          "in": [
+            "driver.team-size",
+            [
+              "11-30",
+              "30+"
+            ]
+          ]
+        }
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "microservices",
+        "points": 5
+      },
+      {
+        "type": "modify",
+        "style": "service-based",
+        "points": 5
+      },
+      {
+        "type": "modify",
+        "style": "modular-monolith",
+        "points": 3
+      }
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "TeamTopologies"
+    }
+  },
+  {
+    "id": "R4",
+    "name": "Event workload",
+    "explanation": "The system mainly reacts to events, which is what event-driven styles are built for.",
+    "when": {
+      "eq": [
+        "char.async-events",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "event-driven",
+        "points": 15
+      },
+      {
+        "type": "modify",
+        "style": "serverless",
+        "points": 5
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.15"
+    }
+  },
+  {
+    "id": "R5",
+    "name": "Strict workflow",
+    "explanation": "Workflows must be strictly controlled, which is hard with asynchronous, nondeterministic event flows.",
+    "when": {
+      "eq": [
+        "char.strict-workflow",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "event-driven",
+        "points": -10
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.15"
+    }
+  },
+  {
+    "id": "R6",
+    "name": "Spiky concurrency",
+    "explanation": "Very high, spiky concurrent load is the problem space-based architecture was designed for.",
+    "when": {
+      "eq": [
+        "char.spiky-concurrency",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "space-based",
+        "points": 15
+      },
+      {
+        "type": "modify",
+        "style": "serverless",
+        "points": 5
+      }
+    ],
+    "otherwise": [
+      {
+        "type": "modify",
+        "style": "space-based",
+        "points": -10
+      }
+    ],
+    "otherwiseExplanation": "Space-based architecture's complexity only pays off under very high, spiky concurrent load, which you didn't select.",
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.16"
+    }
+  },
+  {
+    "id": "R7",
+    "name": "Sequential processing",
+    "explanation": "Data flows through sequential steps, which is exactly what a pipeline does.",
+    "when": {
+      "eq": [
+        "char.sequential-processing",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "pipeline",
+        "points": 20
+      }
+    ],
+    "otherwise": [
+      {
+        "type": "modify",
+        "style": "pipeline",
+        "points": -15
+      }
+    ],
+    "otherwiseExplanation": "A pipeline only fits systems that process data in sequential steps, which you didn't select.",
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "pipeline chapter"
+    }
+  },
+  {
+    "id": "R8",
+    "name": "Plug-ins",
+    "explanation": "You need plug-ins or per-customer customisation, which a microkernel is built for.",
+    "when": {
+      "eq": [
+        "char.plugins",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "microkernel",
+        "points": 25
+      }
+    ],
+    "otherwise": [
+      {
+        "type": "modify",
+        "style": "microkernel",
+        "points": -15
+      }
+    ],
+    "otherwiseExplanation": "A microkernel's plug-in machinery only pays off when you need extensions or customisation, which you didn't select.",
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.13"
+    }
+  },
+  {
+    "id": "R9",
+    "name": "On-premise or single server",
+    "explanation": "You must run on your own servers, so cloud-managed serverless isn't possible and heavily distributed styles get harder.",
+    "when": {
+      "eq": [
+        "char.hosting",
+        "on-prem"
+      ]
+    },
+    "effects": [
+      {
+        "type": "exclude",
+        "style": "serverless"
+      },
+      {
+        "type": "modify",
+        "style": "microservices",
+        "points": -15
+      },
+      {
+        "type": "modify",
+        "style": "cell-based",
+        "points": -20
+      },
+      {
+        "type": "modify",
+        "style": "space-based",
+        "points": -10
+      }
+    ],
+    "source": {
+      "kind": "general",
+      "note": "Serverless needs a cloud provider's managed runtime",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "R9b",
+    "name": "VMs or containers only",
+    "explanation": "You can only use VMs or containers, so provider-managed serverless functions aren't an option.",
+    "when": {
+      "eq": [
+        "char.hosting",
+        "vms"
+      ]
+    },
+    "effects": [
+      {
+        "type": "exclude",
+        "style": "serverless"
+      }
+    ],
+    "source": {
+      "kind": "general",
+      "note": "Serverless needs a cloud provider's managed runtime",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "R10",
+    "name": "Avoid lock-in",
+    "explanation": "Serverless ties you to a provider's triggers, identity and services, which conflicts with avoiding lock-in.",
+    "when": {
+      "eq": [
+        "char.no-lock-in",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "serverless",
+        "points": -15
+      }
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "serverless-tradeoffs"
+    }
+  },
+  {
+    "id": "R11",
+    "name": "Strict ACID transactions",
+    "explanation": "You need all-or-nothing transactions across the system; styles built on async messaging or replicated data make that hard.",
+    "when": {
+      "eq": [
+        "char.strict-acid",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "floor",
+        "attribute": "consistency",
+        "level": "critical"
+      },
+      {
+        "type": "modify",
+        "style": "event-driven",
+        "points": -15
+      },
+      {
+        "type": "modify",
+        "style": "space-based",
+        "points": -15
+      },
+      {
+        "type": "modify",
+        "style": "peer-to-peer",
+        "points": -15
+      },
+      {
+        "type": "modify",
+        "style": "microservices",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "serverless",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "edge",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "cell-based",
+        "points": -5
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "distributed data"
+    }
+  },
+  {
+    "id": "R12",
+    "name": "Legacy migration",
+    "explanation": "You're moving away from a monolith; service-based architecture is a well-known stepping stone, and big-bang microservices rewrites are risky.",
+    "when": {
+      "eq": [
+        "char.legacy-migration",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "service-based",
+        "points": 10
+      },
+      {
+        "type": "modify",
+        "style": "modular-monolith",
+        "points": 5
+      },
+      {
+        "type": "modify",
+        "style": "microservices",
+        "points": -5
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.14"
+    }
+  },
+  {
+    "id": "R13",
+    "name": "Steady heavy load",
+    "explanation": "Constant heavy load is where pay-per-use serverless gets expensive compared with always-on servers.",
+    "when": {
+      "eq": [
+        "char.steady-heavy-load",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "serverless",
+        "points": -10
+      }
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "PrimeVideo"
+    }
+  },
+  {
+    "id": "R14",
+    "name": "Blast radius",
+    "explanation": "Failures must only affect some customers, which is exactly what cells provide.",
+    "when": {
+      "eq": [
+        "char.blast-radius",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "cell-based",
+        "points": 15
+      }
+    ],
+    "otherwise": [
+      {
+        "type": "modify",
+        "style": "cell-based",
+        "points": -10
+      }
+    ],
+    "otherwiseExplanation": "Cell-based architecture's cost and overhead only pay off when failures must be contained to a subset of customers, which you didn't select.",
+    "source": {
+      "kind": "ref",
+      "ref": "AWS-cells"
+    }
+  },
+  {
+    "id": "R15",
+    "name": "Regulated data",
+    "explanation": "Regulated data needs strong security, so security counts at least High.",
+    "when": {
+      "eq": [
+        "char.regulated",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "floor",
+        "attribute": "security",
+        "level": "high"
+      }
+    ],
+    "source": {
+      "kind": "general",
+      "note": "Regulated data needs strong protection",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "R16",
+    "name": "Peer-to-peer",
+    "explanation": "Users or devices share directly, which is what peer-to-peer is for.",
+    "when": {
+      "eq": [
+        "char.p2p",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "peer-to-peer",
+        "points": 20
+      }
+    ],
+    "otherwise": [
+      {
+        "type": "modify",
+        "style": "peer-to-peer",
+        "points": -20
+      }
+    ],
+    "otherwiseExplanation": "Peer-to-peer only fits when users or devices share directly without a central server, which you didn't select.",
+    "source": {
+      "kind": "general",
+      "note": "Niche style, gated by this characteristic",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "R17",
+    "name": "Edge processing",
+    "explanation": "You need processing near devices or offline on site, which is what edge–cloud is for.",
+    "when": {
+      "eq": [
+        "char.edge",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "edge",
+        "points": 20
+      }
+    ],
+    "otherwise": [
+      {
+        "type": "modify",
+        "style": "edge",
+        "points": -20
+      }
+    ],
+    "otherwiseExplanation": "Edge–cloud only fits when you need on-site, low-latency or offline processing, which you didn't select.",
+    "source": {
+      "kind": "ref",
+      "ref": "edge"
+    }
+  },
+  {
+    "id": "R18",
+    "name": "New system, direction uncertain",
+    "explanation": "Growth is stable or unknown and the system isn't planned to live 5+ years, so starting simple and evolving later is the safer bet.",
+    "when": {
+      "all": [
+        {
+          "in": [
+            "driver.growth",
+            [
+              "stable",
+              "unsure"
+            ]
+          ]
+        },
+        {
+          "not": {
+            "eq": [
+              "driver.lifespan",
+              "5+"
+            ]
+          }
+        }
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "modular-monolith",
+        "points": 10
+      },
+      {
+        "type": "modify",
+        "style": "layered",
+        "points": 5
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.10–11"
+    }
+  },
+  {
+    "id": "R19",
+    "name": "Technical changes dominate",
+    "explanation": "Most changes are technical (UI or database swaps); technical layers keep those changes in one place, while domain modules spread them everywhere.",
+    "when": {
+      "eq": [
+        "char.tech-changes",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "modular-monolith",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "layered",
+        "points": 5
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.11"
+    }
+  },
+  {
+    "id": "N1",
+    "name": "Mixed scopes",
+    "explanation": "Parts of your system have very different needs.",
+    "when": {
+      "eq": [
+        "char.mixed-scopes",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "note",
+        "message": "Consider a hybrid: different parts may deserve different styles (separate architectural quanta)."
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.7"
+    }
+  },
+  {
+    "id": "N2",
+    "name": "Several frontend teams",
+    "explanation": "Several teams share one large web frontend.",
+    "when": {
+      "eq": [
+        "char.multi-team-frontend",
+        true
+      ]
+    },
+    "effects": [
+      {
+        "type": "note",
+        "message": "Consider micro-frontends as an add-on: each team owns and deploys its part of the web frontend."
+      }
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "Nx"
+    }
+  },
+  {
+    "id": "N3",
+    "name": "Missing budget and team info",
+    "explanation": "Budget, team size and experience are all \"Not sure\".",
+    "when": {
+      "all": [
+        {
+          "eq": [
+            "driver.budget",
+            "unsure"
+          ]
+        },
+        {
+          "eq": [
+            "driver.team-size",
+            "unsure"
+          ]
+        },
+        {
+          "eq": [
+            "driver.experience",
+            "unsure"
+          ]
+        }
+      ]
+    },
+    "effects": [
+      {
+        "type": "note",
+        "message": "Without budget or team info, results lean towards feature-rich distributed styles, which may underweight cost and complexity.",
+        "warning": true
+      }
+    ],
+    "source": {
+      "kind": "design",
+      "note": "Warning when the inputs that balance cost and complexity are missing",
+      "reviewed": true
+    }
+  }
+]

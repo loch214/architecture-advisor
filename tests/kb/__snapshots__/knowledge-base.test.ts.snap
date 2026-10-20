@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`score matrix > matches the snapshot (any KB score change shows up as a visible diff) 1`] = `
+{
+  "cell-based": "performance=4 scalability=5 elasticity=4 availability=5 security=4 maintainability=3 testability=3 deployability=4 evolvability=3 modularity=4 consistency=3 cost=1 simplicity=1",
+  "edge": "performance=5 scalability=4 elasticity=3 availability=4 security=2 maintainability=2 testability=2 deployability=2 evolvability=3 modularity=3 consistency=2 cost=2 simplicity=1",
+  "event-driven": "performance=5 scalability=4 elasticity=3 availability=5 security=3 maintainability=4 testability=2 deployability=3 evolvability=5 modularity=4 consistency=2 cost=3 simplicity=2",
+  "layered": "performance=3 scalability=1 elasticity=1 availability=1 security=3 maintainability=1 testability=2 deployability=1 evolvability=1 modularity=1 consistency=5 cost=5 simplicity=5",
+  "microkernel": "performance=3 scalability=1 elasticity=1 availability=1 security=3 maintainability=3 testability=3 deployability=3 evolvability=3 modularity=3 consistency=4 cost=5 simplicity=4",
+  "microservices": "performance=2 scalability=5 elasticity=4 availability=5 security=3 maintainability=5 testability=5 deployability=5 evolvability=5 modularity=5 consistency=2 cost=1 simplicity=1",
+  "modular-monolith": "performance=3 scalability=1 elasticity=1 availability=1 security=3 maintainability=2 testability=2 deployability=2 evolvability=2 modularity=2 consistency=5 cost=5 simplicity=5",
+  "peer-to-peer": "performance=3 scalability=5 elasticity=4 availability=5 security=2 maintainability=2 testability=1 deployability=2 evolvability=2 modularity=3 consistency=1 cost=4 simplicity=2",
+  "pipeline": "performance=2 scalability=1 elasticity=1 availability=1 security=3 maintainability=3 testability=3 deployability=2 evolvability=3 modularity=3 consistency=4 cost=5 simplicity=5",
+  "serverless": "performance=2 scalability=5 elasticity=5 availability=4 security=3 maintainability=3 testability=2 deployability=4 evolvability=4 modularity=4 consistency=2 cost=3 simplicity=2",
+  "service-based": "performance=3 scalability=3 elasticity=2 availability=3 security=3 maintainability=4 testability=4 deployability=4 evolvability=4 modularity=3 consistency=4 cost=4 simplicity=3",
+  "soa": "performance=2 scalability=4 elasticity=3 availability=3 security=3 maintainability=1 testability=1 deployability=1 evolvability=1 modularity=3 consistency=3 cost=1 simplicity=1",
+  "space-based": "performance=5 scalability=5 elasticity=5 availability=2 security=3 maintainability=3 testability=1 deployability=3 evolvability=3 modularity=3 consistency=2 cost=2 simplicity=1",
+}
+`;

@@ -1,0 +1,193 @@
+[
+  {
+    "id": "performance",
+    "name": "Performance (responsiveness)",
+    "short": "How quickly the system answers a request",
+    "help": "Pick High if users notice and care about delays, e.g. search, trading or games.",
+    "example": "95% of result pages load within 2 seconds at peak.",
+    "group": "operational",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "Bass"
+    }
+  },
+  {
+    "id": "scalability",
+    "name": "Scalability",
+    "short": "Handles more users or data as demand grows",
+    "help": "Pick High if you expect many more users or much more data over time.",
+    "example": "Handles 10× today's users without a redesign.",
+    "group": "operational",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.4"
+    }
+  },
+  {
+    "id": "elasticity",
+    "name": "Elasticity",
+    "short": "Scales up and back down quickly for sudden spikes",
+    "help": "Pick High if traffic jumps suddenly (ticket drops, flash sales) and then falls again.",
+    "example": "Copes with 50× normal traffic for 10 minutes after a ticket release.",
+    "group": "operational",
+    "visibility": "advanced",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.4"
+    }
+  },
+  {
+    "id": "availability",
+    "name": "Availability / fault tolerance",
+    "short": "Keeps working when parts fail",
+    "help": "Pick High if downtime costs money or trust.",
+    "example": "One failing component doesn't take the whole site down.",
+    "group": "operational",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "Bass"
+    }
+  },
+  {
+    "id": "security",
+    "name": "Security",
+    "short": "Protects data and functions from misuse",
+    "help": "Pick High for personal, financial or health data.",
+    "example": "Only staff can see customer records; every access is logged.",
+    "group": "operational",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "Bass"
+    }
+  },
+  {
+    "id": "maintainability",
+    "name": "Maintainability",
+    "short": "Easy to understand, fix and keep healthy",
+    "help": "Pick High if the system will live long or many people will change it.",
+    "example": "A new developer can fix a typical bug within a day.",
+    "group": "engineering",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.4"
+    }
+  },
+  {
+    "id": "testability",
+    "name": "Testability",
+    "short": "Easy to show it works correctly",
+    "help": "Pick High if mistakes are costly and you want strong automated tests.",
+    "example": "Each business rule can be tested without starting the whole system.",
+    "group": "engineering",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "Bass"
+    }
+  },
+  {
+    "id": "deployability",
+    "name": "Deployability",
+    "short": "Easy, low-risk, frequent releases",
+    "help": "Pick High if you want to release often (daily or weekly) without drama.",
+    "example": "A change can go live in under an hour with a safe rollback.",
+    "group": "engineering",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.4"
+    }
+  },
+  {
+    "id": "evolvability",
+    "name": "Evolvability / modifiability",
+    "short": "Easy to add and change features over the years",
+    "help": "Pick High if requirements will keep changing.",
+    "example": "Adding a new payment method touches one part of the code.",
+    "group": "engineering",
+    "visibility": "advanced",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "Bass",
+      "locator": "modifiability"
+    }
+  },
+  {
+    "id": "modularity",
+    "name": "Modularity",
+    "short": "Built from well-separated parts",
+    "help": "Pick High if several teams or people must work on separate parts.",
+    "example": "The billing team can change its code without touching ordering.",
+    "group": "structural",
+    "visibility": "advanced",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.4"
+    }
+  },
+  {
+    "id": "consistency",
+    "name": "Data consistency",
+    "short": "Data is always correct and in sync (all-or-nothing transactions)",
+    "help": "Pick High if a half-finished update would be a real problem, e.g. money transfers.",
+    "example": "A payment and its ledger entry are always saved together or not at all.",
+    "group": "structural",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "general",
+      "note": "ACID vs eventual consistency, as discussed in R&F",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "cost",
+    "name": "Low cost",
+    "short": "Cheap to build, host and run",
+    "help": "Pick High if money is tight.",
+    "example": "Runs on one small server or a free tier.",
+    "group": "business",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "$ ratings"
+    }
+  },
+  {
+    "id": "simplicity",
+    "name": "Simplicity",
+    "short": "Easy for a small or less experienced team to build and run",
+    "help": "Pick High for small teams, beginners or tight deadlines.",
+    "example": "Two students can understand and run the whole thing.",
+    "group": "business",
+    "visibility": "default",
+    "higherIsBetter": true,
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.4"
+    }
+  }
+]

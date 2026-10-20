@@ -1,0 +1,2040 @@
+[
+  {
+    "id": "layered",
+    "name": "Layered architecture",
+    "category": "monolithic",
+    "partitioning": "technical",
+    "quanta": "1",
+    "summary": "Horizontal technical layers (presentation, business, persistence, database) in one deployable app. Closed layers keep changes inside one layer.",
+    "strengths": [
+      "Simplest and cheapest style",
+      "Familiar to most developers",
+      "A fine starting point before the long-term direction is clear"
+    ],
+    "weaknesses": [
+      "A feature change touches every layer",
+      "Architecture sinkhole: requests pass through layers that add nothing",
+      "Scales and deploys only as a whole",
+      "Tends to erode into a big ball of mud"
+    ],
+    "goodWhen": [
+      "Small or simple apps and websites",
+      "Tight budget and schedule",
+      "Most changes are technical (swap UI framework or database)"
+    ],
+    "avoidWhen": [
+      "Large systems that need scalability, agility or frequent independent deployment"
+    ],
+    "patterns": [
+      "mvc"
+    ],
+    "antiPatterns": [
+      "architecture-sinkhole",
+      "big-ball-of-mud"
+    ],
+    "niche": false,
+    "aliases": [
+      "layered",
+      "layered architecture",
+      "n-tier",
+      "3-tier",
+      "three-tier",
+      "multi-tier",
+      "mvc monolith"
+    ],
+    "combinesWith": [],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.10"
+    },
+    "costLevel": 1,
+    "scores": {
+      "simplicity": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "modularity": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "maintainability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "testability": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "deployability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "evolvability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "performance": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "scalability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "elasticity": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "availability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "cost": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 10-6"
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Style has a weak effect on security; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "One database with ACID transactions",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "modular-monolith",
+    "name": "Modular monolith",
+    "category": "monolithic",
+    "partitioning": "domain",
+    "quanta": "1",
+    "summary": "One deployable app split into business-domain modules (orders, inventory, payments…), each with its own internal layers if needed.",
+    "strengths": [
+      "Simple and cheap",
+      "Fits Domain-Driven Design; teams can own a module",
+      "Easy to evolve later into service-based or microservices"
+    ],
+    "weaknesses": [
+      "Needs strict governance or module boundaries erode",
+      "The whole app scales and deploys together",
+      "Technical changes (new UI or database tech) ripple across every module"
+    ],
+    "goodWhen": [
+      "Starting a new system, especially when its future direction is uncertain",
+      "Tight budget or time"
+    ],
+    "avoidWhen": [
+      "High scalability, availability or responsiveness needs",
+      "Changes are mostly technical"
+    ],
+    "patterns": [
+      "hexagonal",
+      "strangler-fig"
+    ],
+    "antiPatterns": [
+      "big-ball-of-mud"
+    ],
+    "niche": false,
+    "aliases": [
+      "modular monolith",
+      "modulith",
+      "majestic monolith",
+      "monolith",
+      "monolithic",
+      "single app"
+    ],
+    "combinesWith": [
+      "event-driven",
+      "service-based"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.11"
+    },
+    "costLevel": 1,
+    "scores": {
+      "simplicity": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "modularity": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "maintainability": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "testability": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "deployability": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "evolvability": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "performance": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "scalability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "elasticity": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "availability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "cost": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 11-7"
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Style has a weak effect on security; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "One database with ACID transactions",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "microkernel",
+    "name": "Microkernel (plug-in) architecture",
+    "category": "monolithic",
+    "partitioning": "mixed",
+    "quanta": "1",
+    "summary": "A stable minimal core plus independent plug-ins for specialised, variable or customer-specific features, connected through a registry and contracts.",
+    "strengths": [
+      "Easy to add, remove or customise features",
+      "Keeps messy custom logic out of the core"
+    ],
+    "weaknesses": [
+      "The core is a change bottleneck",
+      "Plug-in contracts need versioning",
+      "Limited scalability"
+    ],
+    "goodWhen": [
+      "Product-style software (IDEs, CI servers, issue trackers, browsers)",
+      "Lots of per-customer or per-region rule variation"
+    ],
+    "avoidWhen": [
+      "There is no real need for extensibility"
+    ],
+    "patterns": [],
+    "antiPatterns": [],
+    "niche": true,
+    "aliases": [
+      "microkernel",
+      "plug-in architecture",
+      "plugin architecture",
+      "plug-ins",
+      "plugins",
+      "extension-based"
+    ],
+    "combinesWith": [],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.13"
+    },
+    "costLevel": 1,
+    "scores": {
+      "simplicity": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "modularity": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "maintainability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "testability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "deployability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "evolvability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "performance": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "scalability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "elasticity": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "availability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "cost": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 13-9"
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Style has a weak effect on security; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Mostly one database; remote plug-ins may hold their own data",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "pipeline",
+    "name": "Pipeline (pipes and filters)",
+    "category": "monolithic",
+    "partitioning": "technical",
+    "quanta": "1",
+    "summary": "Data flows one way through independent processing steps (filters) linked by pipes.",
+    "strengths": [
+      "Simple and cheap",
+      "Steps are reusable and easy to test on their own"
+    ],
+    "weaknesses": [
+      "Poor fit for interactive request/response apps",
+      "Limited scale and fault tolerance when deployed as one unit"
+    ],
+    "goodWhen": [
+      "ETL, media or data processing",
+      "Compilers, batch jobs, CI pipelines"
+    ],
+    "avoidWhen": [
+      "Interactive, request/response business apps"
+    ],
+    "patterns": [],
+    "antiPatterns": [],
+    "niche": true,
+    "aliases": [
+      "pipeline",
+      "pipes and filters",
+      "pipe and filter",
+      "etl",
+      "batch pipeline",
+      "data pipeline"
+    ],
+    "combinesWith": [],
+    "source": {
+      "kind": "book",
+      "ref": "RF1",
+      "locator": "ch.11"
+    },
+    "costLevel": 1,
+    "scores": {
+      "simplicity": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "modularity": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "maintainability": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate; the 1st edition does not rate maintainability",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "testability": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "deployability": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "evolvability": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "performance": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "scalability": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "elasticity": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "availability": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "cost": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. pipeline rating as reproduced in secondary book summaries (ref:RF-summaries); the book figure itself was not checked",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Style has a weak effect on security; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Usually one data store per run; steps hand data on in order",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "service-based",
+    "name": "Service-based architecture",
+    "category": "distributed",
+    "partitioning": "domain",
+    "quanta": "1+",
+    "summary": "About 4–12 coarse-grained, separately deployed domain services, usually sharing one database.",
+    "strengths": [
+      "Practical distribution at moderate cost",
+      "Good maintainability, testability and deployability",
+      "ACID transactions inside a service"
+    ],
+    "weaknesses": [
+      "Coarse scaling and weak elasticity",
+      "Shared-database coupling",
+      "Schema changes need coordination"
+    ],
+    "goodWhen": [
+      "Business apps with clear domains and moderate scale",
+      "A gradual move away from a monolith"
+    ],
+    "avoidWhen": [
+      "Extreme or very spiky scale"
+    ],
+    "patterns": [
+      "api-gateway",
+      "circuit-breaker"
+    ],
+    "antiPatterns": [
+      "shared-database"
+    ],
+    "niche": false,
+    "aliases": [
+      "service-based",
+      "service based",
+      "sba",
+      "macroservices",
+      "coarse-grained services"
+    ],
+    "combinesWith": [
+      "event-driven"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.14"
+    },
+    "costLevel": 2,
+    "scores": {
+      "simplicity": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "modularity": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "maintainability": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "testability": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "deployability": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "evolvability": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "performance": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "scalability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "elasticity": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "availability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "cost": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 14-8"
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Style has a weak effect on security; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "ACID inside a service; usually one shared database",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "event-driven",
+    "name": "Event-driven architecture",
+    "category": "distributed",
+    "partitioning": "technical",
+    "quanta": "1+",
+    "summary": "Components react asynchronously to events through a broker (choreographed) or a mediator (orchestrated).",
+    "strengths": [
+      "Very responsive, scalable and fault tolerant",
+      "Easy to add new reactions to existing events"
+    ],
+    "weaknesses": [
+      "Hard to test and debug",
+      "Workflow state and error handling are hard",
+      "Nondeterministic; eventual consistency"
+    ],
+    "goodWhen": [
+      "The business reacts to things happening",
+      "Async or parallel work; IoT, notifications, real-time flows"
+    ],
+    "avoidWhen": [
+      "Strict, deterministic request/response workflows"
+    ],
+    "patterns": [
+      "pub-sub",
+      "competing-consumers",
+      "saga",
+      "cqrs",
+      "event-sourcing",
+      "outbox"
+    ],
+    "antiPatterns": [],
+    "niche": false,
+    "aliases": [
+      "event-driven",
+      "event driven",
+      "eda",
+      "event-based",
+      "message-driven",
+      "reactive",
+      "kafka",
+      "broker topology",
+      "mediator topology"
+    ],
+    "combinesWith": [
+      "microservices",
+      "edge"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.15"
+    },
+    "costLevel": 3,
+    "scores": {
+      "simplicity": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "modularity": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "maintainability": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "testability": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "deployability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "evolvability": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "performance": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "scalability": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "elasticity": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "availability": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "cost": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 15-39"
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Style has a weak effect on security; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Asynchronous messaging or replicated data means eventual consistency",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "space-based",
+    "name": "Space-based architecture",
+    "category": "distributed",
+    "partitioning": "technical",
+    "quanta": "1+",
+    "summary": "Processing units keep data in replicated in-memory grids; the database is updated asynchronously, outside the request path.",
+    "strengths": [
+      "Top responsiveness, scalability and elasticity under huge, spiky load"
+    ],
+    "weaknesses": [
+      "Very complex, hard to test and expensive",
+      "Data collisions between replicated caches",
+      "Weaker fault tolerance"
+    ],
+    "goodWhen": [
+      "Ticketing, auctions and flash sales, where a central database would choke"
+    ],
+    "avoidWhen": [
+      "Ordinary load; small teams; tight budgets"
+    ],
+    "patterns": [],
+    "antiPatterns": [],
+    "niche": true,
+    "aliases": [
+      "space-based",
+      "space based",
+      "tuple space",
+      "in-memory data grid",
+      "data grid"
+    ],
+    "combinesWith": [],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.16"
+    },
+    "costLevel": 4,
+    "scores": {
+      "simplicity": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "modularity": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "maintainability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "testability": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "deployability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "evolvability": {
+        "value": 3,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "performance": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "scalability": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "elasticity": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "availability": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "cost": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 16-18"
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Style has a weak effect on security; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Asynchronous messaging or replicated data means eventual consistency",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "microservices",
+    "name": "Microservices",
+    "category": "distributed",
+    "partitioning": "domain",
+    "quanta": "many",
+    "summary": "Many small single-purpose services, each owning its data within a bounded context, deployed independently.",
+    "strengths": [
+      "Top modularity, deployability and per-service testability",
+      "Top scalability and fault tolerance",
+      "Team autonomy"
+    ],
+    "weaknesses": [
+      "Highest cost and complexity",
+      "Network latency between services",
+      "Distributed data is hard",
+      "Needs strong DevOps automation",
+      "Grains-of-sand risk (services split too small)"
+    ],
+    "goodWhen": [
+      "Clear bounded contexts and many teams",
+      "High scale and frequent independent releases",
+      "Mature operations"
+    ],
+    "avoidWhen": [
+      "Small team",
+      "Tightly coupled domain",
+      "No automation maturity"
+    ],
+    "patterns": [
+      "api-gateway",
+      "bff",
+      "service-discovery",
+      "sidecar",
+      "service-mesh",
+      "circuit-breaker",
+      "saga",
+      "cqrs"
+    ],
+    "antiPatterns": [
+      "distributed-monolith",
+      "grains-of-sand",
+      "chatty-services",
+      "shared-database",
+      "entity-services"
+    ],
+    "niche": false,
+    "aliases": [
+      "microservices",
+      "micro-services",
+      "microservice",
+      "msa"
+    ],
+    "combinesWith": [
+      "event-driven"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.18"
+    },
+    "costLevel": 5,
+    "scores": {
+      "simplicity": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "modularity": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "maintainability": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "testability": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "deployability": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "evolvability": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "performance": {
+        "value": 2,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "scalability": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "elasticity": {
+        "value": 4,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "availability": {
+        "value": 5,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "cost": {
+        "value": 1,
+        "source": {
+          "kind": "book",
+          "ref": "RF2",
+          "locator": "Fig 18-16"
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "More endpoints but stronger isolation; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Each service owns its data; cross-service work is eventually consistent",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "soa",
+    "name": "Orchestration-driven SOA",
+    "category": "distributed",
+    "partitioning": "technical",
+    "quanta": "1",
+    "summary": "Enterprise services coordinated through a central orchestration engine or enterprise service bus (ESB).",
+    "strengths": [
+      "Large-scale enterprise integration"
+    ],
+    "weaknesses": [
+      "Very complex and expensive",
+      "Hard to change and test",
+      "Everything is coupled to the bus"
+    ],
+    "goodWhen": [
+      "Existing enterprise integration landscapes"
+    ],
+    "avoidWhen": [
+      "Almost any new system"
+    ],
+    "patterns": [],
+    "antiPatterns": [
+      "golden-hammer"
+    ],
+    "niche": false,
+    "aliases": [
+      "soa",
+      "service-oriented architecture",
+      "service oriented architecture",
+      "esb",
+      "enterprise service bus"
+    ],
+    "combinesWith": [],
+    "source": {
+      "kind": "book",
+      "ref": "RF1",
+      "locator": "ch.16"
+    },
+    "costLevel": 5,
+    "scores": {
+      "simplicity": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "modularity": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "maintainability": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate; the 1st edition does not rate maintainability",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "testability": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "deployability": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "evolvability": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "performance": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "scalability": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "elasticity": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "availability": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "cost": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "R&F 1st ed. rating recalled from memory; no published table found online to confirm it",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Style has a weak effect on security; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Central orchestration can coordinate transactions, but across many services",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "serverless",
+    "name": "Serverless",
+    "category": "distributed",
+    "partitioning": "domain",
+    "quanta": "many",
+    "summary": "Functions (FaaS) and managed backend services (BaaS, e.g. managed auth, databases and storage) run by a cloud provider; pay per use; no servers to manage.",
+    "strengths": [
+      "Scales automatically, down to zero and up to large bursts",
+      "No server operations",
+      "Cheap at low or spiky traffic"
+    ],
+    "weaknesses": [
+      "Cold starts",
+      "Vendor lock-in through provider-specific triggers and identity",
+      "Expensive under steady heavy load",
+      "Local testing and debugging are harder",
+      "Execution time limits"
+    ],
+    "goodWhen": [
+      "Event-triggered tasks",
+      "Spiky or low traffic",
+      "Small teams that want no ops; MVPs on BaaS"
+    ],
+    "avoidWhen": [
+      "On-premise only",
+      "Strict lock-in limits",
+      "Steady high throughput",
+      "Long-running processes"
+    ],
+    "patterns": [
+      "api-gateway",
+      "bff"
+    ],
+    "antiPatterns": [],
+    "niche": false,
+    "aliases": [
+      "serverless",
+      "faas",
+      "aws lambda",
+      "lambda functions",
+      "cloud functions",
+      "azure functions",
+      "baas",
+      "firebase",
+      "supabase",
+      "jamstack"
+    ],
+    "combinesWith": [
+      "event-driven"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "Roberts"
+    },
+    "costLevel": 3,
+    "scores": {
+      "simplicity": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "modularity": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "maintainability": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "testability": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "deployability": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "evolvability": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "performance": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "scalability": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "elasticity": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "availability": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "cost": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:Roberts, ref:serverless-tradeoffs and ref:PrimeVideo; lowered in calibration",
+          "reviewed": true,
+          "flagged": true
+        }
+      },
+      "security": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Provider handles patching, but many functions and permissions to secure; neutral 3",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Asynchronous messaging or replicated data means eventual consistency",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "cell-based",
+    "name": "Cell-based architecture",
+    "category": "distributed",
+    "partitioning": "domain",
+    "quanta": "many",
+    "summary": "The whole stack is copied into independent cells, each serving a subset of customers, behind a thin routing layer that uses a partition key.",
+    "strengths": [
+      "Fault isolation: a failure affects one cell only",
+      "Predictable, testable maximum scale per cell",
+      "Scale by adding cells"
+    ],
+    "weaknesses": [
+      "Routing, cell-sizing, deployment and monitoring overhead",
+      "Expensive (duplicated fixed costs)",
+      "Cross-cell features are hard"
+    ],
+    "goodWhen": [
+      "Large, critical multi-tenant platforms where limiting the blast radius matters"
+    ],
+    "avoidWhen": [
+      "Small systems; tight budgets"
+    ],
+    "patterns": [
+      "api-gateway",
+      "circuit-breaker"
+    ],
+    "antiPatterns": [],
+    "niche": true,
+    "aliases": [
+      "cell-based",
+      "cell based",
+      "cellular architecture",
+      "bulkhead architecture",
+      "shuffle sharding"
+    ],
+    "combinesWith": [
+      "microservices"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "AWS-cells"
+    },
+    "costLevel": 5,
+    "scores": {
+      "simplicity": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "modularity": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "maintainability": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "testability": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "deployability": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "evolvability": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "performance": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "scalability": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "elasticity": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "availability": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "cost": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:AWS-cells",
+          "reviewed": true
+        }
+      },
+      "security": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Small blast radius limits the damage of a breach",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Strong inside a cell; cross-cell features are hard",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "peer-to-peer",
+    "name": "Peer-to-peer",
+    "category": "distributed",
+    "partitioning": "technical",
+    "quanta": "many",
+    "summary": "Nodes act as both clients and servers and share resources directly, with little or no central server.",
+    "strengths": [
+      "Scales with the number of peers",
+      "No single point of failure",
+      "Low central infrastructure cost"
+    ],
+    "weaknesses": [
+      "Hard to secure and moderate",
+      "Weak consistency",
+      "Hard to test",
+      "Unpredictable peer quality"
+    ],
+    "goodWhen": [
+      "File sharing, decentralised or blockchain apps",
+      "Local-first or offline collaboration",
+      "LAN multiplayer"
+    ],
+    "avoidWhen": [
+      "Ordinary client/server business apps"
+    ],
+    "patterns": [],
+    "antiPatterns": [],
+    "niche": true,
+    "aliases": [
+      "peer-to-peer",
+      "peer to peer",
+      "p2p",
+      "decentralized",
+      "decentralised",
+      "mesh network",
+      "blockchain",
+      "dapp",
+      "local-first"
+    ],
+    "combinesWith": [],
+    "source": {
+      "kind": "general",
+      "note": "Our description",
+      "reviewed": true
+    },
+    "costLevel": 2,
+    "scores": {
+      "simplicity": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "modularity": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "maintainability": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "testability": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "deployability": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "evolvability": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "performance": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "scalability": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "elasticity": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "availability": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "cost": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate",
+          "reviewed": true
+        }
+      },
+      "security": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "No central trust point; hard to secure and moderate",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "Replicas converge eventually at best",
+          "reviewed": true
+        }
+      }
+    }
+  },
+  {
+    "id": "edge",
+    "name": "Edge–cloud architecture",
+    "category": "distributed",
+    "partitioning": "technical",
+    "quanta": "many",
+    "summary": "Processing runs near the data source (devices, gateways, edge locations), with the cloud used for coordination, storage and heavy analytics.",
+    "strengths": [
+      "Very low latency",
+      "Keeps working offline or on poor networks",
+      "Uses less bandwidth"
+    ],
+    "weaknesses": [
+      "Many devices to deploy, update and secure",
+      "Weak edge hardware",
+      "Data sync and consistency are hard"
+    ],
+    "goodWhen": [
+      "Industrial IoT, retail stores, vehicles",
+      "AR/VR, video analytics on site"
+    ],
+    "avoidWhen": [
+      "No latency or offline need"
+    ],
+    "patterns": [],
+    "antiPatterns": [],
+    "niche": true,
+    "aliases": [
+      "edge",
+      "edge computing",
+      "edge-cloud",
+      "fog computing",
+      "iot gateway",
+      "on-device"
+    ],
+    "combinesWith": [
+      "event-driven"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "edge"
+    },
+    "costLevel": 4,
+    "scores": {
+      "simplicity": {
+        "value": 1,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "modularity": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "maintainability": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "testability": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "deployability": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "evolvability": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "performance": {
+        "value": 5,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "scalability": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "elasticity": {
+        "value": 3,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "availability": {
+        "value": 4,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "cost": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Our estimate from ref:edge",
+          "reviewed": true
+        }
+      },
+      "security": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Many exposed devices, often physically reachable",
+          "reviewed": true
+        }
+      },
+      "consistency": {
+        "value": 2,
+        "source": {
+          "kind": "general",
+          "note": "Edge and cloud data sync over unreliable links",
+          "reviewed": true
+        }
+      }
+    }
+  }
+]

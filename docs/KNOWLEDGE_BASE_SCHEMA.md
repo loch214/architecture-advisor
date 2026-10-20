@@ -180,3 +180,16 @@ Alias matching: lower-case, word-boundary regex over the notes; longest alias wi
 
 ## Release gate
 A test fails the build in production mode if any `source.reviewed === false`. That way unreviewed general-knowledge scores can't go live by accident. In development they show a "draft" badge in the UI.
+
+## As implemented (build session 1, 2026-10-20)
+The Zod schemas live in `src/modules/knowledge-base/schema.ts`; cross-file checks in `integrity.ts`. Additions to the sketch above, all deliberate:
+- `general` sources may carry `flagged: true` for estimates the KB draft marks ⚠ (shown as "estimate" on the methodology page).
+- Rules with `otherwise` must also have `otherwiseExplanation` (the text shown when the else-branch fires). Note effects may set `warning: true` (N3 becomes a warning instead of a note).
+- Rule ids match `R<n>[a-z]` or `N<n>`; notes N1–N3 are rules with `note` effects.
+- `patterns.json` entries have `aliases` (so notes mentioning "CQRS" or "saga" match). `glossary.kind` adds `frontend-style`.
+- `styles.json` entries have `quanta`; `characteristics.json` choice items have `default`, and rare items `rare: true` (shown under "More situations"). `hosting` gained a `Not sure` option (default) so nothing is pre-selected.
+- `meta.json` has `references[]`: the public citation list used by the methodology page.
+- `drivers.json`: option ids are `unsure` first, then kebab-case values (`very-limited`, `1-3`, `5+`…).
+- Integrity checks: unique ids, every style scores every attribute, `cost = 6 − costLevel`, every referenced style/attribute/pattern/driver option/characteristic value exists, patterns vs anti-patterns used in the right list, every driver has `unsure`, floors have a source.
+- **Validation timing (session 2):** `kb` is the typed JSON and is *not* parsed at import time, so Zod stays out of the browser bundle. `check.ts` (`assertValidKnowledgeBase()`: schema + integrity) runs in `next.config.ts`, so a broken KB still fails `next dev` and `next build`, and the KB tests call it too. Importance levels live in `levels.ts` (no Zod) for client code.
+- Alias matching is implemented in `mentions.ts` (`matchMentions`): pure, longest alias claims its text first, max 4, in order of appearance.

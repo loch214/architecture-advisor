@@ -8,8 +8,10 @@ Gemini 3.5 Flash-Lite ──fail──▶ Groq (gpt-oss-120b) ──fail──�
 ```
 | Order | Provider / model (configurable) | Free limit | Timeout |
 |---|---|---|---|
-| 1 | Google Gemini `gemini-3.5-flash-lite` | ~15 RPM / 500 RPD | 10 s |
-| 2 | Groq `openai/gpt-oss-120b` | 30 RPM / 1,000 RPD / 8K TPM | 8 s |
+| 1 | Google Gemini `gemini-3.5-flash-lite` | ~15 RPM / 500–1,000 RPD (unpublished; re-checked 2026-10-20, Q19) | 10 s |
+| 2 | Groq `openai/gpt-oss-120b` | 30 RPM / 1,000 RPD / 8K TPM / 200K TPD (re-checked 2026-10-20) | 8 s |
+
+Gemini 3.5 Flash-Lite ignores custom temperature/top-K/top-P and rejects frequency/presence penalties (Google Cloud model page), so the adapter must not set them.
 | — | Rules-only | ∞ | — |
 
 - **Why Flash-Lite, not Flash (decided):** free Flash is ~20 requests/day and queued for 27–350 s in measurements (see `RESEARCH.md`). Flash-Lite has 25× the daily quota. We always use the latest Flash-Lite; the model ID is an env var (`GEMINI_MODEL`), so upgrading is a config change.
@@ -180,6 +182,10 @@ Response schema adds: `reuse: { fits: boolean, changes: string[] (max 5) }`. If 
 | `unavailable` (all providers failed / budget hit) | "AI explanation isn't available right now. The ranking below comes from our rule engine and is complete." + Retry button |
 | `rate_limited` (this user) | "You've reached the AI limit for now. Rule-based results still work." |
 | `invalid_input` | Form-level error (shouldn't happen past client validation) |
+| `disabled` (server runs with `AI_MODE=off`) | Neutral info box: "AI not enabled yet. … The ranking, trade-offs and reasons on this page are complete" |
+| `skipped` (user ticked "Don't use AI") | "AI turned off for this request. … nothing was sent anywhere" (no request to `/api/explain`) |
+
+As built in session 2: the `AiBlock` type lives in `src/modules/recommendation/types.ts` (the `ai` module will import it, types only). `/api/explain` validates the input and returns `{ ai: { status: "disabled" } }` when `AI_MODE=off`; until the chain exists, `mock`/`live` return `unavailable`. A 400 is returned for an invalid body, with no stack traces.
 
 ## 11. Testing hooks
 `AI_MODE=off|mock|live` env var. `mock` returns fixture responses (valid, invalid, slow, 429) so the chain and UI states can be tested without spending quota. See `TESTING_STRATEGY.md`.

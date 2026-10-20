@@ -1,33 +1,51 @@
-# Private course material: never commit
-lectures/
-docs/private/
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Local-only tooling (graft context graph + its Claude Code hooks/MCP wiring)
-graft/
-.claude/
-.mcp.json
-.ignore
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 
-# Node / Next.js
-node_modules/
-.next/
-out/
-build/
-coverage/
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
 *.tsbuildinfo
 next-env.d.ts
 
-# Env & secrets
-.env
-.env.*
-!.env.example
+# course material stays private (public repo cites published books only)
+lectures/
+docs/private/
 
-# Test artifacts
-playwright-report/
-test-results/
-
-# OS / editor
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
+# test output
+/playwright-report/
+/test-results/
+/blob-report/
