@@ -160,14 +160,14 @@ interface AdvisorResult {
 ```
 `snapshot` stores the KB scores used, so a saved result still renders correctly after the KB changes. The trade-off table is rendered from `snapshot` (KB data), never from AI text.
 
-## 8. Fitness functions (Ford et al., *Building Evolutionary Architectures*), automated in CI
+## 8. Fitness functions (Ford et al., *Building Evolutionary Architectures*), run with `npm run check`
 | Check | Tool |
 |---|---|
 | `scoring/` imports nothing outside `knowledge-base/` (no network, no React, no Next) | `dependency-cruiser` rule |
 | No server-only module (`platform/`, `ai/providers`) imported by client code | `server-only` package + dependency-cruiser |
 | KB valid; every style has every attribute; no unreviewed sources in production build | Vitest KB tests |
 | Golden scenarios still produce expected top picks | Vitest |
-| No `NEXT_PUBLIC_` env var containing `KEY` | small CI script |
+| No `NEXT_PUBLIC_` env var containing `KEY` | `scripts/check-env-names.mjs` |
 | Client JS bundle under budget (200 KB gz per page) | `scripts/check-bundle.mjs` (`npm run bundle:check`, after `next build`): sums the gzipped scripts each prerendered page loads, minus legacy polyfills. Session 2: `/` 135 KB, `/advisor` 187 KB |
 
 ## 9. ADRs to write at the start of build (Nygard / MADR format)

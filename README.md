@@ -33,18 +33,22 @@ npm run kb:release-gate  # fails if any KB source is unreviewed
 npm run build          # production build (also validates the knowledge base)
 npm run bundle:check   # after build: client JS per page ≤ 200 KB gzipped
 npm run test:e2e       # Playwright against a production build (run `npm run build` first)
-npm run check          # lint + typecheck + format + fitness + coverage, as in CI
+npm run check          # everything at once: lint + typecheck + format + fitness + tests with coverage
 ```
 
 Playwright needs Chromium: `npx playwright install chromium` on a fresh machine.
 
+There is no CI server: run `npm run check` (and `npm run build`) before you push.
+
 ### Environment
+
+Copy `.env.example` to `.env.local` and fill in your keys (`.env.local` is git-ignored).
 
 | Variable  | Values                    | Default | Meaning                                                   |
 | --------- | ------------------------- | ------- | --------------------------------------------------------- |
 | `AI_MODE` | `off` \| `mock` \| `live` | `off`   | `off`: rules only, the AI panel says "AI not enabled yet" |
 
-AI keys (Phase 5) are server-only environment variables and must never start with `NEXT_PUBLIC_`.
+`GEMINI_API_KEY`, `GROQ_API_KEY` (and optional `GEMINI_MODEL`, `GROQ_MODEL`) are server-only and must never start with `NEXT_PUBLIC_`. They're used once the AI layer (Phase 5) is built; until then keep `AI_MODE=off`.
 
 ## Docs
 

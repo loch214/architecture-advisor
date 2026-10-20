@@ -11,18 +11,18 @@ Phases 1–4 are built (rules-only app, not deployed). Work is on branch `build/
 ## Phase 1: Knowledge base finalised ✅
 - ✅ Research for Q14/Q15 + spot-checks (KB draft §8)
 - ✅ `.gitignore` has `lectures/` and `docs/private/`
-- ✅ Next.js 16.4 scaffold (App Router, TS strict), Tailwind 4, Vitest, ESLint + Prettier, dependency-cruiser, CI workflow file
+- ✅ Next.js 16.4 scaffold (App Router, TS strict), Tailwind 4, Vitest, ESLint + Prettier, dependency-cruiser
 - ✅ KB → JSON + Zod (`src/modules/knowledge-base/`), integrity checks, score-matrix snapshot, release gate: green
 - ✅ shadcn-style components hand-written in `src/components/ui/` (registry unreachable from the container); `components.json` + `cn()` so `shadcn add` works later
 - ✅ Playwright config + e2e tests; `bundle:check` script (200 KB gz per page)
-- ✅ CI first runs on the PR from `build/phase-1-4`
+- ✅ CI ran green on the PR, then was removed at the owner's request (Q23); checks run locally with `npm run check`
 - ✅ ADR-001…007 in `docs/adr/`
 - KB draft v2 already reviewed and calibrated by Claude; owner can override any value (optional).
 - Approve golden scenarios (TESTING_STRATEGY §2).
 - Before the first commit: `.gitignore` must contain `lectures/` and `docs/private/` (course material stays private; public repo cites books only).
 - Convert to JSON + Zod schemas (incl. aliases + glossary); KB tests green.
 - Write ADR-001…007.
-**Milestone:** KB v1.0.0 merged; repo scaffolded; CI running lint/typecheck/KB tests.
+**Milestone:** KB v1.0.0 merged; repo scaffolded; lint/typecheck/KB tests runnable with one command.
 
 ## Phase 2: Rule engine ✅
 - Weights + floors, base score, rules interpreter, ordering, explanation data.

@@ -1,6 +1,6 @@
 # Testing Strategy
 
-Test pyramid: many fast unit tests on the engine and KB, focused tests on the AI layer with mocks, a few end-to-end tests. Everything runs in CI on every push. No test calls a real AI provider (except an optional manual eval script).
+Test pyramid: many fast unit tests on the engine and KB, focused tests on the AI layer with mocks, a few end-to-end tests. Everything runs locally with `npm run check` (plus `npm run test:e2e` after a build); there is no CI server (Q23). No test calls a real AI provider (except an optional manual eval script).
 
 ## 1. Knowledge base tests (`tests/kb/`)
 - Every JSON file passes its Zod schema.
@@ -89,7 +89,7 @@ When a KB or rule change breaks a golden test, that's a signal to stop and think
 4. Validation: can't submit without a High/Critical attribute.
 5. Keyboard-only run through the form; axe accessibility check on form and result.
 
-## 6. Manual / periodic AI evaluation (not in CI)
+## 6. Manual / periodic AI evaluation (not in `npm run check`)
 `npm run eval:ai` runs the golden scenarios plus notes against **real** providers (uses quota, run occasionally) and writes a report: schema pass rate, adjustment frequency/size, latency per provider, and a sample of explanations for human reading. Use it when changing prompts or models.
 
 ## Coverage targets
