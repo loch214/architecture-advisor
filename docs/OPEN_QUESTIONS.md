@@ -33,6 +33,7 @@
 | Q21 | Flagged items | Owner asked for "the better way": flagged estimates stay as they are but are **shown as estimates** to users: `≈` in the trade-off table and the methodology ratings matrix, with a note naming pipeline, SOA and serverless. A future owner check against the book remains welcome but is no longer a launch blocker |
 | Q22 | Branch name | Work moved to `build/phase-1-4` (pushing there works); the PR is opened from it. The build container isn't allowed to delete branches, so the owner deletes the old `claude/peaceful-fermat-0prbs1` branch on GitHub (Branches page → bin icon); it holds nothing that isn't on `build/phase-1-4` |
 | Q23 | CI | Owner asked to drop CI to keep things simple (2026-10-20). The GitHub Actions workflow is removed after one green run; the same checks run locally with `npm run check`, `npm run build`, `npm run bundle:check` and `npm run test:e2e`. `.env.example` added for local keys |
+| Q24 | Test scope | Owner: "don't overcomplicate". Required checks are `npm run check` (lint, typecheck, format, fitness, unit/golden/KB tests) and `npm run build`. The Playwright e2e suite stays in the repo but is **optional** (no Chromium install needed day to day). No new test tooling without asking. The Startup MVP preset's scalability conflict is intentional (golden G10) |
 
 ## Still open
 _None blocking. New questions go here._

@@ -32,11 +32,11 @@ npm run golden:print   # print the top 5 styles for each golden scenario
 npm run kb:release-gate  # fails if any KB source is unreviewed
 npm run build          # production build (also validates the knowledge base)
 npm run bundle:check   # after build: client JS per page ≤ 200 KB gzipped
-npm run test:e2e       # Playwright against a production build (run `npm run build` first)
+npm run test:e2e       # optional: browser tests (needs `npx playwright install chromium` once)
 npm run check          # everything at once: lint + typecheck + format + fitness + tests with coverage
 ```
 
-Playwright needs Chromium: `npx playwright install chromium` on a fresh machine.
+Day to day you only need `npm run check` and `npm run build`; the browser tests are optional.
 
 There is no CI server: run `npm run check` (and `npm run build`) before you push.
 

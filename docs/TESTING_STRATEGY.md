@@ -80,7 +80,7 @@ When a KB or rule change breaks a golden test, that's a signal to stop and think
 - `tests/scoring/preview.test.ts`: floor chips match the engine for complete input.
 - `tests/api/explain.test.ts`: `disabled` with `AI_MODE=off`/unset, 400 on bad JSON or invalid input, no internals echoed.
 
-## 5. UI / E2E (Playwright, a few tests)
+## 5. UI / E2E (Playwright, a few tests; optional, Q24)
 **Status (session 2):** `tests/e2e/advisor.spec.ts` covers 1, 4 and 5 (axe WCAG 2.2 AA checks on landing, methodology, form steps and result) plus refresh persistence, floor chips, AI opt-out and JSON download, on desktop and a Pixel 7 viewport. 2 and 3 wait for `AI_MODE=mock` (Phase 5).
 
 1. Preset → submit → ranked list + trade-off table visible with `AI_MODE=off`.
