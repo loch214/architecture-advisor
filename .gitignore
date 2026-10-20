@@ -1,0 +1,33 @@
+# Private course material: never commit
+lectures/
+docs/private/
+
+# Local-only tooling (graft context graph + its Claude Code hooks/MCP wiring)
+graft/
+.claude/
+.mcp.json
+.ignore
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+build/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# Test artifacts
+playwright-report/
+test-results/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
