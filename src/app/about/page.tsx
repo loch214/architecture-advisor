@@ -29,8 +29,10 @@ export default function AboutPage() {
           </li>
           <li>The rule-based result is calculated in your browser.</li>
           <li>
-            AI explanations are not enabled yet. When they are, your answers and notes will be sent to Google Gemini or
-            Groq only if you leave AI on, and you can turn it off for any request.
+            If you leave AI on, your answers and notes (with obvious emails, phone numbers and key-like strings masked)
+            are sent to Google Gemini, or to Groq if Gemini is busy, to write the explanation. Free AI services may use
+            this text to improve their products. You can turn AI off for any request. We don&apos;t log your notes or
+            the AI&apos;s text.
           </li>
         </ul>
       </section>

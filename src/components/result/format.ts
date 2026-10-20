@@ -1,4 +1,8 @@
+import type { AdvisorResult } from "@/modules/recommendation";
 import type { Fit } from "@/modules/scoring";
+
+/** A style's display name from the result's own KB snapshot. */
+export const styleName = (r: AdvisorResult, id: string) => r.snapshot.styles[id]?.name ?? id;
 
 /** Scores are stored unrounded; the UI always shows one decimal (SCORING_ENGINE step 5). */
 export const fmt = (n: number) => n.toFixed(1);

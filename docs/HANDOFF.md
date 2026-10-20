@@ -1,34 +1,38 @@
-# Handoff: build session 2 → Phase 5
+# Handoff: build session 3 (Phase 5) → Phase 6
 
-Last updated 2026-10-20. Read `CLAUDE.md` first (note the **commit identity rule**), then this file. Phases 1–4 are built; next is the owner's setup and Phase 5 (AI layer).
+Last updated 2026-10-20. Read `CLAUDE.md` first (note the **commit identity rule**), then this file. Phases 1–5 are built; next is Phase 6 (polish and launch), plus the two owner items below.
 
 ## Where things are
-- **Branch:** `main` (PR #1 phases 1–4 and PR #2 ESLint 10 merged). Start Phase 5 on a new feature branch. No CI server (Q23): run `npm run check` and `npm run build` before pushing. Commits are authored as `Lochana Dahanayake <loch214@gmail.com>`, no Claude trailers. Set `git config user.name/user.email` in a fresh clone before committing. Keep commits grouped by logical step (owner's request): not one giant commit, not dozens of tiny ones.
-- **Stack:** Next 16.4.2 (App Router, `cacheComponents`; read `node_modules/next/dist/docs/` before writing Next code), React 19.3, Tailwind 4, Zod 4 (server/tests only, see below), Vitest 5, fast-check, ESLint 10 (with an npm `overrides` entry), Playwright 1.56 + `playwright-core` 1.56 pinned (keep them matched), dependency-cruiser, `radix-ui`, `lucide-react`.
+- **Branch:** everything is on `main` (Phase 5 merged via PR #4). Start new work on a fresh branch from `main`. **Claude opens and merges its own PRs (Q27)**; the owner does no PR or merge steps. Old merged branches still exist on GitHub because the container can't delete them (harmless). No CI server (Q23): run `npm run check` and `npm run build` (+ `npm run bundle:check`) before pushing. Commits are authored as `Lochana Dahanayake <loch214@gmail.com>`, no Claude trailers. Set `git config user.name/user.email` in a fresh clone before committing. Keep commits grouped by logical step.
+- **Stack:** Next 16.4.2 (App Router, `cacheComponents`; read `node_modules/next/dist/docs/` before writing Next code), React 19.3, Tailwind 4, Zod 4 (server/tests only), Vercel AI SDK (`ai` 7, `@ai-sdk/google` 4, `@ai-sdk/groq` 4; docs in `node_modules/ai/docs/`), Vitest 5, fast-check, ESLint 10 (with an npm `overrides` entry), Playwright 1.56 + `playwright-core` 1.56 pinned, dependency-cruiser, `radix-ui`, `lucide-react`.
 - **Owner's machine:** Windows + PowerShell, Node 24, folder path has spaces. `.gitattributes` forces LF line endings. Local tool files (`.claude/`, `.mcp.json`, `.ignore`, `graft/`) are excluded via `.git/info/exclude` and must never be committed.
-- **Keep it simple (owner, Q24):** the daily check is `npm run check` (+ `npm run build` before pushing). No CI, no new test tooling. E2E (Playwright) is optional and not required for any phase.
-- **Container network:** npm works; most websites and WebFetch are blocked; WebSearch works.
+- **Keep it simple (owner, Q24):** the daily check is `npm run check` (+ `npm run build` before pushing). No CI, no new test tooling. AI tests use mocked providers only. E2E (Playwright) is optional.
+
+## API keys (where they live)
+- **Cloud sessions (Claude Code on the web):** `GEMINI_API_KEY` and `GROQ_API_KEY` are set as environment variables in the **cloud environment settings** (not in any file). Set `AI_MODE=live` only for the command that needs it (e.g. `AI_MODE=live npx next start`).
+- **Local runs:** copy `.env.example` to `.env.local` (git-ignored) and fill in the keys there.
+- Never print, log or commit the keys, and never prefix them with `NEXT_PUBLIC_` (a fitness check fails the build if a secret-looking `NEXT_PUBLIC_` name appears).
+- **Container network:** npm and `generativelanguage.googleapis.com` work. `api.groq.com` is **denied** by the cloud environment's network policy (Q26): add it under the environment's Network access → Allowed domains to test Groq live from the cloud. Most other websites and WebFetch are blocked; WebSearch works.
 
 ## Done
 | Area | Where |
 |---|---|
-| KB JSON + Zod, integrity, snapshot, release gate | `src/modules/knowledge-base/` (validated at build time by `check.ts` from `next.config.ts`; `kb` itself is unparsed typed JSON so Zod stays out of the browser) |
-| Pure scoring engine + `previewFloors` | `src/modules/scoring/` (FloorSource now carries `level`) |
-| Result object | `src/modules/recommendation/` (`buildResult`, `withAi`, `finalScores`, `AdvisorResult`, `AiBlock` with `disabled`/`skipped`) |
-| Form (Phase 3) | `src/components/form/` (presets = golden G1/G10/G4/G3/G6 + Growing SaaS) |
-| Results, methodology, about (Phase 4) | `src/components/result/`, `src/components/advisor/`, `src/app/{advisor,methodology,about}` |
-| `/api/explain` | `src/app/api/explain/route.ts` + `src/modules/platform/env.ts` (`AI_MODE`, `server-only`) |
-| UI kit | `src/components/ui/` (hand-written shadcn-style), `components.json`, `src/lib/utils.ts` |
-| Fitness | dependency-cruiser, ESLint purity, env-name check, `bundle:check` (200 KB gz/page), all local |
-| Tests | 148 unit/property/golden/KB/form/API tests (`npm run check`); 10 optional Playwright e2e (desktop + mobile, axe) |
+| KB JSON + Zod, integrity, snapshot, release gate | `src/modules/knowledge-base/` |
+| Pure scoring engine + `previewFloors` | `src/modules/scoring/` |
+| Result object | `src/modules/recommendation/` (`buildResult`, `withAi` now stamps `versions.prompt`) |
+| Form, results, methodology, about (Phases 3–4) | `src/components/`, `src/app/` |
+| **AI layer (Phase 5)** | `src/modules/ai/` (prompt, schema, validation, redaction, chain, T1/T2 cache, providers Gemini/Groq/mock) and `src/modules/platform/` (`KvStore` in memory, rate limit, `aiEnv()`); `/api/explain` wires them. Details and deviations: `AI_INTEGRATION.md` §12 |
+| AI panel | `src/components/result/ai-panel.tsx` shows summary, top pick, others, cautions, provider and the reused/adapted note; mention cards show the AI's answer |
+| Tests | 216 Vitest tests in `npm run check` (61 in `tests/ai/`, 10 route tests); no test calls a real provider |
+| Live check | Gemini OK through `/api/explain` (~5.8 s, valid first try). Groq not reachable from the container; fallback to rules-only proven |
 | ADRs | `docs/adr/001…007` |
-| Open questions | Q19–Q24 closed (`OPEN_QUESTIONS.md`) |
 
-Note: the **Startup MVP** preset (= golden G10) raises a scalability conflict on purpose (scalability Low + unpredictable spikes); it demonstrates the conflict warning. Don't "fix" it.
+## Waiting on the owner (only things Claude can't do)
+1. **Q25 Upstash:** yes/no on adding Upstash Redis (free, via Vercel Marketplace) for launch. Without it, cache and rate limits are per server instance. Ask once; don't block on it.
+2. **Q26 Groq:** the owner allows `api.groq.com` in the cloud environment's network settings. Then Claude runs one real Groq call: `AI_MODE=live` with an empty `GEMINI_API_KEY`, so the chain goes straight to Groq.
+3. **Vercel:** the owner creates the Vercel project and adds the env vars when Phase 6 reaches deployment (Claude never creates accounts).
 
-## Next: Phase 5 (AI layer)
-1. Keys are ready: `GEMINI_API_KEY` and `GROQ_API_KEY` are in the owner's local `.env.local` (template: `.env.example`, also `AI_MODE`, `GEMINI_MODEL`, `GROQ_MODEL`). Never `NEXT_PUBLIC_`. **Upstash: ask the owner first**; build the cache/rate-limit behind an interface with an in-memory fallback so Phase 5 works without it. Vercel project and deploy come later.
-2. Add the Vercel AI SDK packages, then `src/modules/ai/`: prompt builder, response schema, `LlmProvider` port + Gemini/Groq adapters (Vercel AI SDK), chain with timeouts and breaker, validation + clamp, redaction, `AI_MODE=mock` fixtures. Don't send temperature/penalties to Gemini 3.5 Flash-Lite (Q19).
-3. Extend `/api/explain`: rate limit, server-side `score()`, cache tiers, chain; `AiPanel` already renders `ok`/`unavailable`/`rate_limited`.
-4. Tests: Vitest with mocked providers only (`TESTING_STRATEGY.md` §3–4). Never call real providers in tests. E2E cases 2–3 are optional.
-5. Bundle headroom on `/advisor` is ~13 KB; keep heavy code out of the form (the result view is already lazy).
+The prompt for the next session is in `docs/KICKOFF_PROMPT.md`.
+
+## Next: Phase 6 (polish and launch)
+See `ROADMAP.md`. Notable items: "AI changed the order" banner, privacy page linking the providers' terms, Vercel project + env vars (`AI_MODE=live`, both keys), optional e2e cases 2–3 with `AI_MODE=mock` (`AI_MOCK=ok|fail`), copy review and a11y audit. Bundle headroom on `/advisor` is ~13 KB (186.6 / 200 KB gz); keep AI code server-side.

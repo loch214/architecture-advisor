@@ -6,7 +6,7 @@ Each phase ends with something demonstrable. The app is deployable from phase 4 
 Done locally 2026-10-21. Building continues in **Claude Code on the web** (cloud session) on repo `loch214/architecture-advisor`, starting from `docs/KICKOFF_PROMPT.md`. First cloud session scope: research tasks + Phases 1–4 (rules-only app, not deployed). Phase 5 needs owner-provided API keys; deployment needs the owner's Vercel account.
 
 ## Build status (updated 2026-10-20, end of build session 2)
-Phases 1–4 are built (rules-only app, not deployed). Work is on branch `build/phase-1-4` (Q22). Handoff for the next session: `docs/HANDOFF.md`.
+Phases 1–4 are built (rules-only app, not deployed). Phase 5 (AI layer) is built and merged into `main` (PR #4). Handoff for the next session: `docs/HANDOFF.md`.
 
 ## Phase 1: Knowledge base finalised ✅
 - ✅ Research for Q14/Q15 + spot-checks (KB draft §8)
@@ -41,7 +41,11 @@ Phases 1–4 are built (rules-only app, not deployed). Work is on branch `build/
 **Milestone:** public URL that gives useful, explainable recommendations with no AI. Share with a few classmates for feedback.
 ✅ Built in session 2: result page (ranked list, why this score, KB trade-off table, adjustments, conflicts, excluded, patterns, mentions, how calculated, JSON download, print), `/methodology` and `/about`, `/api/explain` returning `disabled` with `AI_MODE=off`. ⬜ Vercel deploy (owner's account).
 
-## Phase 5: AI layer
+## Phase 5: AI layer ✅ (built 2026-10-20; Upstash deferred, Q25)
+- ✅ `src/modules/ai/` + `/api/explain`: prompt, schema, validation, redaction, Gemini/Groq adapters, chain with timeouts, breaker and repair retry, T1/T2 cache, rate limit, global budget, mock mode, mocked tests
+- ✅ Live check: Gemini OK through the route. Groq blocked by the build container's network policy (fallback to rules-only proven); one live Groq check still to do
+- ⏳ Upstash (shared cache/limits across instances): waits on the owner (Q25); in-memory store until then
+- ⏳ `eval:ai` script and prompt tuning: later, with real traffic
 - `/api/explain`, prompt builder, glossary matching, redaction, provider adapters (Gemini 3.5 Flash-Lite, Groq), chain with timeouts and breaker, Zod + consistency validation, repair retry.
 - Owner: get a Gemini API key (AI Studio) and a Groq key; add Upstash through the Vercel Marketplace (one click, env vars injected).
 - Upstash cache + rate limits + global budget.

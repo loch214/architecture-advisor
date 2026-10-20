@@ -35,5 +35,14 @@
 | Q23 | CI | Owner asked to drop CI to keep things simple (2026-10-20). The GitHub Actions workflow is removed after one green run; the same checks run locally with `npm run check`, `npm run build`, `npm run bundle:check` and `npm run test:e2e`. `.env.example` added for local keys |
 | Q24 | Test scope | Owner: "don't overcomplicate". Required checks are `npm run check` (lint, typecheck, format, fitness, unit/golden/KB tests) and `npm run build`. The Playwright e2e suite stays in the repo but is **optional** (no Chromium install needed day to day). No new test tooling without asking. The Startup MVP preset's scalability conflict is intentional (golden G10) |
 
+## Closed by build session 3 (2026-10-20)
+| # | Topic | Outcome |
+|---|---|---|
+| Q27 | PR workflow | Owner: "I'm not gonna do any of those merge, making PR anything by myself." Claude opens **and merges** its own PRs (merge commit) once `npm run check`, `npm run build` and `npm run bundle:check` pass and the docs are updated, then starts the next work on a fresh branch from `main`. This overrides the "open a PR" line in CLAUDE.md's working style, which Claude can't edit from the container |
+| Q22 follow-up | Old branches | `build/phase-1-4`, `claude/nice-gates-3nyb3w` and `claude/peaceful-fermat-0prbs1` are fully merged into `main`. The container's permission rules block deleting remote branches, so they stay. They're harmless; delete them on GitHub's Branches page whenever convenient |
+
 ## Still open
-_None blocking. New questions go here._
+| # | Topic | Question |
+|---|---|---|
+| Q25 | Upstash | Phase 5 runs without Upstash (owner: "skip unless needed; ask first"). The cache, rate limit, global budget and breaker use an in-memory store per server instance. That is fine locally and for low traffic, but on Vercel each instance keeps its own copy, so limits are per instance. **Owner: add Upstash Redis (Vercel Marketplace, free) before or at launch?** If yes, it's one `KvStore` adapter |
+| Q26 | Groq live check | The build container's network policy denies `api.groq.com`, so the Groq adapter is tested with mocks only. **Owner:** allow `api.groq.com` in the cloud environment's network settings (or run `AI_MODE=live` locally with only `GROQ_API_KEY` set) so one real Groq call can be checked |

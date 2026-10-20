@@ -70,5 +70,6 @@ export function buildResult(input: UserInput, kb: KnowledgeBase, ctx: ResultCont
 
 /** Merges an AI block that arrived later into an existing result (the rule part never changes). */
 export function withAi(result: AdvisorResult, ai: AiBlock, kb: KnowledgeBase): AdvisorResult {
-  return { ...result, ai, final: finalScores(result.rules, ai.adjustments, kb) };
+  const versions = { ...result.versions, prompt: ai.promptVersion };
+  return { ...result, versions, ai, final: finalScores(result.rules, ai.adjustments, kb) };
 }

@@ -128,10 +128,12 @@ docs/
 ```
 app → components → recommendation → scoring → knowledge-base
 app/api → recommendation, ai, platform
-ai → scoring (types only), recommendation (types only: AiBlock), knowledge-base, platform
+ai → scoring (types + pure score()), recommendation (types + pure finalScores()), knowledge-base, platform
 scoring → knowledge-base (types + data only)   ✗ no next/*, react, fetch, ai, platform
 knowledge-base → (nothing)
 ```
+
+**Changed in Phase 5 (deliberately):** the `ai` module calls two pure functions instead of types only: `score()` (the server recomputes the rule result, AI_INTEGRATION §9) and `finalScores()` (the consistency check must re-sort with exactly the engine's tie-break; a copy would drift). Both are pure, so the AI module still can't change the ranking structure. Platform holds a generic `KvStore` (in memory now, Upstash later), `allowRequest()` and `aiEnv()`.
 
 **As built (session 2):** `app/` has `page.tsx` (landing), `advisor/`, `methodology/`, `about/` and `api/explain/route.ts`; `/styles` is v1.1. `components/` has `ui/` (hand-written shadcn-style), `form/` (steps, presets, form state), `result/` and `advisor/` (the page's client controller). `recommendation/` holds `buildResult`, `withAi`, `finalScores` and the `AdvisorResult`/`AiBlock` types. `platform/env.ts` reads `AI_MODE` and imports `server-only`. The KB is validated at build time in `next.config.ts` instead of at import, so the browser never loads Zod.
 

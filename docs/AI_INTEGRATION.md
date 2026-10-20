@@ -185,7 +185,30 @@ Response schema adds: `reuse: { fits: boolean, changes: string[] (max 5) }`. If 
 | `disabled` (server runs with `AI_MODE=off`) | Neutral info box: "AI not enabled yet. … The ranking, trade-offs and reasons on this page are complete" |
 | `skipped` (user ticked "Don't use AI") | "AI turned off for this request. … nothing was sent anywhere" (no request to `/api/explain`) |
 
-As built in session 2: the `AiBlock` type lives in `src/modules/recommendation/types.ts` (the `ai` module will import it, types only). `/api/explain` validates the input and returns `{ ai: { status: "disabled" } }` when `AI_MODE=off`; until the chain exists, `mock`/`live` return `unavailable`. A 400 is returned for an invalid body, with no stack traces.
+As built: the `AiBlock` type lives in `src/modules/recommendation/types.ts`. `/api/explain` returns 400 for an invalid body (413 over 16 KB), never a stack trace; `disabled` with `AI_MODE=off`; `rate_limited` over the per-client limit; otherwise the result of the chain (`ok`, `cached`, `adapted` or `unavailable`).
 
 ## 11. Testing hooks
-`AI_MODE=off|mock|live` env var. `mock` returns fixture responses (valid, invalid, slow, 429) so the chain and UI states can be tested without spending quota. See `TESTING_STRATEGY.md`.
+`AI_MODE=off|mock|live` env var. `mock` returns fixture responses so the chain and UI states can be tested without spending quota: `AI_MOCK=ok` (default), `invalid`, `slow`, `429` or `fail`. See `TESTING_STRATEGY.md`.
+
+## 12. As built (Phase 5, 2026-10-20)
+Code: `src/modules/ai/` (`context.ts`, `prompt.ts`, `schema.ts`, `validate.ts`, `redact.ts`, `chain.ts`, `cache.ts`, `explain.ts`, `providers/{types,sdk,gemini,groq,mock}.ts`) and `src/modules/platform/` (`store.ts`, `rate-limit.ts`, `env.ts`).
+
+| Setting (server-only env) | Default | Meaning |
+|---|---|---|
+| `AI_MODE` | `off` | `off` / `mock` / `live` |
+| `GEMINI_API_KEY`, `GEMINI_MODEL` | –, `gemini-3.5-flash-lite` | Provider 1; skipped when the key is empty |
+| `GROQ_API_KEY`, `GROQ_MODEL` | –, `openai/gpt-oss-120b` | Provider 2; skipped when the key is empty |
+| `CACHE_IDENTICAL_REUSE` | `true` | `false` sends identical requests to the AI with the old answer as reference |
+| `AI_DAILY_BUDGET` | `1300` | AI requests per UTC day across all users |
+| `AI_MOCK` | `ok` | Fixture for `AI_MODE=mock` |
+
+Decisions and deviations made while building (none change behaviour the plan promised):
+- **SDK call:** `generateText` + `Output.object` with our JSON schema (`z.toJSONSchema`) but **no SDK validation and `maxRetries: 0`**; the chain validates and decides repair/next. If the model returns non-JSON text, the adapter hands the text back so the repair step can explain what was wrong. No temperature/penalties are sent to any provider.
+- **Groq:** `strictJsonSchema: false` (Groq's strict mode doesn't support length/bound keywords; our own checks cover them) and `reasoningEffort: "low"` (fast, fits 8K TPM).
+- **429 daily vs per-minute:** decided from the error text (`per day`, `RPD`, `TPD`, `PerDay`). A `Retry-After` header wins; otherwise Gemini rests until midnight Pacific and Groq until midnight UTC (Groq publishes no reset time).
+- **Mentions** are in the schema as `explanation.mentions` (ids limited to the matched list); the server requires every matched item to be answered, once.
+- **Extra consistency check:** an adjustment with `basis: "notes"` needs non-empty notes, and any phrase it puts in double quotes (8+ characters) must appear in the notes. This is how a T2 adjustment whose reason no longer applies is caught deterministically.
+- **Cache entry** stores the validated AI response (not the whole `AiBlock`) so a T1 hit can be re-validated against the fresh rule result; the T2 diff list also names changed characteristics (informational; they don't block similarity).
+- **Storage:** Upstash is not set up yet (Q25). The cache, rate limits, global budget and breaker run on an in-memory store per server instance behind a Redis-shaped `KvStore` interface, so adding Upstash later is one adapter.
+- **Logging:** one JSON line per request (`provider`, `latencyMs`, `status`, attempts as `ok`/`invalid`/`timeout`/…); never notes or AI text. The invalid reason is not logged because it can quote the notes.
+- **Live check (2026-10-20):** one real call per provider through `/api/explain` with `AI_MODE=live`. Gemini 3.5 Flash-Lite: valid reply first try in ~5.8 s (1 adjustment citing the notes, mentions answered). Groq: not reachable from the build container (network policy denies `api.groq.com`), so the route logged `network` and returned `unavailable` (rules-only), proving the fallback. Groq still needs one live check once the host is allowed.

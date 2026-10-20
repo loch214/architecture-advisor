@@ -11,7 +11,7 @@ export interface AiAdjustment {
   styleId: StyleId;
   delta: number;
   reason: string;
-  basis: string;
+  basis: "notes" | "inputs";
 }
 
 export interface AiExplanation {
@@ -20,6 +20,8 @@ export interface AiExplanation {
   others: { styleId: StyleId; why: string }[];
   cautions: string[];
   notesUsed: string[];
+  /** Answers about KB items matched in the notes. Optional: results saved before Phase 5 lack it. */
+  mentions?: { id: string; answer: string }[];
 }
 
 /** The AI block of a result. The `ai` module fills it in Phase 5; the rule result never depends on it. */
@@ -28,6 +30,8 @@ export interface AiBlock {
   reuse?: { tier: "identical" | "similar"; fits?: boolean; changes?: string[] };
   provider?: string;
   model?: string;
+  /** The prompt version the explanation was written with (stamped into `versions.prompt`). */
+  promptVersion?: string;
   latencyMs?: number;
   adjustments: AiAdjustment[];
   explanation?: AiExplanation;

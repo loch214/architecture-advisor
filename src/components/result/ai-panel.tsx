@@ -25,8 +25,23 @@ const MESSAGES: Partial<Record<AiBlock["status"], { title: string; body: string;
   },
 };
 
+const REUSE_NOTES = {
+  identical: "Explanation reused from an identical request.",
+  similar: "Explanation adapted from a similar request.",
+};
+
 /** The AI panel. Every non-ok state is neutral (never red): the rule result is always complete. */
-export function AiPanel({ ai, pending, onRetry }: { ai: AiBlock; pending: boolean; onRetry: () => void }) {
+export function AiPanel({
+  ai,
+  pending,
+  onRetry,
+  nameOf = (id) => id,
+}: {
+  ai: AiBlock;
+  pending: boolean;
+  onRetry: () => void;
+  nameOf?: (styleId: string) => string;
+}) {
   if (pending) {
     return (
       <div role="status" className="space-y-3 rounded-lg border p-4">
@@ -56,21 +71,40 @@ export function AiPanel({ ai, pending, onRetry }: { ai: AiBlock; pending: boolea
       </Alert>
     );
   }
-  // ok / cached / adapted: filled in by the AI layer in Phase 5.
+  // ok / cached / adapted. AI text is always rendered as plain text.
   const e = ai.explanation;
   if (!e) return null;
   return (
     <div className="space-y-3 rounded-lg border p-4 text-sm">
       <p>{e.summary}</p>
-      <p>{e.topPick.why}</p>
-      {e.cautions.length > 0 && (
-        <ul className="list-disc space-y-1 pl-5">
-          {e.cautions.map((c) => (
-            <li key={c}>{c}</li>
+      <p>
+        <span className="font-medium">Why {nameOf(e.topPick.styleId)}: </span>
+        {e.topPick.why}
+      </p>
+      {e.others.length > 0 && (
+        <ul className="space-y-1">
+          {e.others.map((o) => (
+            <li key={o.styleId}>
+              <span className="font-medium">{nameOf(o.styleId)}: </span>
+              <span className="text-muted-foreground">{o.why}</span>
+            </li>
           ))}
         </ul>
       )}
-      {ai.provider && <p className="text-xs text-muted-foreground">Explanation by {ai.provider}</p>}
+      {e.cautions.length > 0 && (
+        <div>
+          <p className="font-medium">Watch out for</p>
+          <ul className="list-disc space-y-1 pl-5">
+            {e.cautions.map((c) => (
+              <li key={c}>{c}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+      <p className="text-xs text-muted-foreground">
+        {ai.provider && <>Explanation by {ai.provider}. </>}
+        {ai.reuse && REUSE_NOTES[ai.reuse.tier]}
+      </p>
     </div>
   );
 }
