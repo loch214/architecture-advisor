@@ -71,6 +71,8 @@ When a KB or rule change breaks a golden test, that's a signal to stop and think
 | Cache T2 | similarity test: each of the 5 conditions has a passing and a failing case (top-3 order differs, weight diff of 2 levels, 3 driver changes, notes Jaccard 0.59, different glossary mentions); reference + diff list appear in the prompt; `fits:true` with failing consistency → invalid; adjustment with stale reason rejected |
 | Rate limit | 11th request in window → `rate_limited`; global budget reached → `unavailable` |
 
+**Status (Phase 5):** built in `tests/ai/` (`validate`, `prompt` with a snapshot, `chain` with fake timers, `explain` for T1/T2 cache and budget, `providers` with the AI SDK's `MockLanguageModelV4`, `platform` for the store and rate limit). No test calls a real provider.
+
 ## 4. API route tests
 `/api/explain` with mocked AI: 400 on invalid body, ignores client-sent scores (recomputes), never returns stack traces, never echoes keys, correct status per AI outcome.
 
@@ -78,7 +80,7 @@ When a KB or rule change breaks a golden test, that's a signal to stop and think
 - `tests/recommendation/`: `buildResult` is pure, wraps `score()`, snapshots the KB (flagged estimates marked), matches mentions; `finalScores` reproduces example B's AI illustration (+4 → #2).
 - `tests/form/`: every preset passes `checkInput` and uses its golden scenario's input (G1, G10, G4, G3, G6; Growing SaaS must rank a domain-partitioned distributed style first); per-step validation; local-storage restore drops unknown ids.
 - `tests/scoring/preview.test.ts`: floor chips match the engine for complete input.
-- `tests/api/explain.test.ts`: `disabled` with `AI_MODE=off`/unset, 400 on bad JSON or invalid input, no internals echoed.
+- `tests/api/explain.test.ts`: `disabled` with `AI_MODE=off`/unset, 400 on bad JSON or invalid input, 413 on an oversized body, no internals echoed; Phase 5 adds `AI_MODE=mock` ok → cached, each failing fixture → `unavailable`, live without keys calls nothing, 11th request → `rate_limited`, client-sent scores ignored, keys never echoed and notes never logged.
 
 ## 5. UI / E2E (Playwright, a few tests; optional, Q24)
 **Status (session 2):** `tests/e2e/advisor.spec.ts` covers 1, 4 and 5 (axe WCAG 2.2 AA checks on landing, methodology, form steps and result) plus refresh persistence, floor chips, AI opt-out and JSON download, on desktop and a Pixel 7 viewport. 2 and 3 wait for `AI_MODE=mock` (Phase 5).

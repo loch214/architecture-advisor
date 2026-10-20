@@ -36,4 +36,7 @@
 | Q24 | Test scope | Owner: "don't overcomplicate". Required checks are `npm run check` (lint, typecheck, format, fitness, unit/golden/KB tests) and `npm run build`. The Playwright e2e suite stays in the repo but is **optional** (no Chromium install needed day to day). No new test tooling without asking. The Startup MVP preset's scalability conflict is intentional (golden G10) |
 
 ## Still open
-_None blocking. New questions go here._
+| # | Topic | Question |
+|---|---|---|
+| Q25 | Upstash | Phase 5 runs without Upstash (owner: "skip unless needed; ask first"). The cache, rate limit, global budget and breaker use an in-memory store per server instance. That is fine locally and for low traffic, but on Vercel each instance keeps its own copy, so limits are per instance. **Owner: add Upstash Redis (Vercel Marketplace, free) before or at launch?** If yes, it's one `KvStore` adapter |
+| Q26 | Groq live check | The build container's network policy denies `api.groq.com`, so the Groq adapter is tested with mocks only. **Owner:** allow `api.groq.com` in the cloud environment's network settings (or run `AI_MODE=live` locally with only `GROQ_API_KEY` set) so one real Groq call can be checked |
