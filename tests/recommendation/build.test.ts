@@ -53,7 +53,10 @@ describe("finalScores / withAi", () => {
 
   it("withAi replaces the AI block and recomputes final scores without touching the rule result", () => {
     const r = buildResult(exampleB, kb, ctx, disabled);
-    const ai: AiBlock = { status: "ok", adjustments: [{ styleId: "serverless", delta: -5, reason: "x", basis: "y" }] };
+    const ai: AiBlock = {
+      status: "ok",
+      adjustments: [{ styleId: "serverless", delta: -5, reason: "x", basis: "inputs" }],
+    };
     const merged = withAi(r, ai, kb);
     expect(merged.rules).toBe(r.rules);
     expect(merged.final.find((f) => f.styleId === "serverless")).toMatchObject({ aiDelta: -5, finalScore: 65.625 });
