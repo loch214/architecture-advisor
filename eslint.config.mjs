@@ -24,9 +24,21 @@ const eslintConfig = defineConfig([
     rules: {
       "no-restricted-globals": [
         "error",
-        ...["fetch", "Date", "window", "document", "localStorage", "sessionStorage", "setTimeout", "setInterval", "crypto", "process"].map(
-          (name) => ({ name, message: "Pure modules must not use the clock, randomness, network or runtime state." }),
-        ),
+        ...[
+          "fetch",
+          "Date",
+          "window",
+          "document",
+          "localStorage",
+          "sessionStorage",
+          "setTimeout",
+          "setInterval",
+          "crypto",
+          "process",
+        ].map((name) => ({
+          name,
+          message: "Pure modules must not use the clock, randomness, network or runtime state.",
+        })),
       ],
       "no-restricted-properties": [
         "error",
