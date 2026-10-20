@@ -6,7 +6,7 @@ Each phase ends with something demonstrable. The app is deployable from phase 4 
 Done locally 2026-10-21. Building continues in **Claude Code on the web** (cloud session) on repo `loch214/architecture-advisor`, starting from `docs/KICKOFF_PROMPT.md`. First cloud session scope: research tasks + Phases 1–4 (rules-only app, not deployed). Phase 5 needs owner-provided API keys; deployment needs the owner's Vercel account.
 
 ## Build status (updated 2026-10-20, end of build session 2)
-Phases 1–4 are built (rules-only app, not deployed). Phase 5 (AI layer) is built on branch `claude/architecture-advisor-phase-5-ai-k6kmq2` (PR). Handoff for the next session: `docs/HANDOFF.md`.
+Phases 1–4 are built (rules-only app, not deployed). Phase 5 (AI layer) is built and merged into `main` (PR #4). Handoff for the next session: `docs/HANDOFF.md`.
 
 ## Phase 1: Knowledge base finalised ✅
 - ✅ Research for Q14/Q15 + spot-checks (KB draft §8)
