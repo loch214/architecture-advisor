@@ -102,7 +102,9 @@ describe("weights", () => {
       kb,
     );
     expect(r.effectiveLevels.consistency).toBe("critical");
-    expect(r.conflicts[0]!.from).toEqual([{ kind: "rule", ruleId: "R11", label: "Strict ACID transactions" }]);
+    expect(r.conflicts[0]!.from).toEqual([
+      { kind: "rule", ruleId: "R11", label: "Strict ACID transactions", level: "critical" },
+    ]);
   });
 });
 

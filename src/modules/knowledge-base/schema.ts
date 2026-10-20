@@ -1,8 +1,9 @@
 import { z } from "zod";
 
-export const LEVELS = ["none", "low", "medium", "high", "critical"] as const;
+import { LEVELS } from "./levels";
+
+export { LEVELS, LEVEL_LABELS, isLevel, type Level } from "./levels";
 export const LevelSchema = z.enum(LEVELS);
-export type Level = z.infer<typeof LevelSchema>;
 
 const Id = z.string().regex(/^[a-z0-9][a-z0-9+.-]*$/, "ids are lower-case kebab-case");
 
@@ -203,11 +204,3 @@ export const KnowledgeBaseSchema = z.object({
   glossary: z.array(GlossaryEntrySchema),
 });
 export type KnowledgeBase = z.infer<typeof KnowledgeBaseSchema>;
-
-export const LEVEL_LABELS: Record<Level, string> = {
-  none: "Not needed",
-  low: "Low",
-  medium: "Medium",
-  high: "High",
-  critical: "Critical",
-};

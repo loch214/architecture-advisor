@@ -1,4 +1,5 @@
-import { LevelSchema, type KnowledgeBase } from "@/modules/knowledge-base/schema";
+import { isLevel } from "@/modules/knowledge-base/levels";
+import type { KnowledgeBase } from "@/modules/knowledge-base/schema";
 import type { UserInput } from "./types";
 
 export const MAX_NOTES_LENGTH = 1000;
@@ -34,7 +35,7 @@ export function checkInput(raw: unknown, kb: KnowledgeBase): { ok: boolean; issu
     const known = new Set(kb.attributes.map((a) => a.id));
     for (const [id, level] of Object.entries(attributes)) {
       if (!known.has(id)) add(`attributes.${id}`, "unknown", "Unknown attribute.");
-      else if (!LevelSchema.safeParse(level).success) add(`attributes.${id}`, "invalid", "Unknown importance level.");
+      else if (!isLevel(level)) add(`attributes.${id}`, "invalid", "Unknown importance level.");
     }
     if (!Object.values(attributes).some((l) => l === "high" || l === "critical")) {
       add(

@@ -1,20 +1,16 @@
 import { describe, expect, it } from "vitest";
-import {
-  kb,
-  rawKnowledgeBase,
-  findIntegrityProblems,
-  listSources,
-  isUnreviewed,
-  KnowledgeBaseSchema,
-  AttributeSchema,
-  StyleSchema,
-  RuleSchema,
-} from "@/modules/knowledge-base";
+import { kb, rawKnowledgeBase, findIntegrityProblems, listSources, isUnreviewed } from "@/modules/knowledge-base";
+import { assertValidKnowledgeBase } from "@/modules/knowledge-base/check";
+import { KnowledgeBaseSchema, AttributeSchema, StyleSchema, RuleSchema } from "@/modules/knowledge-base/schema";
 
 describe("knowledge base files", () => {
   it("every file passes its Zod schema", () => {
     const result = KnowledgeBaseSchema.safeParse(rawKnowledgeBase);
     expect(result.success ? [] : result.error.issues).toEqual([]);
+  });
+
+  it("passes the build-time check used by next.config.ts", () => {
+    expect(() => assertValidKnowledgeBase()).not.toThrow();
   });
 
   it("has no cross-reference or derived-value problems", () => {

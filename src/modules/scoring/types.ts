@@ -14,9 +14,10 @@ export interface UserInput {
   notes: string;
 }
 
+/** Where a floor came from, and the level that source asks for (several sources can floor one attribute). */
 export type FloorSource =
-  | { kind: "driver"; driverId: string; optionId: string; label: string }
-  | { kind: "rule"; ruleId: string; label: string };
+  | { kind: "driver"; driverId: string; optionId: string; label: string; level: Level }
+  | { kind: "rule"; ruleId: string; label: string; level: Level };
 
 export interface AppliedFloor {
   attribute: AttributeId;

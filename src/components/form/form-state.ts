@@ -1,4 +1,5 @@
-import { LevelSchema, type KnowledgeBase, type Level } from "@/modules/knowledge-base/schema";
+import { isLevel, type Level } from "@/modules/knowledge-base/levels";
+import type { KnowledgeBase } from "@/modules/knowledge-base/schema";
 import { checkInput, type InputIssue, type UserInput } from "@/modules/scoring";
 
 /**
@@ -82,7 +83,7 @@ export function restoreForm(raw: string | null, kb: KnowledgeBase): SavedForm | 
     const form: FormState = {
       attributes: Object.fromEntries(
         Object.entries(f.attributes ?? {}).filter(
-          ([id, level]) => kb.attributes.some((a) => a.id === id) && LevelSchema.safeParse(level).success,
+          ([id, level]) => kb.attributes.some((a) => a.id === id) && isLevel(level),
         ),
       ) as FormState["attributes"],
       drivers: Object.fromEntries(
