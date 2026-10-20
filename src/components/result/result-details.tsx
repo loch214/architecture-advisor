@@ -7,9 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TriangleAlertIcon, LightbulbIcon } from "lucide-react";
 import { Section } from "./section";
-import { signedInt } from "./format";
-
-const styleName = (r: AdvisorResult, id: string) => r.snapshot.styles[id]?.name ?? id;
+import { signedInt, styleName } from "./format";
 
 /** Conflicts, warnings and notes: things the user should look at before trusting the ranking. */
 export function Heads({ result }: { result: AdvisorResult }) {
@@ -154,6 +152,8 @@ export function Patterns({ result }: { result: AdvisorResult }) {
   );
 }
 
+const aiAnswer = (r: AdvisorResult, id: string) => r.ai.explanation?.mentions?.find((m) => m.id === id)?.answer;
+
 export function Mentions({ result }: { result: AdvisorResult }) {
   if (result.mentions.length === 0) return null;
   return (
@@ -165,6 +165,7 @@ export function Mentions({ result }: { result: AdvisorResult }) {
               &ldquo;{m.matched}&rdquo; → {m.name}
             </p>
             <p className="text-muted-foreground">{m.answer}</p>
+            {aiAnswer(result, m.id) && <p className="mt-1">AI: {aiAnswer(result, m.id)}</p>}
             {m.relatedStyles.length > 0 && (
               <p className="mt-1 text-xs text-muted-foreground">
                 Related: {m.relatedStyles.map((id) => styleName(result, id)).join(", ")}

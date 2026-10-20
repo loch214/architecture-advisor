@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { AiPanel } from "./ai-panel";
-import { FIT_LABELS, fmt, signed } from "./format";
+import { FIT_LABELS, fmt, signed, styleName } from "./format";
 import { RankedList } from "./ranked-list";
 import { Adjustments, Excluded, Heads, HowCalculated, Mentions, Patterns } from "./result-details";
 import { Section } from "./section";
@@ -89,7 +89,7 @@ export function ResultView({
           <RankedList result={result} />
         </Section>
         <Section id="ai-heading" title="AI explanation">
-          <AiPanel ai={result.ai} pending={aiPending} onRetry={onRetryAi} />
+          <AiPanel ai={result.ai} pending={aiPending} onRetry={onRetryAi} nameOf={(id) => styleName(result, id)} />
         </Section>
       </div>
 
