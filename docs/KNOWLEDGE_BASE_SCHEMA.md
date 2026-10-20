@@ -191,4 +191,5 @@ The Zod schemas live in `src/modules/knowledge-base/schema.ts`; cross-file check
 - `meta.json` has `references[]`: the public citation list used by the methodology page.
 - `drivers.json`: option ids are `unsure` first, then kebab-case values (`very-limited`, `1-3`, `5+`…).
 - Integrity checks: unique ids, every style scores every attribute, `cost = 6 − costLevel`, every referenced style/attribute/pattern/driver option/characteristic value exists, patterns vs anti-patterns used in the right list, every driver has `unsure`, floors have a source.
+- **Validation timing (session 2):** `kb` is the typed JSON and is *not* parsed at import time, so Zod stays out of the browser bundle. `check.ts` (`assertValidKnowledgeBase()`: schema + integrity) runs in `next.config.ts`, so a broken KB still fails `next dev` and `next build`, and the KB tests call it too. Importance levels live in `levels.ts` (no Zod) for client code.
 - Alias matching is implemented in `mentions.ts` (`matchMentions`): pure, longest alias claims its text first, max 4, in order of appearance.

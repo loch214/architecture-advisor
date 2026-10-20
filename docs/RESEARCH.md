@@ -132,3 +132,7 @@ Non-commercial clause: fine for a free portfolio tool. If you ever add ads or pa
 - [AHP style selection thesis (Gothenburg)](https://gupea.ub.gu.se/items/3ffb8290-9ce5-4384-8990-c82099a209d5)
 - [Architecture style selection using statistics (IAJIT)](https://ccis2k.org/iajit/index.php/archive/volume-9-2012/may-2012-no-3/item/1157-architecture-style-selection-using-statistics-of-quality-attributes-to-reduce-production-costs)
 - [Pattern knowledge base study (Utrecht)](https://utrecht-main-test.atmire.com/items/b73b99e7-87c5-4c5f-bcae-4da595ff5781)
+
+### Re-check 2026-10-20 (Q19, build session 2)
+- Gemini: [model page](https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite) confirms `gemini-3.5-flash-lite` (stable). [Google Cloud model page](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/gemini/3-5-flash-lite): custom temperature/top-K/top-P ignored, frequency/presence penalties rejected. Free-tier numbers still unpublished; [aiplug.work (Sep 2026)](https://aiplug.work/en/blog/gemini-free-tier-limits) 15 RPM / 500 RPD, [aipromptshub](https://aipromptshub.co/blog/gemini-api-free-tier-rate-limits) 15 RPM / 1,000 RPD.
+- Groq `openai/gpt-oss-120b` free plan: 30 RPM, 1,000 RPD, 8K TPM, 200K TPD, limits per organisation ([benchlm.ai](https://benchlm.ai/free-tier/groq), [klymentiev.com](https://klymentiev.com/blog/groq-pricing), [eesel.ai](https://www.eesel.ai/blog/groq-pricing)).

@@ -92,5 +92,14 @@ Details:
 | Network offline | Rules still work (they run in the browser); AI panel says offline |
 | Unexpected error | Friendly message + "Try again"; result object is never lost (kept in state/localStorage) |
 
+## As built (session 2): deviations from the plan above
+- **ⓘ help** is an inline expandable panel (button with `aria-expanded`), not a hover tooltip: it works on touch and keyboard and avoids shipping a positioning library (the popover version pushed `/advisor` over its bundle budget).
+- **Next is never disabled.** A disabled button can't be focused or explain itself, so Next stays enabled; pressing it on an invalid step shows the summary at the top of the step (focused) plus inline messages.
+- **Picking a preset** opens step 4 (review) so the user can submit at once or edit any step.
+- The result view loads lazily after submit; "Edit answers" returns to the review step; "Start over" clears saved answers. The last result is kept in local storage.
+- An unset attribute shows "Low" selected; clicking Low again doesn't record an explicit choice (same weight, only conflict wording differs).
+- `/about` holds the privacy notes; a separate privacy page waits for Phase 5/6.
+- Flagged estimates show as `≈` in the trade-off table and the methodology matrix (Q21).
+
 ## Copy tone
 Short, friendly, second person. Explain terms once: e.g. "Elasticity: scaling up *and back down* quickly when traffic spikes." No hype words ("revolutionary", "AI-powered magic").

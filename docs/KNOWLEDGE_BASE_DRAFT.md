@@ -320,6 +320,11 @@ A scratch simulation ran all golden scenarios (`TESTING_STRATEGY.md`).
 8. **Golden scenarios as real tests.** The planning simulation didn't keep its inputs, so the build wrote them (`tests/scoring/golden.ts`). Worked examples A and B reproduce every documented number. All 16 pass. Two sensitivities found (G7: microservices ties pipeline if the user rates maintainability + testability High; G11: microservices beats cell-based with clear domains, 30+ devs and deployability High). Inputs chosen to match each scenario's title; sensitivities logged as Q20 for the owner rather than changing rules without a source.
 9. **Review status in the JSON.** Following Q2 (KB review delegated to Claude), every GK/DESIGN item is `reviewed: true`, so the release gate passes. Items the draft marks ⚠ carry `flagged: true` (pipeline and SOA book-derived scores, all serverless scores) so the methodology page can show them as estimates.
 
+### Build session 2 (2026-10-20): Q20 decision
+**No score or rule value changed.**
+
+10. **Q20 resolved: keep R7 (+20) and R14 (+15).** G7 sensitivity: maintainability and testability are where R&F rate pipeline weakly (testability 3, maintainability our flagged estimate) and microservices strongly, so a user who makes them High *should* see microservices close; the result page shows both with reasons. G11 sensitivity: AWS's cell-based guidance and practitioner write-ups (ref:AWS-cells; Rackspace, "Cell-Based Architecture on AWS") describe each cell as a full copy of the application stack behind a thin router, i.e. cells usually *wrap* services, so microservices ranking a close second is consistent. No source gives a specific larger bonus, so raising either rule would be an unsourced change.
+
 ---
 
 ## 9. References (public)
@@ -336,3 +341,4 @@ A scratch simulation ran all golden scenarios (`TESTING_STRATEGY.md`).
 - **RF-summaries:** secondary summaries of R&F 1st ed. ratings: kb.segersian.com, "Pipeline" (architecture styles notes); C. Bagerbach, "Notes on Fundamentals of Software Architecture" (bagerbach.com); D. Lebrero, "Book notes: Fundamentals of Software Architecture" (danlebrero.com, 2021)
 - **modular-monolith refs (Q15, no numeric ratings):** S. Smith, "Introducing Modular Monoliths: The Goldilocks Architecture" (ardalis.com); M. Milanović, "What Is a Modular Monolith?" (techworld-with-milan); encore.dev, "Microservices vs modular monolith" (Shopify example); arXiv 2401.11867, "Modular Monolith: A Software Architecture Trend"; Gandhi, Richards, Ford, *Head First Software Architecture*, O'Reilly 2024, ch. 7
 - **spot-check refs:** AWS Solutions Library, "Guidance for Cell-Based Architecture on AWS" (GitHub); arXiv 2505.01821, edge–cloud collaborative computing survey; Netguru serverless computing architecture guide (2026)
+- **Q20 refs (session 2):** AWS Solutions, "Guidance for Cell-Based Architecture on AWS" (aws.amazon.com/solutions/guidance/cell-based-architecture-on-aws); Rackspace, "Cell-Based Architecture on AWS" (rackspace.com/blog/cell-based-architecture-aws): each cell runs a full copy of the application behind a thin routing layer

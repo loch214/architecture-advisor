@@ -14,7 +14,7 @@ A **deterministic rule engine** scores 13 styles against your weighted prioritie
 
 ## Status
 
-🚧 Build in progress: knowledge base and scoring engine done; form and results page next. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
+🚧 Rules-only version built (knowledge base, scoring engine, 4-step form, results and methodology pages). The AI explanation (Phase 5) and the first deploy are next. With `AI_MODE=off` (the default) the app is complete without any API key. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## Run it locally
 
@@ -22,16 +22,29 @@ Needs Node 22+.
 
 ```bash
 npm install
-npm run dev            # http://localhost:3000
-npm test               # unit, property, golden-scenario and KB tests
+npm run dev            # http://localhost:3000 (/advisor is the tool)
+npm test               # unit, property, golden-scenario, KB, form and API tests
 npm run coverage       # same, with coverage thresholds (engine ≥ 95%)
 npm run lint           # ESLint (incl. purity rules for the engine)
 npm run typecheck      # next typegen + tsc
 npm run fitness        # module-boundary and env-name checks
 npm run golden:print   # print the top 5 styles for each golden scenario
 npm run kb:release-gate  # fails if any KB source is unreviewed
-npm run build          # production build
+npm run build          # production build (also validates the knowledge base)
+npm run bundle:check   # after build: client JS per page ≤ 200 KB gzipped
+npm run test:e2e       # Playwright against a production build (run `npm run build` first)
+npm run check          # lint + typecheck + format + fitness + coverage, as in CI
 ```
+
+Playwright needs Chromium: `npx playwright install chromium` on a fresh machine.
+
+### Environment
+
+| Variable  | Values                    | Default | Meaning                                                   |
+| --------- | ------------------------- | ------- | --------------------------------------------------------- |
+| `AI_MODE` | `off` \| `mock` \| `live` | `off`   | `off`: rules only, the AI panel says "AI not enabled yet" |
+
+AI keys (Phase 5) are server-only environment variables and must never start with `NEXT_PUBLIC_`.
 
 ## Docs
 
@@ -49,6 +62,8 @@ npm run build          # production build
 | [Tech stack](docs/TECH_STACK.md)                     | Next.js, TypeScript, Vercel, Upstash                     |
 | [Testing](docs/TESTING_STRATEGY.md)                  | Unit, property, golden-scenario and AI tests             |
 | [Open questions](docs/OPEN_QUESTIONS.md)             | Decisions log                                            |
+| [ADRs](docs/adr/README.md)                           | Architecture decision records 001–007                    |
+| [Handoff](docs/HANDOFF.md)                           | What's done and what's next                              |
 
 ## Stack
 

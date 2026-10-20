@@ -25,14 +25,13 @@
 | Q14 | Pipeline & SOA ratings | Researched online (book pages unreachable from the build container). **Pipeline:** our values agree with secondary summaries of the R&F 1st ed. figure; kept, still `flagged` (maintainability is our estimate). **SOA:** no published table found; qualitative sources agree; kept as flagged estimates. Details and sources: `KNOWLEDGE_BASE_DRAFT.md` §8 items 4–5, §9 |
 | Q15 | Modular monolith ratings | No independent *numeric* ratings found; qualitative sources agree with the book's direction. Kept R&F 2nd ed. Fig 11-7. Details: KB draft §8 item 6 |
 
+## Closed by build session 2 (2026-10-20)
+| # | Topic | Outcome |
+|---|---|---|
+| Q19 | Fresh AI limits | Re-checked with web search (provider pages unreachable from the container). **Gemini:** model ID `gemini-3.5-flash-lite` confirmed on Google's model page (stable, July 2026). Google still doesn't publish free-tier numbers; Sept 2026 secondary sources give 15 RPM and 500–1,000 RPD, matching `RESEARCH.md`. Google Cloud's model page notes custom temperature/top-K/top-P are ignored and frequency/presence penalties are rejected, so the Phase 5 adapter must not send them. **Groq:** `openai/gpt-oss-120b` free plan 30 RPM, 1,000 RPD, 8K TPM, 200K TPD (consistent across sources; limits are per organisation). No doc change needed beyond this note; re-check in the AI Studio / GroqCloud consoles once keys exist (Phase 5) |
+| Q20 | Golden sensitivities (G7, G11) | **Keep R7 and R14 as they are** (owner delegated the call). G7: a user who rates maintainability and testability High is asking for exactly what R&F rate pipeline weakly and microservices strongly, so a near-tie is honest, and both styles appear with their reasons. G11: cells are an isolation/deployment wrapper that usually contains a full copy of the service stack (AWS cell-based guidance; Rackspace "Cell-based architecture on AWS"), so microservices as a close #2 is consistent. No source supports a specific larger bonus, and CLAUDE.md forbids unsourced changes. See KB draft §8 item 10 |
+| Q21 | Flagged items | Owner asked for "the better way": flagged estimates stay as they are but are **shown as estimates** to users: `≈` in the trade-off table and the methodology ratings matrix, with a note naming pipeline, SOA and serverless. A future owner check against the book remains welcome but is no longer a launch blocker |
+| Q22 | Branch name | Work moved to `build/phase-1-4` (pushing there works); the PR is opened from it and the old `claude/peaceful-fermat-0prbs1` branch is deleted once the PR exists |
+
 ## Still open
-**Q19. Fresh limits.** Before Phase 5, re-verify Gemini Flash-Lite and Groq free-tier limits and model IDs (they change often).
-
-**Q20. Golden-scenario sensitivities (owner, optional).** Found while turning the scenarios into tests (`TESTING_STRATEGY.md` §2 notes):
-- G7 ETL: if the user rates maintainability and testability High, microservices ties pipeline (68.8). Accept as-is, or raise R7 from +20?
-- G11 multi-tenant SaaS: with clear domains, 30+ devs and deployability High, microservices beats cell-based by 0.9 despite "blast radius". Accept, or raise R14 from +15?
-No change made: CLAUDE.md requires a source for any rule change, and both readings are defensible. Default if the owner doesn't answer: keep as-is.
-
-**Q21. Owner review of flagged items (owner, before launch).** `PROJECT_OVERVIEW.md` success criteria ask the owner to review general-knowledge items. They're `reviewed: true` per Q2, but the flagged ones (pipeline, SOA, serverless scores; marked `flagged: true` in `styles.json`) deserve a look, ideally against the book's pipeline (1st ed. ch. 11) and SOA (2nd ed. ch. 17) rating figures.
-
-**Q22. Branch name.** The kickoff asked for `build/phase-1-4`; the cloud session was only allowed to push to its assigned branch `claude/peaceful-fermat-0prbs1`, so work is there. Rename or open the PR from it; either is fine.
+_None blocking. New questions go here._

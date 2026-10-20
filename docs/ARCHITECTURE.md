@@ -128,10 +128,12 @@ docs/
 ```
 app → components → recommendation → scoring → knowledge-base
 app/api → recommendation, ai, platform
-ai → scoring (types only), knowledge-base, platform
+ai → scoring (types only), recommendation (types only: AiBlock), knowledge-base, platform
 scoring → knowledge-base (types + data only)   ✗ no next/*, react, fetch, ai, platform
 knowledge-base → (nothing)
 ```
+
+**As built (session 2):** `app/` has `page.tsx` (landing), `advisor/`, `methodology/`, `about/` and `api/explain/route.ts`; `/styles` is v1.1. `components/` has `ui/` (hand-written shadcn-style), `form/` (steps, presets, form state), `result/` and `advisor/` (the page's client controller). `recommendation/` holds `buildResult`, `withAi`, `finalScores` and the `AdvisorResult`/`AiBlock` types. `platform/env.ts` reads `AI_MODE` and imports `server-only`. The KB is validated at build time in `next.config.ts` instead of at import, so the browser never loads Zod.
 
 ## 7. The Result object (single, self-contained JSON)
 Designed so it can be saved to a DB later without changes.
@@ -143,15 +145,18 @@ interface AdvisorResult {
   input: UserInput;            // exactly what the user entered
   rules: RuleResult;           // full engine output (see SCORING_ENGINE.md)
   ai: {
-    status: "ok" | "cached" | "adapted" | "unavailable" | "rate_limited" | "skipped";
+    status: "ok" | "cached" | "adapted" | "unavailable" | "rate_limited" | "skipped" | "disabled";
     reuse?: { tier: "identical" | "similar"; fits?: boolean; changes?: string[] };
     provider?: string; model?: string; latencyMs?: number;
     adjustments: { styleId: string; delta: number; reason: string; basis: string }[];
     explanation?: { summary: string; topPick: {...}; others: [...]; cautions: string[]; notesUsed: string[] };
   };
   final: { styleId: string; ruleScore: number; aiDelta: number; finalScore: number; rank: number }[];
-  snapshot: { styles: Record<StyleId, { name: string; scores: Record<AttributeId, number> }> };
+  mentions: Mention[];          // glossary matches for the notes (KB, not AI)
+  snapshot: { styles: Record<StyleId, { name: string; scores: Record<AttributeId, number>; estimated: AttributeId[] }> };
 }
+// "disabled" = AI_MODE=off on the server; "skipped" = the user opted out. id/createdAt come from the caller,
+// so buildResult(input, kb, { id, createdAt, appVersion }, ai) stays pure.
 ```
 `snapshot` stores the KB scores used, so a saved result still renders correctly after the KB changes. The trade-off table is rendered from `snapshot` (KB data), never from AI text.
 
@@ -163,7 +168,7 @@ interface AdvisorResult {
 | KB valid; every style has every attribute; no unreviewed sources in production build | Vitest KB tests |
 | Golden scenarios still produce expected top picks | Vitest |
 | No `NEXT_PUBLIC_` env var containing `KEY` | small CI script |
-| Client JS bundle under budget (e.g. 200 KB gz for /advisor) | Next build output check |
+| Client JS bundle under budget (200 KB gz per page) | `scripts/check-bundle.mjs` (`npm run bundle:check`, after `next build`): sums the gzipped scripts each prerendered page loads, minus legacy polyfills. Session 2: `/` 135 KB, `/advisor` 187 KB |
 
 ## 9. ADRs to write at the start of build (Nygard / MADR format)
 1. ADR-001 Modular monolith on Next.js/Vercel

@@ -84,7 +84,7 @@ interface StyleResult {
 interface RuleResult {
   kbVersion; engineVersion;
   effectiveLevels: Record<AttributeId, Level>; effectiveWeights: Record<AttributeId, number>;
-  floors: { attribute; level; from: FloorSource[] }[];       // driver or rule that set each floor
+  floors: { attribute; level; from: FloorSource[] }[];       // every driver or rule flooring it, each with its own level
   ranked: StyleResult[];
   excluded: { styleId; ruleIds: string[]; reasons: string[] }[];
   firedRules: { ruleId; name; branch: "when" | "otherwise"; explanation; effects }[];
@@ -94,7 +94,7 @@ interface RuleResult {
   topAttributes: AttributeId[];   // effective weight ≥ High, highest first, ties in KB order
 }
 ```
-Implementation notes: base and final are rounded to 6 decimals internally so equal sums tie exactly (display rounds to 1). Rules run in `rules.json` order. Rules with an `otherwise` branch carry an `otherwiseExplanation` shown when that branch fires. `score()` validates first and throws `InvalidInputError`; `checkInput()` returns the issues for the form.
+Implementation notes: base and final are rounded to 6 decimals internally so equal sums tie exactly (display rounds to 1). Rules run in `rules.json` order. Rules with an `otherwise` branch carry an `otherwiseExplanation` shown when that branch fires. `score()` validates first and throws `InvalidInputError`; `checkInput()` returns the issues for the form. `previewFloors(partialInput, kb)` returns floors and conflicts for a half-filled form (unanswered drivers = "unsure"); the form's floor chips use it.
 
 ---
 

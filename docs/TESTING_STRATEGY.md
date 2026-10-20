@@ -74,7 +74,15 @@ When a KB or rule change breaks a golden test, that's a signal to stop and think
 ## 4. API route tests
 `/api/explain` with mocked AI: 400 on invalid body, ignores client-sent scores (recomputes), never returns stack traces, never echoes keys, correct status per AI outcome.
 
+## 4b. Result, form and route tests (built in session 2)
+- `tests/recommendation/`: `buildResult` is pure, wraps `score()`, snapshots the KB (flagged estimates marked), matches mentions; `finalScores` reproduces example B's AI illustration (+4 → #2).
+- `tests/form/`: every preset passes `checkInput` and uses its golden scenario's input (G1, G10, G4, G3, G6; Growing SaaS must rank a domain-partitioned distributed style first); per-step validation; local-storage restore drops unknown ids.
+- `tests/scoring/preview.test.ts`: floor chips match the engine for complete input.
+- `tests/api/explain.test.ts`: `disabled` with `AI_MODE=off`/unset, 400 on bad JSON or invalid input, no internals echoed.
+
 ## 5. UI / E2E (Playwright, a few tests)
+**Status (session 2):** `tests/e2e/advisor.spec.ts` covers 1, 4 and 5 (axe WCAG 2.2 AA checks on landing, methodology, form steps and result) plus refresh persistence, floor chips, AI opt-out and JSON download, on desktop and a Pixel 7 viewport. 2 and 3 wait for `AI_MODE=mock` (Phase 5).
+
 1. Preset → submit → ranked list + trade-off table visible with `AI_MODE=off`.
 2. Same with `AI_MODE=mock` (ok): explanation appears, AI delta pill visible.
 3. `AI_MODE=mock` (fail): fallback message, ranking still visible.
