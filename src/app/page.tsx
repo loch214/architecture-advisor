@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 const steps = [
   {
     title: "Describe your project",
-    body: "Team, budget, growth, and which quality attributes matter most. Every question has a “Not sure” option.",
+    body: "Team, budget, growth, and which quality attributes (things like speed, cost or security) matter most. Every question has a “Not sure” option.",
   },
   {
     title: "Get a ranked list",

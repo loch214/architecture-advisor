@@ -9,7 +9,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { AiPanel } from "./ai-panel";
+import { AiPanel, aiAnnouncement } from "./ai-panel";
 import { FIT_LABELS, fmt, signed, styleName } from "./format";
 import { RankedList } from "./ranked-list";
 import { Adjustments, Excluded, Heads, HowCalculated, Mentions, Patterns } from "./result-details";
@@ -84,8 +84,12 @@ export function ResultView({
         </div>
       </header>
 
+      <p className="sr-only" aria-live="polite">
+        {aiPending ? "" : [aiAnnouncement(result.ai), change && "AI changed the order."].filter(Boolean).join(" ")}
+      </p>
+
       {change && (
-        <Alert variant="info" role="status">
+        <Alert variant="info">
           <ArrowDownUpIcon aria-hidden />
           <AlertTitle>AI changed the order</AlertTitle>
           <AlertDescription>

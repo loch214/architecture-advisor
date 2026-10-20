@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { axe } from "./axe";
+import { aiPanel, axe } from "./helpers";
 
 test.beforeEach(async ({ page }) => {
   await page.goto("/advisor");
@@ -16,7 +16,7 @@ test("preset → submit shows a rules-only result with the AI 'not enabled' stat
   await expect(page.getByRole("heading", { name: "Ranked styles" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Trade-off comparison" })).toBeVisible();
   await expect(page.getByRole("columnheader", { name: "Space-based architecture" })).toBeVisible();
-  await expect(page.getByText("AI not enabled yet")).toBeVisible();
+  await expect(aiPanel(page).getByText("AI not enabled yet")).toBeVisible();
   await axe(page);
 
   const download = page.waitForEvent("download");
@@ -63,7 +63,7 @@ test("opting out of AI says nothing was sent", async ({ page }) => {
   await page.getByRole("button", { name: "Startup MVP" }).click();
   await page.getByText("Don't use AI for this request").click();
   await page.getByRole("button", { name: "Get recommendation" }).click();
-  await expect(page.getByText("AI turned off for this request")).toBeVisible();
+  await expect(aiPanel(page).getByText("AI turned off for this request")).toBeVisible();
   await expect(page.getByText(/Your answers pull in different directions/)).toBeVisible();
 });
 
