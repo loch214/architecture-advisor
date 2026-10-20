@@ -3,7 +3,11 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  resolve: { tsconfigPaths: true },
+  resolve: {
+    tsconfigPaths: true,
+    // `server-only` throws outside a React Server build; in unit tests it's a no-op.
+    alias: { "server-only": new URL("./tests/server-only-stub.ts", import.meta.url).pathname },
+  },
   test: {
     environment: "node",
     include: ["tests/**/*.test.{ts,tsx}"],
