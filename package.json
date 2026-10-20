@@ -17,7 +17,8 @@
     "fitness": "depcruise src --config .dependency-cruiser.cjs && node scripts/check-env-names.mjs",
     "kb:release-gate": "KB_RELEASE_GATE=1 vitest run tests/kb",
     "check": "npm run lint && npm run typecheck && npm run format:check && npm run fitness && npm run coverage",
-    "golden:print": "PRINT_GOLDEN=1 vitest run tests/scoring/print-golden.test.ts --silent=false"
+    "golden:print": "PRINT_GOLDEN=1 vitest run tests/scoring/print-golden.test.ts --silent=false",
+    "bundle:check": "node scripts/check-bundle.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
