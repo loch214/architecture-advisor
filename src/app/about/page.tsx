@@ -35,6 +35,13 @@ export default function AboutPage() {
             the AI&apos;s text.
           </li>
         </ul>
+        <p>
+          The{" "}
+          <Link href="/privacy" className="underline underline-offset-4">
+            privacy page
+          </Link>{" "}
+          has the details and links to each provider&apos;s terms.
+        </p>
       </section>
       <section className="space-y-2">
         <h2 className="text-xl font-semibold">Limitations</h2>

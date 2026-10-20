@@ -59,7 +59,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <footer className="no-print border-t">
           <p className="mx-auto max-w-6xl px-4 py-4 text-xs text-muted-foreground">
             Rule-based scores from published architecture books, plus an optional AI explanation. A starting point for
-            your own judgement, not a substitute for it.
+            your own judgement, not a substitute for it.{" "}
+            <Link href="/privacy" className="underline underline-offset-4 hover:text-foreground">
+              Privacy
+            </Link>
           </p>
         </footer>
       </body>

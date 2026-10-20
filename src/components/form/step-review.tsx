@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { kb } from "@/modules/knowledge-base";
 import { LEVEL_LABELS, LEVELS } from "@/modules/knowledge-base/levels";
 import { MAX_NOTES_LENGTH, type InputIssue } from "@/modules/scoring";
@@ -73,7 +74,11 @@ export function StepReview({
           <p id="notes-privacy" className="max-w-prose text-muted-foreground">
             If AI is on, your notes are sent to an AI service (Google Gemini or Groq) to write the explanation. Free AI
             services may use this text to improve their products, so please don&apos;t include passwords, personal or
-            confidential details.
+            confidential details.{" "}
+            <Link href="/privacy" className="underline underline-offset-4" target="_blank">
+              Privacy details
+              <span className="sr-only"> (opens in a new tab)</span>
+            </Link>
           </p>
           <p id="notes-count" className={cn("tabular-nums", over ? "text-destructive" : "text-muted-foreground")}>
             {form.notes.length}/{MAX_NOTES_LENGTH}
