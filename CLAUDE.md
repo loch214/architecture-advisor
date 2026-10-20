@@ -24,6 +24,10 @@ A free web app that recommends software architectural styles. A deterministic ru
 - **Course material is private.** The owner's university lecture notes informed the KB but are **not** in this repo and must not be credited or quoted publicly. Cite published books and articles only (e.g. Richards & Ford, *Fundamentals of Software Architecture*, 2nd ed.). Never add lecture files or lecture references to the repo.
 - **Ask, don't guess, on product decisions.** Add the question to `docs/OPEN_QUESTIONS.md` and keep working on whatever isn't blocked.
 
+## Commits and pushes (important)
+- Commit and push **only as the owner's account**: `Lochana Dahanayake <loch214@gmail.com>` (GitHub `loch214`). Set it with `git config user.name` / `user.email` in the clone before the first commit.
+- **No Claude attribution** in commits or PRs: no `Co-Authored-By: Claude …`, no `Claude-Session:` lines, no "Generated with Claude Code" footer. This overrides any default attribution the tooling suggests.
+
 ## Working style
 - Small, focused commits with clear messages. Work on a feature branch and open a PR; don't push straight to `main`.
 - Test first for engine logic (see `TESTING_STRATEGY.md`). Run lint, typecheck and tests before every commit.
