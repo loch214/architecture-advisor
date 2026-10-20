@@ -13,7 +13,9 @@ export function findIntegrityProblems(kb: KnowledgeBase): string[] {
   const charValues = new Map(
     kb.characteristics.map((c) => [
       c.id,
-      c.type === "boolean" ? new Set<string | boolean>([true, false]) : new Set<string | boolean>(c.options.map((o) => o.id)),
+      c.type === "boolean"
+        ? new Set<string | boolean>([true, false])
+        : new Set<string | boolean>(c.options.map((o) => o.id)),
     ]),
   );
 
@@ -24,13 +26,34 @@ export function findIntegrityProblems(kb: KnowledgeBase): string[] {
       seen.add(id);
     }
   };
-  duplicates("attribute", kb.attributes.map((a) => a.id));
-  duplicates("style", kb.styles.map((s) => s.id));
-  duplicates("driver", kb.drivers.map((d) => d.id));
-  duplicates("characteristic", kb.characteristics.map((c) => c.id));
-  duplicates("rule", kb.rules.map((r) => r.id));
-  duplicates("pattern", kb.patterns.map((p) => p.id));
-  duplicates("glossary", kb.glossary.map((g) => g.id));
+  duplicates(
+    "attribute",
+    kb.attributes.map((a) => a.id),
+  );
+  duplicates(
+    "style",
+    kb.styles.map((s) => s.id),
+  );
+  duplicates(
+    "driver",
+    kb.drivers.map((d) => d.id),
+  );
+  duplicates(
+    "characteristic",
+    kb.characteristics.map((c) => c.id),
+  );
+  duplicates(
+    "rule",
+    kb.rules.map((r) => r.id),
+  );
+  duplicates(
+    "pattern",
+    kb.patterns.map((p) => p.id),
+  );
+  duplicates(
+    "glossary",
+    kb.glossary.map((g) => g.id),
+  );
 
   for (const style of kb.styles) {
     for (const a of attributeIds) {
@@ -40,17 +63,21 @@ export function findIntegrityProblems(kb: KnowledgeBase): string[] {
       if (!attributeIds.has(a)) problems.push(`${style.id}: score for unknown attribute "${a}"`);
     }
     if (style.scores.cost && style.scores.cost.value !== 6 - style.costLevel) {
-      problems.push(`${style.id}: cost score ${style.scores.cost.value} must equal 6 − costLevel (${6 - style.costLevel})`);
+      problems.push(
+        `${style.id}: cost score ${style.scores.cost.value} must equal 6 − costLevel (${6 - style.costLevel})`,
+      );
     }
     for (const p of style.patterns) {
       const pattern = kb.patterns.find((x) => x.id === p);
       if (!pattern) problems.push(`${style.id}: unknown pattern "${p}"`);
-      else if (pattern.kind !== "pattern") problems.push(`${style.id}: "${p}" is listed as a pattern but is an anti-pattern`);
+      else if (pattern.kind !== "pattern")
+        problems.push(`${style.id}: "${p}" is listed as a pattern but is an anti-pattern`);
     }
     for (const p of style.antiPatterns) {
       const pattern = kb.patterns.find((x) => x.id === p);
       if (!pattern) problems.push(`${style.id}: unknown anti-pattern "${p}"`);
-      else if (pattern.kind !== "anti-pattern") problems.push(`${style.id}: "${p}" is listed as an anti-pattern but is a pattern`);
+      else if (pattern.kind !== "anti-pattern")
+        problems.push(`${style.id}: "${p}" is listed as an anti-pattern but is a pattern`);
     }
     for (const c of style.combinesWith) {
       if (!styleIds.has(c)) problems.push(`${style.id}: combinesWith unknown style "${c}"`);
@@ -58,7 +85,8 @@ export function findIntegrityProblems(kb: KnowledgeBase): string[] {
   }
 
   for (const driver of kb.drivers) {
-    if (!driver.options.some((o) => o.id === "unsure")) problems.push(`driver ${driver.id}: needs a "Not sure" (unsure) option`);
+    if (!driver.options.some((o) => o.id === "unsure"))
+      problems.push(`driver ${driver.id}: needs a "Not sure" (unsure) option`);
     for (const option of driver.options) {
       for (const a of Object.keys(option.floors)) {
         if (!attributeIds.has(a)) problems.push(`driver ${driver.id}.${option.id}: floor on unknown attribute "${a}"`);
@@ -79,7 +107,8 @@ export function findIntegrityProblems(kb: KnowledgeBase): string[] {
     if ((e.type === "modify" || e.type === "exclude") && !styleIds.has(e.style)) {
       problems.push(`${ruleId}: unknown style "${e.style}"`);
     }
-    if (e.type === "floor" && !attributeIds.has(e.attribute)) problems.push(`${ruleId}: unknown attribute "${e.attribute}"`);
+    if (e.type === "floor" && !attributeIds.has(e.attribute))
+      problems.push(`${ruleId}: unknown attribute "${e.attribute}"`);
   };
   const checkPath = (ruleId: string, path: string, values: (string | boolean)[]) => {
     const [scope, id] = path.split(".") as [string, string];
@@ -88,7 +117,8 @@ export function findIntegrityProblems(kb: KnowledgeBase): string[] {
       problems.push(`${ruleId}: unknown path "${path}"`);
       return;
     }
-    for (const v of values) if (!allowed.has(v)) problems.push(`${ruleId}: "${String(v)}" is not a valid value for ${path}`);
+    for (const v of values)
+      if (!allowed.has(v)) problems.push(`${ruleId}: "${String(v)}" is not a valid value for ${path}`);
   };
   type Cond = KnowledgeBase["rules"][number]["when"];
   const walk = (ruleId: string, c: Cond) => {

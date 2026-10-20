@@ -35,9 +35,7 @@ export const MetaSchema = z
     }),
     modifierCapPerStyle: z.number().int().positive(),
     maxCriticalSoftLimit: z.number().int().positive(),
-    references: z.array(
-      z.object({ id: z.string(), citation: z.string(), url: z.url().optional() }).strict(),
-    ),
+    references: z.array(z.object({ id: z.string(), citation: z.string(), url: z.url().optional() }).strict()),
   })
   .strict();
 
@@ -205,3 +203,11 @@ export const KnowledgeBaseSchema = z.object({
   glossary: z.array(GlossaryEntrySchema),
 });
 export type KnowledgeBase = z.infer<typeof KnowledgeBaseSchema>;
+
+export const LEVEL_LABELS: Record<Level, string> = {
+  none: "Not needed",
+  low: "Low",
+  medium: "Medium",
+  high: "High",
+  critical: "Critical",
+};
