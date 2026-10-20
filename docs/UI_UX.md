@@ -9,7 +9,8 @@ Principles: plain language first, jargon explained inline (tooltips with a one-l
 | `/advisor` | The form (stepper) and the result on the same page (result replaces form; "Edit answers" goes back with state kept) |
 | `/methodology` | How scoring works: formula, levels, rules, sources, what's general knowledge. Generated from KB data. Builds trust and is great for a portfolio |
 | `/styles` + `/styles/[id]` | *(v1.1)* Browsable catalog of styles, scores and patterns from the KB |
-| `/about` | Project, author, limitations, privacy |
+| `/about` | Project, author, limitations, short privacy summary |
+| `/privacy` | What is sent where and what is kept; the AI providers and host with links to their terms (AI_INTEGRATION §9.6). Linked from the notes notice, `/about` and the footer |
 
 ## Form: 4-step stepper
 Progress bar at the top. Each step fits one screen on desktop. State is kept in the URL hash or `localStorage` so a refresh doesn't lose answers.
@@ -98,8 +99,15 @@ Details:
 - **Picking a preset** opens step 4 (review) so the user can submit at once or edit any step.
 - The result view loads lazily after submit; "Edit answers" returns to the review step; "Start over" clears saved answers. The last result is kept in local storage.
 - An unset attribute shows "Low" selected; clicking Low again doesn't record an explicit choice (same weight, only conflict wording differs).
-- `/about` holds the privacy notes; a separate privacy page waits for Phase 5/6.
 - Flagged estimates show as `≈` in the trade-off table and the methodology matrix (Q21).
+
+## As built (session 4, Phase 6)
+- **"AI changed the order" banner:** a neutral info box under the header when the AI's #1 differs from the rule engine's (`topPickChange()` in `recommendation`), naming both styles. Not shown while the AI is loading. Score bars animate to the adjusted width (off with `prefers-reduced-motion`). Check it locally with `AI_MODE=mock AI_MOCK=reorder` and the Startup MVP preset.
+- **States checked:** loading skeleton, ok, reused/adapted note, unavailable + Retry, rate limited, disabled and skipped all render in the AI panel; ok, unavailable and reorder are covered by e2e with `AI_MODE=mock`. A refresh while the AI is loading shows "isn't available right now" + Retry (the pending request isn't resumed), which is acceptable. The rate-limited message doesn't show a reset time yet ("resets in ~X min" in the table above).
+- **`/privacy`** page added; the footer links to it.
+- **Accessibility pass:** `Alert` no longer defaults to `role="alert"` (a result page used to fire several assertive announcements); only the form's error summary keeps it. A polite, screen-reader-only live region on the result says when the AI part settles ("AI explanation ready." / the status title, plus "AI changed the order."). The light-mode info colour is darker (`oklch(0.5 0.14 255)`) so the "AI ±n" badge passes 4.5:1. Preset cards use spans inside the button instead of a Card's div/h3/p (invalid inside a button, and it skipped a heading level). axe now also runs on `/about`, `/privacy` and the AI result states.
+- **Lighthouse (local production build, 2026-10-20):** `/`, `/advisor`, `/about`, `/privacy` score 99–100 on performance, 100 on accessibility, best practices and SEO; `/methodology` 96 performance. Re-run on the deployed site.
+- **Copy:** the landing page defines "quality attributes"; the "Adjustments made" description no longer says "base scores"; the landing button reads "Start the advisor".
 
 ## Copy tone
 Short, friendly, second person. Explain terms once: e.g. "Elasticity: scaling up *and back down* quickly when traffic spikes." No hype words ("revolutionary", "AI-powered magic").

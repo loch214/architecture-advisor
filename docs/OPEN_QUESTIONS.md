@@ -41,8 +41,14 @@
 | Q27 | PR workflow | Owner: "I'm not gonna do any of those merge, making PR anything by myself." Claude opens **and merges** its own PRs (merge commit) once `npm run check`, `npm run build` and `npm run bundle:check` pass and the docs are updated, then starts the next work on a fresh branch from `main`. This overrides the "open a PR" line in CLAUDE.md's working style, which Claude can't edit from the container |
 | Q22 follow-up | Old branches | `build/phase-1-4`, `claude/nice-gates-3nyb3w` and `claude/peaceful-fermat-0prbs1` are fully merged into `main`. The container's permission rules block deleting remote branches, so they stay. They're harmless; delete them on GitHub's Branches page whenever convenient |
 
+## Closed by build session 4 (2026-10-20)
+| # | Topic | Outcome |
+|---|---|---|
+| Q26 | Groq live check | `api.groq.com` is now reachable from the cloud container. One real call through `/api/explain` (`AI_MODE=live`, empty `GEMINI_API_KEY`) returned `ok` from Groq `openai/gpt-oss-120b` in ~1.6 s; the first reply failed validation and the repair retry fixed it. Details: AI_INTEGRATION §12 |
+
 ## Still open
 | # | Topic | Question |
 |---|---|---|
-| Q25 | Upstash | Phase 5 runs without Upstash (owner: "skip unless needed; ask first"). The cache, rate limit, global budget and breaker use an in-memory store per server instance. That is fine locally and for low traffic, but on Vercel each instance keeps its own copy, so limits are per instance. **Owner: add Upstash Redis (Vercel Marketplace, free) before or at launch?** If yes, it's one `KvStore` adapter |
+| Q25 | Upstash | Phase 5 runs without Upstash (owner: "skip unless needed; ask first"). The cache, rate limit, global budget and breaker use an in-memory store per server instance. That is fine locally and for low traffic, but on Vercel each instance keeps its own copy, so limits are per instance. **Owner: add Upstash Redis (Vercel Marketplace, free) before or at launch?** If yes, it's one `KvStore` adapter. Asked again in session 4; no answer yet, nothing blocked |
+| Q28 | Analytics | ROADMAP Phase 6 lists optional privacy-friendly analytics (Vercel Web Analytics, free tier: page views only, no cookies). The privacy page currently says "no analytics". **Owner: turn on Vercel Web Analytics at launch, yes or no?** If yes: one `<Analytics />` component, a line on `/privacy`, and a bundle check |
 | Q26 | Groq live check | The build container's network policy denies `api.groq.com`, so the Groq adapter is tested with mocks only. **Owner:** allow `api.groq.com` in the cloud environment's network settings (or run `AI_MODE=live` locally with only `GROQ_API_KEY` set) so one real Groq call can be checked |

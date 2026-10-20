@@ -172,7 +172,7 @@ Response schema adds: `reuse: { fits: boolean, changes: string[] (max 5) }`. If 
   3. **Light redaction before sending:** a regex pass masks obvious emails, phone numbers, URLs with tokens and long key-like strings (`[redacted]`). Cheap, deterministic and unit-tested; not a guarantee, which is why the notice exists.
   4. **Opt-out:** checkbox "Don't use AI for this request" → rules-only, nothing leaves the browser except static page loads.
   5. **No logging** of notes or AI text; log only provider, latency, status, cache hit. The Upstash cache stores AI output keyed by a hash; the key is not reversible to the notes.
-  6. **Privacy page** lists the providers and links their terms.
+  6. **Privacy page** lists the providers and links their terms. Built as `/privacy` (Phase 6): Gemini API Additional Terms + Google Privacy Policy, Groq "Your data", Services Agreement and Privacy Policy, and Vercel's privacy policy (host), with the summaries checked 2026-10-20. It also says what the server keeps: no notes or AI text in logs; cached AI answers with the masked notes' token set for up to 30 days; a hashed IP for rate limits.
 
 ## 10. Error handling summary (what the user sees)
 | `ai.status` | UI |
@@ -188,7 +188,7 @@ Response schema adds: `reuse: { fits: boolean, changes: string[] (max 5) }`. If 
 As built: the `AiBlock` type lives in `src/modules/recommendation/types.ts`. `/api/explain` returns 400 for an invalid body (413 over 16 KB), never a stack trace; `disabled` with `AI_MODE=off`; `rate_limited` over the per-client limit; otherwise the result of the chain (`ok`, `cached`, `adapted` or `unavailable`).
 
 ## 11. Testing hooks
-`AI_MODE=off|mock|live` env var. `mock` returns fixture responses so the chain and UI states can be tested without spending quota: `AI_MOCK=ok` (default), `invalid`, `slow`, `429` or `fail`. See `TESTING_STRATEGY.md`.
+`AI_MODE=off|mock|live` env var. `mock` returns fixture responses so the chain and UI states can be tested without spending quota: `AI_MOCK=ok` (default), `reorder` (raises the rule engine's #2 by 5 so the "AI changed the order" banner shows; valid only when the top two are within 5 points, e.g. the Startup MVP preset), `invalid`, `slow`, `429` or `fail`. See `TESTING_STRATEGY.md`.
 
 ## 12. As built (Phase 5, 2026-10-20)
 Code: `src/modules/ai/` (`context.ts`, `prompt.ts`, `schema.ts`, `validate.ts`, `redact.ts`, `chain.ts`, `cache.ts`, `explain.ts`, `providers/{types,sdk,gemini,groq,mock}.ts`) and `src/modules/platform/` (`store.ts`, `rate-limit.ts`, `env.ts`).
@@ -212,3 +212,4 @@ Decisions and deviations made while building (none change behaviour the plan pro
 - **Storage:** Upstash is not set up yet (Q25). The cache, rate limits, global budget and breaker run on an in-memory store per server instance behind a Redis-shaped `KvStore` interface, so adding Upstash later is one adapter.
 - **Logging:** one JSON line per request (`provider`, `latencyMs`, `status`, attempts as `ok`/`invalid`/`timeout`/…); never notes or AI text. The invalid reason is not logged because it can quote the notes.
 - **Live check (2026-10-20):** one real call per provider through `/api/explain` with `AI_MODE=live`. Gemini 3.5 Flash-Lite: valid reply first try in ~5.8 s (1 adjustment citing the notes, mentions answered). Groq: not reachable from the build container (network policy denies `api.groq.com`), so the route logged `network` and returned `unavailable` (rules-only), proving the fallback. Groq still needs one live check once the host is allowed.
+- **Groq live check (session 4, 2026-10-20):** `api.groq.com` is now reachable. One real call through `/api/explain` with `AI_MODE=live` and an empty `GEMINI_API_KEY` (Student-style input with notes): `status: ok`, provider Groq, `openai/gpt-oss-120b`, ~1.6 s provider latency (~3.6 s round trip). The first reply failed our checks and the repair retry returned a valid one (attempts `invalid` → `ok`), so the repair path is proven live too. No adjustments; summary, top pick and others were sensible. Closes Q26.
