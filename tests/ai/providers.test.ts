@@ -2,7 +2,9 @@ import { describe, expect, it, vi } from "vitest";
 import { APICallError } from "ai";
 import { MockLanguageModelV4 } from "ai/test";
 import { buildPrompt } from "@/modules/ai/prompt";
-import { mockProvider } from "@/modules/ai/providers/mock";
+import { mockProvider, mockReorderReply } from "@/modules/ai/providers/mock";
+import { validateReply } from "@/modules/ai/validate";
+import { presets } from "@/components/form/presets";
 import { nextMidnight, sdkProvider, toProviderError } from "@/modules/ai/providers/sdk";
 import { geminiProvider } from "@/modules/ai/providers/gemini";
 import { groqProvider } from "@/modules/ai/providers/groq";
@@ -113,5 +115,20 @@ describe("mock provider (AI_MODE=mock)", () => {
     c.abort();
     await expect(slow).rejects.toMatchObject({ kind: "timeout" });
     expect(vi.isFakeTimers()).toBe(false);
+  });
+});
+
+describe("mock reorder fixture (AI_MOCK=reorder)", () => {
+  it("is a valid reply that moves #2 to the top when the top two are close (Startup MVP preset)", async () => {
+    const c = ctxFor(presets.find((p) => p.id === "startup")!.input);
+    const p = buildPrompt(c);
+    const v = validateReply(await mockProvider("reorder").generate(p, signal()), c, p.ids);
+    expect(v).toMatchObject({ ok: true, explanation: { topPick: { styleId: p.ids.top[1] } } });
+  });
+
+  it("is rejected when the gap is wider than 5 points, so the chain falls back", () => {
+    const c = ctxFor(presets.find((p) => p.id === "student")!.input);
+    const p = buildPrompt(c);
+    expect(validateReply(mockReorderReply(p), c, p.ids).ok).toBe(false);
   });
 });

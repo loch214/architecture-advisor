@@ -15,7 +15,7 @@ export interface AiEnv {
   identicalReuse: boolean;
   /** AI_DAILY_BUDGET: AI requests per day across all users before falling back to rules-only. */
   dailyBudget: number;
-  /** AI_MOCK=ok|invalid|slow|429|fail picks the fixture used with AI_MODE=mock. */
+  /** AI_MOCK=ok|reorder|invalid|slow|429|fail picks the fixture used with AI_MODE=mock. */
   mockScenario: string;
 }
 

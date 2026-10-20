@@ -1,10 +1,11 @@
 "use client";
 
-import { ChevronRightIcon, DownloadIcon, PencilIcon, PrinterIcon, RotateCcwIcon } from "lucide-react";
+import { ArrowDownUpIcon, ChevronRightIcon, DownloadIcon, PencilIcon, PrinterIcon, RotateCcwIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { kb } from "@/modules/knowledge-base";
-import type { AdvisorResult } from "@/modules/recommendation";
+import { topPickChange, type AdvisorResult } from "@/modules/recommendation";
 import { fitFor } from "@/modules/scoring";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -44,6 +45,7 @@ export function ResultView({
   const top = result.final[0]!;
   const topStyle = kb.styles.find((s) => s.id === top.styleId);
   const name = result.snapshot.styles[top.styleId]!.name;
+  const change = aiPending ? undefined : topPickChange(result);
 
   return (
     <article aria-labelledby="result-heading" className="space-y-10">
@@ -81,6 +83,18 @@ export function ResultView({
           </Button>
         </div>
       </header>
+
+      {change && (
+        <Alert variant="info" role="status">
+          <ArrowDownUpIcon aria-hidden />
+          <AlertTitle>AI changed the order</AlertTitle>
+          <AlertDescription>
+            Our rule engine ranked {styleName(result, change.ruleTop)} first. The AI&apos;s small adjustments (at most 5
+            points per style) moved {styleName(result, change.finalTop)} to the top. Both scores are shown below, and
+            the AI explanation says why.
+          </AlertDescription>
+        </Alert>
+      )}
 
       <Heads result={result} />
 

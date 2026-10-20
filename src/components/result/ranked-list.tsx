@@ -82,10 +82,10 @@ export function RankedList({ result }: { result: AdvisorResult }) {
                   <span
                     className="relative col-start-2 h-2.5 rounded-full bg-muted sm:col-start-auto"
                     role="img"
-                    aria-label={`Final score ${fmt(f.finalScore)} out of 100`}
+                    aria-label={`Final score ${fmt(f.finalScore)} out of 100${f.aiDelta !== 0 ? `, rule score ${fmt(f.ruleScore)}` : ""}`}
                   >
                     <span
-                      className="absolute inset-y-0 left-0 rounded-full bg-primary"
+                      className="absolute inset-y-0 left-0 rounded-full bg-primary transition-[width] duration-500 motion-reduce:transition-none"
                       style={{ width: `${f.finalScore}%` }}
                     />
                     {f.aiDelta !== 0 && (
