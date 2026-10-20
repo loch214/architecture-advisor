@@ -30,7 +30,7 @@ export default function Home() {
         </p>
         <div className="flex flex-wrap gap-3">
           <Button asChild size="lg">
-            <Link href="/advisor">Start</Link>
+            <Link href="/advisor">Start the advisor</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
             <Link href="/methodology">How it works</Link>
