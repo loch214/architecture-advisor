@@ -5,7 +5,18 @@ Each phase ends with something demonstrable. The app is deployable from phase 4 
 ## Phase 0: Planning ✅ (this set of docs)
 Done locally 2026-10-21. Building continues in **Claude Code on the web** (cloud session) on repo `loch214/architecture-advisor`, starting from `docs/KICKOFF_PROMPT.md`. First cloud session scope: research tasks + Phases 1–4 (rules-only app, not deployed). Phase 5 needs owner-provided API keys; deployment needs the owner's Vercel account.
 
-## Phase 1: Knowledge base finalised
+## Build status (updated 2026-10-20, end of build session 1)
+Work is on branch `claude/peaceful-fermat-0prbs1` (see Q22). Handoff for the next session: `docs/HANDOFF.md`.
+
+## Phase 1: Knowledge base finalised 🟡 (mostly done)
+- ✅ Research for Q14/Q15 + spot-checks (KB draft §8)
+- ✅ `.gitignore` has `lectures/` and `docs/private/`
+- ✅ Next.js 16.4 scaffold (App Router, TS strict), Tailwind 4, Vitest, ESLint + Prettier, dependency-cruiser, CI workflow file
+- ✅ KB → JSON + Zod (`src/modules/knowledge-base/`), integrity checks, score-matrix snapshot, release gate: green
+- ⬜ shadcn/ui components (registry unreachable from the container: hand-write them in the shadcn pattern with `radix-ui` + `class-variance-authority`, already installed)
+- ⬜ Playwright config + first e2e test; `bundle:check` script (CI references it but it doesn't exist yet)
+- ⬜ CI not yet run on GitHub (it triggers on PRs and pushes to `main`)
+- ⬜ ADR-001…007
 - KB draft v2 already reviewed and calibrated by Claude; owner can override any value (optional).
 - Approve golden scenarios (TESTING_STRATEGY §2).
 - Before the first commit: `.gitignore` must contain `lectures/` and `docs/private/` (course material stays private; public repo cites books only).
@@ -13,16 +24,17 @@ Done locally 2026-10-21. Building continues in **Claude Code on the web** (cloud
 - Write ADR-001…007.
 **Milestone:** KB v1.0.0 merged; repo scaffolded; CI running lint/typecheck/KB tests.
 
-## Phase 2: Rule engine
+## Phase 2: Rule engine ✅
 - Weights + floors, base score, rules interpreter, ordering, explanation data.
 - Unit, property and golden tests; dependency-cruiser fitness function.
 **Milestone:** `score()` passes all golden scenarios, ≥ 95% coverage. A tiny CLI/test prints results for the presets.
+✅ Done: `src/modules/scoring/`, 114 tests (unit, fast-check properties, 16 golden, worked examples A and B exact), 100% line coverage on the engine; `npm run golden:print` prints the top 5 per scenario. Fitness: dependency-cruiser boundaries + ESLint purity rules (no `Date`, `Math.random`, `fetch`, browser globals in engine/KB/recommendation).
 
-## Phase 3: Input form
+## Phase 3: Input form ⬜ (next session)
 - 4-step form, presets, floors chips, validation, local storage, accessibility.
 **Milestone:** form produces a valid `UserInput` for every preset; Playwright validation test passes.
 
-## Phase 4: Results page (rules only) + first deploy 🚀
+## Phase 4: Results page (rules only) + first deploy 🚀 ⬜ (next session; deploy needs the owner)
 - Ranked list, "why this score", trade-off table from KB, excluded styles, patterns, methodology page, JSON download.
 - Deploy to Vercel (`AI_MODE=off`).
 **Milestone:** public URL that gives useful, explainable recommendations with no AI. Share with a few classmates for feedback.

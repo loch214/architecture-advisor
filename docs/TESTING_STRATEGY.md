@@ -15,7 +15,7 @@ Test pyramid: many fast unit tests on the engine and KB, focused tests on the AI
 | Area | Examples |
 |---|---|
 | Weights | levels map correctly; unset = low; floors use max; conflicts recorded when a floor beats the user's level |
-| Base score | hand-calculated cases (e.g. worked example A: modular monolith = 64.1) |
+| Base score | hand-calculated cases (e.g. worked example A: modular monolith base = 59.0) |
 | Normalisation | all-1 style → 0, all-5 style → 100 |
 | Rules | each rule fires on its condition only; `otherwise` branches; exclude removes the style; modifier cap ±30; floors from rules |
 | Ordering | tie-break chain (final → base → simplicity → id) |
@@ -29,28 +29,31 @@ Test pyramid: many fast unit tests on the engine and KB, focused tests on the AI
 5. Excluded styles never appear in `ranked`.
 
 ### Golden scenario tests (`tests/scoring/golden.test.ts`)
-Realistic inputs with an **expected top pick** and **expected top 3 (any order)**. These encode domain judgement, so you review and approve them. Proposed set:
+Realistic inputs with an **expected top pick** and **expected top 3 (any order)**. These encode domain judgement, so you review and approve them. Inputs live in `tests/scoring/golden.ts`; `npm run golden:print` prints the top 5 for each.
 
-| # | Scenario | Expected #1 | Also expected | Simulated (2026-10-21) |
-|---|---|---|---|---|
-| G1 | Student group project, beginner, very limited budget, prototype (example A) | Modular monolith | Layered or service-based in top 3 | MM 69.0, layered 57.0, SBA 56.0 ✓ |
-| G2 | Solo dev, quick prototype, very tight deadline | Modular monolith or layered | — | MM 71.4, layered 60.7 ✓ |
-| G3 | Concert ticketing, flash spikes, experienced (example B) | Space-based | Serverless/microservices/EDA in top 4 | Space 80.6, serverless 70.6 ✓ |
-| G4 | IoT sensor platform, async events, high availability | Event-driven | — | EDA 84.8 ✓ |
-| G5 | 30+ devs, clear domains, frequent independent releases, experienced | Microservices | — | 89.5 ✓ |
-| G6 | Mid-size business app, clear domains, migrating legacy monolith | Service-based | MM in top 5 | SBA 78.1 ✓ |
-| G7 | ETL / data processing tool | Pipeline | — | 78.0 ✓ |
-| G8 | Product with customer plug-ins, long-lived | Microkernel | — | 76.2 ✓ |
-| G9 | Banking ledger: strict ACID, on-prem, regulated, strict workflow | Service-based or modular monolith | serverless excluded; EDA not in top 3 | SBA 62.5, MM 45.8 ✓ |
-| G10 | Startup MVP: tiny team, very limited budget, spiky traffic (deliberate conflict) | Serverless or service-based | conflict surfaced to user | tie 58.0 (SBA wins on simplicity) ✓ |
-| G11 | Global multi-tenant SaaS, blast-radius isolation | Cell-based | Microservices #2 | 89.1 / 86.0 ✓ |
-| G12 | On-prem + no lock-in + spiky load | Space-based | serverless excluded | 71.3 ✓ |
-| G13 | Direct device-to-device sharing, no central server | Peer-to-peer | — | 81.4 ✓ |
-| G14 | On-site low-latency processing + async events | Event-driven or edge | edge in top 2 | EDA 87.6, edge 76.0 ✓ |
-| G15 | Changes mostly technical (UI/DB swaps), small beginner team | Layered | MM #2 | 58.8 / 56.0 ✓ |
-| G16 | Only "maintainability High", every driver "Not sure" | (no fixed pick) | warning N3 shown | microservices 71.7 + warning ✓ |
+| # | Scenario | Expected #1 | Also expected | Simulated (2026-10-21) | Real tests (2026-10-20) |
+|---|---|---|---|---|---|
+| G1 | Student group project, beginner, very limited budget, prototype (example A) | Modular monolith | Layered or service-based in top 3 | MM 69.0, layered 57.0, SBA 56.0 | MM 69.0, layered 57.0, SBA 56.0 ✓ |
+| G2 | Solo dev, quick prototype, very tight deadline | Modular monolith or layered | — | MM 71.4, layered 60.7 | MM 66.0, SBA 60.7 ✓ |
+| G3 | Concert ticketing, flash spikes, experienced (example B) | Space-based | Serverless/microservices/EDA in top 4 | Space 80.6, serverless 70.6 | Space 80.6, serverless 70.6 ✓ |
+| G4 | IoT sensor platform, async events, high availability | Event-driven | — | EDA 84.8 | EDA 86.6 ✓ |
+| G5 | 30+ devs, clear domains, frequent independent releases, experienced | Microservices | — | 89.5 | 89.5 ✓ |
+| G6 | Mid-size business app, clear domains, migrating legacy monolith | Service-based | MM in top 5 | SBA 78.1 | SBA 80.0, MM #5 49.0 ✓ |
+| G7 | ETL / data processing tool | Pipeline | — | 78.0 | 73.9 ✓ (see note) |
+| G8 | Product with customer plug-ins, long-lived | Microkernel | — | 76.2 | 73.8 ✓ |
+| G9 | Banking ledger: strict ACID, on-prem, regulated, strict workflow | Service-based or modular monolith | serverless excluded; EDA not in top 3 | SBA 62.5, MM 45.8 | SBA 66.7, MM 45.5 ✓ |
+| G10 | Startup MVP: tiny team, very limited budget, spiky traffic (deliberate conflict) | Serverless or service-based | conflict surfaced to user | tie 58.0 (SBA wins on simplicity) | tie 58.0 (SBA wins on simplicity), scalability conflict ✓ |
+| G11 | Global multi-tenant SaaS, blast-radius isolation | Cell-based | Microservices #2 | 89.1 / 86.0 | 87.1 / 84.4 ✓ (see note) |
+| G12 | On-prem + no lock-in + spiky load | Space-based | serverless excluded | 71.3 | 69.6 ✓ |
+| G13 | Direct device-to-device sharing, no central server | Peer-to-peer | — | 81.4 | 76.6 ✓ |
+| G14 | On-site low-latency processing + async events | Event-driven or edge | edge in top 2 | EDA 87.6, edge 76.0 | EDA 88.1, edge 71.9 ✓ |
+| G15 | Changes mostly technical (UI/DB swaps), small beginner team | Layered | MM #2 | 58.8 / 56.0 | 56.3 / 53.8 ✓ |
+| G16 | Only "maintainability High", every driver "Not sure" | (no fixed pick) | warning N3 shown | microservices 71.7 + warning | microservices 71.7 + N3 ✓ |
 
-The simulation was a scratch script outside the repo. These rows become the first real tests in Phase 2.
+**Status: implemented in Phase 2, all 16 pass.** The planning simulation didn't record its inputs (except worked examples A and B, G16 and the G10 tie), so the build session wrote concrete inputs for each scenario from its title. That's why some numbers differ from the simulated column; the expected picks did not change. Notes:
+- **G7 sensitivity:** with an ETL input that rates maintainability and testability High (instead of simplicity and cost), microservices ties pipeline at 68.8 and wins on base score. The final input uses simplicity High + cost High, which fits a typical data-processing tool. Logged as Q20.
+- **G11 sensitivity:** with clear domains, 30+ devs and *deployability* High, microservices edges out cell-based (87.8 vs 86.9) despite the blast-radius requirement. The final input rates performance High instead (global users). Logged as Q20.
+- **G10** with "deployability High, scalability Low" reproduces the simulated tie exactly, so it's likely the original input.
 
 When a KB or rule change breaks a golden test, that's a signal to stop and think: either the change is wrong, or the expectation needs a documented update.
 

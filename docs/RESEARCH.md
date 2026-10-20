@@ -36,7 +36,7 @@ The knowledge base is built from established literature (detailed per-item sourc
 | Elasticity | 1 | 1 | 1 | 2 | 3 | 5 | 4 |
 | Fault tolerance | 1 | 1 | 1 | 3 | 5 | 2 | 5 |
 
-Pipeline and orchestration-driven SOA ratings come from the 1st edition (from memory, flagged). Serverless, cell-based, peer-to-peer and edge are our own reviewed estimates.
+Pipeline and orchestration-driven SOA ratings come from the 1st edition. Pipeline values are partly corroborated by secondary book summaries; SOA values could not be confirmed online (both flagged, see `KNOWLEDGE_BASE_DRAFT.md` §8, 2026-10-20 research). Serverless, cell-based, peer-to-peer and edge are our own reviewed estimates.
 
 ---
 
@@ -47,9 +47,9 @@ Pipeline and orchestration-driven SOA ratings come from the 1st edition (from me
 | **Richards & Ford characteristic ratings** | Star ratings per style per characteristic (book figures) | The core scoring matrix |
 | **Weighted scoring / weighted sum** | Multiply each criterion's score by its importance, add up | The base formula: simple, explainable, testable |
 | **AHP** (Analytic Hierarchy Process) | Compare criteria in pairs to derive weights. Used in several academic style-selection papers | Rejected for v1: pairwise comparison of 13 attributes = 78 questions. Too heavy for beginners |
-| **ATAM utility tree** (L08) | Break broad qualities into concrete scenarios, rank by importance and difficulty | Importance levels; future "write a QA scenario" helper |
-| **QA scenarios** (L02) | Six-part testable requirement (source, stimulus, environment, artifact, response, measure) | Future feature; v1 free text can hint at them |
-| **ADRs** (L07) | Short records of a decision, its drivers, options and consequences | Future: export a result as an ADR draft. Also how we document this app |
+| **ATAM utility tree** (Bass et al.) | Break broad qualities into concrete scenarios, rank by importance and difficulty | Importance levels; future "write a QA scenario" helper |
+| **QA scenarios** (Bass et al.) | Six-part testable requirement (source, stimulus, environment, artifact, response, measure) | Future feature; v1 free text can hint at them |
+| **ADRs** (Nygard) | Short records of a decision, its drivers, options and consequences | Future: export a result as an ADR draft. Also how we document this app |
 
 ### Similar tools
 - **Academic prototypes:** recommender tools using quality attributes + AHP, AHP-DEA, and statistical approaches (e.g. TJEECS vol. 33 iss. 3; Gothenburg AHP thesis; IAJIT 2012/2021). Mostly papers, not public, maintained web apps.

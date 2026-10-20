@@ -19,9 +19,20 @@
 | Q17 | Cache behaviour | Never reuse a *similar* answer blindly: identical → reuse (re-validated; switchable); similar → AI verifies/adapts using the old answer as reference (AI_INTEGRATION §7) |
 | Q18 | Where building happens | Claude Code on the web (cloud credits), repo `loch214/architecture-advisor`; kickoff prompt in `docs/KICKOFF_PROMPT.md` |
 
-## Still open: delegated to the build agent (research, then decide and document)
-**Q14. Pipeline & SOA ratings.** Owner has no books. Current values are from memory of R&F 1st ed. → Build agent: search online for published rating tables (O'Reilly previews, author talks/slides, reputable summaries, course notes that cite the figures). If confirmed, update and cite; otherwise keep as flagged estimates.
+## Closed by build session 1 (2026-10-20)
+| # | Topic | Outcome |
+|---|---|---|
+| Q14 | Pipeline & SOA ratings | Researched online (book pages unreachable from the build container). **Pipeline:** our values agree with secondary summaries of the R&F 1st ed. figure; kept, still `flagged` (maintainability is our estimate). **SOA:** no published table found; qualitative sources agree; kept as flagged estimates. Details and sources: `KNOWLEDGE_BASE_DRAFT.md` §8 items 4–5, §9 |
+| Q15 | Modular monolith ratings | No independent *numeric* ratings found; qualitative sources agree with the book's direction. Kept R&F 2nd ed. Fig 11-7. Details: KB draft §8 item 6 |
 
-**Q15. Modular monolith ratings.** Build agent: look for independent sources (author talks, articles, other books) and compare with the R&F 2nd ed. figure. Follow the book unless strong, cited evidence says otherwise; record the comparison in `KNOWLEDGE_BASE_DRAFT.md` §8.
-
+## Still open
 **Q19. Fresh limits.** Before Phase 5, re-verify Gemini Flash-Lite and Groq free-tier limits and model IDs (they change often).
+
+**Q20. Golden-scenario sensitivities (owner, optional).** Found while turning the scenarios into tests (`TESTING_STRATEGY.md` §2 notes):
+- G7 ETL: if the user rates maintainability and testability High, microservices ties pipeline (68.8). Accept as-is, or raise R7 from +20?
+- G11 multi-tenant SaaS: with clear domains, 30+ devs and deployability High, microservices beats cell-based by 0.9 despite "blast radius". Accept, or raise R14 from +15?
+No change made: CLAUDE.md requires a source for any rule change, and both readings are defensible. Default if the owner doesn't answer: keep as-is.
+
+**Q21. Owner review of flagged items (owner, before launch).** `PROJECT_OVERVIEW.md` success criteria ask the owner to review general-knowledge items. They're `reviewed: true` per Q2, but the flagged ones (pipeline, SOA, serverless scores; marked `flagged: true` in `styles.json`) deserve a look, ideally against the book's pipeline (1st ed. ch. 11) and SOA (2nd ed. ch. 17) rating figures.
+
+**Q22. Branch name.** The kickoff asked for `build/phase-1-4`; the cloud session was only allowed to push to its assigned branch `claude/peaceful-fermat-0prbs1`, so work is there. Rename or open the PR from it; either is fine.
