@@ -6,3 +6,5 @@ test-results
 package-lock.json
 src/modules/knowledge-base/data
 docs
+.claude
+graft

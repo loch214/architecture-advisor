@@ -16,6 +16,9 @@ const eslintConfig = defineConfig([
     "coverage/**",
     "playwright-report/**",
     "test-results/**",
+    // Local agent tooling (graft index and Claude Code helpers), not app code.
+    ".claude/**",
+    "graft/**",
   ]),
   prettier,
   {

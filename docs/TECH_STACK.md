@@ -13,7 +13,7 @@
 | Cache / rate limit | **Upstash Redis** + `@upstash/ratelimit` (free: 256 MB, 500K commands/month) | Shared across serverless instances; HTTP-based (works in serverless) |
 | Tests | **Vitest**, fast-check (property tests), Playwright (a few E2E), Testing Library | Fast unit tests for the engine; real-browser check of main flow |
 | Architecture checks | dependency-cruiser, `server-only` | Fitness functions (see ARCHITECTURE §8) |
-| Lint/format | ESLint + Prettier | — |
+| Lint/format | ESLint 10 + Prettier (LF line endings, enforced by `.gitattributes`) | ESLint 9 is deprecated. `package.json` `overrides: { "eslint": "$eslint" }` makes the plugins inside `eslint-config-next` use our ESLint 10, which removes npm's peer-dependency warnings (a peer dependency is a package a plugin expects you to install yourself). |
 | Checks | `npm run check` locally (no CI server, owner decision Q23) | Lint, typecheck, tests, fitness functions in one command; Vercel still builds a preview per push |
 | Hosting | **Vercel Hobby** | Free, previews per branch, serverless functions up to 300 s |
 | Future DB + auth | **Supabase** (Postgres + Auth) *or* Neon + Auth.js | See below |
