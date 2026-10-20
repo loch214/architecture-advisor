@@ -1,0 +1,69 @@
+{
+  "kbVersion": "1.0.0",
+  "scale": {
+    "min": 1,
+    "max": 5
+  },
+  "levels": {
+    "none": 0,
+    "low": 1,
+    "medium": 2,
+    "high": 3,
+    "critical": 5
+  },
+  "modifierCapPerStyle": 30,
+  "maxCriticalSoftLimit": 3,
+  "references": [
+    {
+      "id": "RF2",
+      "citation": "M. Richards, N. Ford, Fundamentals of Software Architecture, 2nd ed., O'Reilly, 2025"
+    },
+    {
+      "id": "RF1",
+      "citation": "M. Richards, N. Ford, Fundamentals of Software Architecture, 1st ed., O'Reilly, 2020"
+    },
+    {
+      "id": "Bass",
+      "citation": "L. Bass, P. Clements, R. Kazman, Software Architecture in Practice, Addison-Wesley"
+    },
+    {
+      "id": "Roberts",
+      "citation": "M. Roberts, \"Serverless Architectures\", martinfowler.com",
+      "url": "https://martinfowler.com/articles/serverless.html"
+    },
+    {
+      "id": "serverless-tradeoffs",
+      "citation": "Practitioner analyses of cold starts, lock-in and steady-load cost (Netguru serverless guide, 2026; tianpan.co forum, 2026)"
+    },
+    {
+      "id": "PrimeVideo",
+      "citation": "Amazon Prime Video Tech, \"Scaling up the Prime Video audio/video monitoring service and reducing costs by 90%\", 2023"
+    },
+    {
+      "id": "AWS-cells",
+      "citation": "AWS Well-Architected, Reducing the Scope of Impact with Cell-Based Architecture, 2023"
+    },
+    {
+      "id": "edge",
+      "citation": "Thoughtworks Decoder, \"Edge computing\"; edge–cloud latency literature"
+    },
+    {
+      "id": "TeamTopologies",
+      "citation": "M. Skelton, M. Pais, Team Topologies, IT Revolution, 2019"
+    },
+    {
+      "id": "microservices.io",
+      "citation": "C. Richardson, Microservice Architecture pattern catalog",
+      "url": "https://microservices.io/patterns/"
+    },
+    {
+      "id": "Nx",
+      "citation": "Nx, micro-frontend architecture guide",
+      "url": "https://nx.dev"
+    },
+    {
+      "id": "RF-summaries",
+      "citation": "Secondary summaries of R&F 1st ed. pipeline ratings (kb.segersian.com; bagerbach.com book notes)"
+    }
+  ]
+}

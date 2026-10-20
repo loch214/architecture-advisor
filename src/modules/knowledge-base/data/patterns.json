@@ -1,0 +1,443 @@
+[
+  {
+    "id": "mvc",
+    "name": "MVC / MVP / MVVM",
+    "kind": "pattern",
+    "problem": "UI code mixes display, input handling and business logic.",
+    "solution": "Separate the model, the view and the code that connects them.",
+    "tradeoffs": [
+      "Organises UI code; works with any style"
+    ],
+    "aliases": [
+      "mvc",
+      "mvp",
+      "mvvm",
+      "model-view-controller"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  },
+  {
+    "id": "hexagonal",
+    "name": "Hexagonal / Clean / Onion",
+    "kind": "pattern",
+    "problem": "Business logic gets tangled with frameworks and databases.",
+    "solution": "Put business logic in the centre and talk to the outside world through ports and adapters.",
+    "tradeoffs": [
+      "More files and interfaces",
+      "Business logic becomes easy to test"
+    ],
+    "aliases": [
+      "hexagonal",
+      "ports and adapters",
+      "clean architecture",
+      "onion architecture"
+    ],
+    "source": {
+      "kind": "general",
+      "note": "A. Cockburn; R. Martin",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "strangler-fig",
+    "name": "Strangler Fig",
+    "kind": "pattern",
+    "problem": "Replacing a legacy system in one go is risky.",
+    "solution": "Route features one by one to new code until the old system can be switched off.",
+    "tradeoffs": [
+      "Two systems run side by side for a while"
+    ],
+    "aliases": [
+      "strangler fig",
+      "strangler"
+    ],
+    "source": {
+      "kind": "general",
+      "note": "M. Fowler, martinfowler.com",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "api-gateway",
+    "name": "API Gateway",
+    "kind": "pattern",
+    "problem": "Clients would need to know about many services.",
+    "solution": "One entry point routes requests and handles cross-cutting concerns such as auth.",
+    "tradeoffs": [
+      "Extra hop and a component to run"
+    ],
+    "aliases": [
+      "api gateway",
+      "gateway"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "microservices.io"
+    }
+  },
+  {
+    "id": "bff",
+    "name": "Backend for Frontend (BFF)",
+    "kind": "pattern",
+    "problem": "Different clients (web, mobile) need different APIs.",
+    "solution": "A small backend per client type shapes the data it needs.",
+    "tradeoffs": [
+      "More backends to maintain"
+    ],
+    "aliases": [
+      "bff",
+      "backend for frontend"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "microservices.io"
+    }
+  },
+  {
+    "id": "service-discovery",
+    "name": "Service Discovery",
+    "kind": "pattern",
+    "problem": "Service locations change as instances come and go.",
+    "solution": "A registry lets services find each other at runtime.",
+    "tradeoffs": [
+      "Another piece of infrastructure"
+    ],
+    "aliases": [
+      "service discovery",
+      "service registry"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "microservices.io"
+    }
+  },
+  {
+    "id": "sidecar",
+    "name": "Sidecar",
+    "kind": "pattern",
+    "problem": "Every service re-implements logging, metrics and networking.",
+    "solution": "Run those concerns in a helper process deployed next to each service.",
+    "tradeoffs": [
+      "More processes per service"
+    ],
+    "aliases": [
+      "sidecar"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  },
+  {
+    "id": "service-mesh",
+    "name": "Service Mesh",
+    "kind": "pattern",
+    "problem": "Service-to-service traffic needs consistent security, retries and monitoring.",
+    "solution": "A mesh of sidecars, managed centrally, handles that traffic.",
+    "tradeoffs": [
+      "Operational complexity"
+    ],
+    "aliases": [
+      "service mesh",
+      "istio",
+      "linkerd"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  },
+  {
+    "id": "circuit-breaker",
+    "name": "Circuit Breaker",
+    "kind": "pattern",
+    "problem": "A failing dependency makes callers hang and fail too.",
+    "solution": "Stop calling a failing service for a while and fail fast instead.",
+    "tradeoffs": [
+      "Needs sensible thresholds and fallbacks"
+    ],
+    "aliases": [
+      "circuit breaker"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "microservices.io"
+    }
+  },
+  {
+    "id": "pub-sub",
+    "name": "Publish/Subscribe",
+    "kind": "pattern",
+    "problem": "Many parts need to react to the same event.",
+    "solution": "Publishers send events to a topic; any number of subscribers receive them.",
+    "tradeoffs": [
+      "Harder to trace who reacts to what"
+    ],
+    "aliases": [
+      "pub/sub",
+      "pub-sub",
+      "publish subscribe",
+      "publish-subscribe"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  },
+  {
+    "id": "competing-consumers",
+    "name": "Competing Consumers",
+    "kind": "pattern",
+    "problem": "One consumer can't keep up with the message rate.",
+    "solution": "Several consumers read from the same queue in parallel.",
+    "tradeoffs": [
+      "Message order is no longer guaranteed"
+    ],
+    "aliases": [
+      "competing consumers"
+    ],
+    "source": {
+      "kind": "general",
+      "note": "Hohpe & Woolf, Enterprise Integration Patterns",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "saga",
+    "name": "Saga",
+    "kind": "pattern",
+    "problem": "A business transaction spans several services, so one database transaction can't cover it.",
+    "solution": "A sequence of local transactions with compensating actions if a step fails.",
+    "tradeoffs": [
+      "Eventual consistency",
+      "Compensation logic is hard to get right"
+    ],
+    "aliases": [
+      "saga",
+      "sagas"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "microservices.io"
+    }
+  },
+  {
+    "id": "cqrs",
+    "name": "CQRS",
+    "kind": "pattern",
+    "problem": "Reads and writes have very different needs.",
+    "solution": "Separate the write model from one or more read models.",
+    "tradeoffs": [
+      "Read models lag behind (eventual consistency)",
+      "More moving parts"
+    ],
+    "aliases": [
+      "cqrs",
+      "command query responsibility segregation"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "microservices.io"
+    }
+  },
+  {
+    "id": "event-sourcing",
+    "name": "Event Sourcing",
+    "kind": "pattern",
+    "problem": "You need a full history of changes, not just current state.",
+    "solution": "Store every change as an event and rebuild state from the events.",
+    "tradeoffs": [
+      "Harder queries and schema evolution",
+      "Excellent audit trail"
+    ],
+    "aliases": [
+      "event sourcing",
+      "event-sourcing",
+      "event store"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "microservices.io"
+    }
+  },
+  {
+    "id": "outbox",
+    "name": "Transactional Outbox",
+    "kind": "pattern",
+    "problem": "Saving data and publishing an event can't be done atomically.",
+    "solution": "Write the event to an outbox table in the same transaction; publish it afterwards.",
+    "tradeoffs": [
+      "Extra table and relay process"
+    ],
+    "aliases": [
+      "outbox",
+      "transactional outbox"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "microservices.io"
+    }
+  },
+  {
+    "id": "big-ball-of-mud",
+    "name": "Big ball of mud",
+    "kind": "anti-pattern",
+    "problem": "No clear structure; everything depends on everything.",
+    "solution": "Keep module boundaries explicit and enforce them with automated checks.",
+    "tradeoffs": [
+      "Every change gets slower and riskier"
+    ],
+    "aliases": [
+      "big ball of mud",
+      "spaghetti code"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  },
+  {
+    "id": "distributed-monolith",
+    "name": "Distributed monolith",
+    "kind": "anti-pattern",
+    "problem": "Services must be deployed together because they are tightly coupled.",
+    "solution": "Draw boundaries around business capabilities and avoid synchronous chains.",
+    "tradeoffs": [
+      "Costs of distribution without the benefits"
+    ],
+    "aliases": [
+      "distributed monolith"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  },
+  {
+    "id": "god-service",
+    "name": "God service",
+    "kind": "anti-pattern",
+    "problem": "One service does far too much.",
+    "solution": "Split by business capability.",
+    "tradeoffs": [
+      "Becomes a bottleneck for every team"
+    ],
+    "aliases": [
+      "god service",
+      "god object"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "chatty-services",
+    "name": "Chatty services",
+    "kind": "anti-pattern",
+    "problem": "Services make many small calls to each other for one request.",
+    "solution": "Coarser APIs, or merge services that always talk.",
+    "tradeoffs": [
+      "Latency and fragility add up"
+    ],
+    "aliases": [
+      "chatty services",
+      "chatty"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  },
+  {
+    "id": "shared-database",
+    "name": "Shared database between services",
+    "kind": "anti-pattern",
+    "problem": "Several services read and write the same tables.",
+    "solution": "Give each service its own data, or accept a shared schema consciously (as service-based does).",
+    "tradeoffs": [
+      "Schema changes need coordination"
+    ],
+    "aliases": [
+      "shared database"
+    ],
+    "source": {
+      "kind": "ref",
+      "ref": "microservices.io"
+    }
+  },
+  {
+    "id": "golden-hammer",
+    "name": "Golden hammer",
+    "kind": "anti-pattern",
+    "problem": "Using one favourite technology or style for every problem.",
+    "solution": "Choose per problem from the drivers and trade-offs.",
+    "tradeoffs": [
+      "Poor fit hidden by familiarity"
+    ],
+    "aliases": [
+      "golden hammer"
+    ],
+    "source": {
+      "kind": "general",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "entity-services",
+    "name": "Entity services",
+    "kind": "anti-pattern",
+    "problem": "Services are split around data entities (CustomerService, OrderService) rather than workflows.",
+    "solution": "Split around business capabilities and workflows.",
+    "tradeoffs": [
+      "Every workflow spans many services"
+    ],
+    "aliases": [
+      "entity services",
+      "entity service"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  },
+  {
+    "id": "grains-of-sand",
+    "name": "Grains of sand",
+    "kind": "anti-pattern",
+    "problem": "Services are split far too small.",
+    "solution": "Find the right granularity with disintegration/integration drivers.",
+    "tradeoffs": [
+      "Huge communication and ops overhead"
+    ],
+    "aliases": [
+      "grains of sand",
+      "nanoservices"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  },
+  {
+    "id": "architecture-sinkhole",
+    "name": "Architecture sinkhole",
+    "kind": "anti-pattern",
+    "problem": "Requests pass through layers that add no logic.",
+    "solution": "Open selected layers, or accept it if it's under ~20% of requests.",
+    "tradeoffs": [
+      "Wasted work and latency"
+    ],
+    "aliases": [
+      "architecture sinkhole",
+      "sinkhole"
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2"
+    }
+  }
+]

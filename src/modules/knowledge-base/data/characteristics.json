@@ -1,0 +1,259 @@
+[
+  {
+    "id": "domains-clear",
+    "type": "choice",
+    "label": "Does it split into clear, separate business areas?",
+    "help": "E.g. orders, payments and inventory that change for different reasons.",
+    "group": "workload",
+    "options": [
+      {
+        "id": "yes",
+        "label": "Yes"
+      },
+      {
+        "id": "no",
+        "label": "No"
+      },
+      {
+        "id": "unsure",
+        "label": "Not sure"
+      }
+    ],
+    "default": "unsure",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "async-events",
+    "type": "boolean",
+    "label": "It mainly reacts to events or runs background work",
+    "help": "E.g. sensor readings, notifications, order-placed events.",
+    "group": "workload",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "spiky-concurrency",
+    "type": "boolean",
+    "label": "Very high or sharply spiky concurrent load",
+    "help": "E.g. ticket drops or flash sales where thousands arrive at once.",
+    "group": "workload",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "sequential-processing",
+    "type": "boolean",
+    "label": "It processes data in sequential steps",
+    "help": "E.g. ETL, media conversion, batch jobs.",
+    "group": "workload",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "plugins",
+    "type": "boolean",
+    "label": "Needs plug-ins, extensions or per-customer customisation",
+    "help": "E.g. an IDE with extensions, or rules that differ per client.",
+    "group": "workload",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "strict-workflow",
+    "type": "boolean",
+    "label": "Workflows must be strictly controlled and predictable",
+    "help": "E.g. every loan application goes through the same steps in order.",
+    "group": "workload",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "steady-heavy-load",
+    "type": "boolean",
+    "label": "Constant, heavy, predictable load around the clock",
+    "help": "E.g. a busy API that never sleeps.",
+    "group": "workload",
+    "rare": true,
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "blast-radius",
+    "type": "boolean",
+    "label": "Failures must only affect a subset of customers",
+    "help": "Large multi-tenant platforms where one outage must not hit everyone.",
+    "group": "workload",
+    "rare": true,
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "p2p",
+    "type": "boolean",
+    "label": "Users or devices share directly with each other",
+    "help": "Little or no central server, e.g. file sharing or local-first apps.",
+    "group": "workload",
+    "rare": true,
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "edge",
+    "type": "boolean",
+    "label": "Must process near devices or keep working offline on site",
+    "help": "Ultra-low latency or unreliable networks, e.g. factory floors.",
+    "group": "workload",
+    "rare": true,
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "tech-changes",
+    "type": "boolean",
+    "label": "Most expected changes are technical",
+    "help": "E.g. swapping the UI framework or database, rather than new business features.",
+    "group": "workload",
+    "rare": true,
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "mixed-scopes",
+    "type": "boolean",
+    "label": "Parts of the system have very different needs",
+    "help": "E.g. a public site with huge traffic and a small back office.",
+    "group": "workload",
+    "rare": true,
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "multi-team-frontend",
+    "type": "boolean",
+    "label": "Several teams will work on one large web frontend",
+    "help": "Each team owns part of the same website.",
+    "group": "workload",
+    "rare": true,
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "hosting",
+    "type": "choice",
+    "label": "Where will it run?",
+    "help": "Some styles need a cloud provider.",
+    "group": "constraint",
+    "options": [
+      {
+        "id": "unsure",
+        "label": "Not sure"
+      },
+      {
+        "id": "managed-cloud",
+        "label": "Managed cloud is fine"
+      },
+      {
+        "id": "vms",
+        "label": "VMs or containers only"
+      },
+      {
+        "id": "on-prem",
+        "label": "On-premise or a single server"
+      }
+    ],
+    "default": "unsure",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "no-lock-in",
+    "type": "boolean",
+    "label": "Must avoid vendor lock-in",
+    "help": "You must be able to move to another provider.",
+    "group": "constraint",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "strict-acid",
+    "type": "boolean",
+    "label": "Strict all-or-nothing transactions across the whole system",
+    "help": "E.g. money must never be half-transferred.",
+    "group": "constraint",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "legacy-migration",
+    "type": "boolean",
+    "label": "Migrating from an existing monolith",
+    "help": "You're replacing or splitting an old system.",
+    "group": "constraint",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  },
+  {
+    "id": "regulated",
+    "type": "boolean",
+    "label": "Regulated data (health, finance, personal data)",
+    "help": "Laws or auditors set rules for the data.",
+    "group": "constraint",
+    "source": {
+      "kind": "design",
+      "note": "Form input",
+      "reviewed": true
+    }
+  }
+]
