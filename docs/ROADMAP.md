@@ -14,7 +14,7 @@ Phases 1–4 are built (rules-only app, not deployed). Work is on branch `build/
 - ✅ Next.js 16.4 scaffold (App Router, TS strict), Tailwind 4, Vitest, ESLint + Prettier, dependency-cruiser
 - ✅ KB → JSON + Zod (`src/modules/knowledge-base/`), integrity checks, score-matrix snapshot, release gate: green
 - ✅ shadcn-style components hand-written in `src/components/ui/` (registry unreachable from the container); `components.json` + `cn()` so `shadcn add` works later
-- ✅ Playwright config + e2e tests; `bundle:check` script (200 KB gz per page)
+- ✅ Playwright config + e2e tests (optional, Q24); `bundle:check` script (200 KB gz per page)
 - ✅ CI ran green on the PR, then was removed at the owner's request (Q23); checks run locally with `npm run check`
 - ✅ ADR-001…007 in `docs/adr/`
 - KB draft v2 already reviewed and calibrated by Claude; owner can override any value (optional).
