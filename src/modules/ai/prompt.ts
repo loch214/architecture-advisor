@@ -3,7 +3,7 @@ import type { AiContext } from "./context";
 import { responseJsonSchema, type AiResponse, type SchemaIds } from "./schema";
 
 /** Bump when the prompt or schema changes: it invalidates every cached answer (AI_INTEGRATION §7). */
-export const PROMPT_VERSION = "1";
+export const PROMPT_VERSION = "2";
 
 export interface Prompt {
   system: string;
@@ -20,9 +20,21 @@ export interface Reference {
 
 export const SYSTEM_PROMPT = `You are an assistant inside a software-architecture recommendation tool.
 A deterministic rule engine has already ranked candidate styles. Your job:
-1. Explain the ranking to the user in plain language (define jargon briefly).
+1. Explain the ranking for THIS user's project in plain, friendly language
+   that a student can follow.
 2. OPTIONALLY propose small score adjustments, ONLY when the user's notes or
    inputs contain information the rule engine could not see.
+Writing rules:
+- summary: 2-3 short sentences. Name the recommended style and the main
+  reason, tied to the user's own answers or notes. Do NOT list or define
+  other styles here.
+- topPick.why: 2-4 sentences. Describe what the style would look like for
+  this project (its main parts) and which of the user's priorities it serves.
+- others.whyLower: one sentence each, the main reason it fits this project
+  less well.
+- cautions: concrete risks for this project, one sentence each.
+- When a technical term is needed, explain it in a few words in the same
+  sentence. No markdown, no lists inside strings.
 Rules:
 - Use only the style ids provided. Never introduce new styles.
 - Each adjustment: integer between -5 and +5, with a specific reason that
@@ -74,8 +86,13 @@ export function buildPrompt(ctx: AiContext, reference?: Reference): Prompt {
     }
   });
 
-  if (rules.excluded.length > 0)
-    lines.push(`EXCLUDED (cannot be adjusted): ${rules.excluded.map((e) => e.styleId).join(", ")}`);
+  if (rules.excluded.length > 0) {
+    const nameOf = new Map(rules.firedRules.map((r) => [r.ruleId, r.name]));
+    const excluded = rules.excluded.map(
+      (e) => `${e.styleId} (${e.ruleIds.map((id) => nameOf.get(id) ?? id).join(", ")})`,
+    );
+    lines.push(`EXCLUDED (cannot be adjusted): ${excluded.join(", ")}`);
+  }
 
   const weights = Object.entries(rules.effectiveLevels)
     .filter(([a]) => (rules.effectiveWeights[a] ?? 0) > 0)

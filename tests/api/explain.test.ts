@@ -36,7 +36,7 @@ describe("POST /api/explain", () => {
   it("AI_MODE=mock: ok, then cached for the identical request", async () => {
     vi.stubEnv("AI_MODE", "mock");
     const ai = await aiFor({ input: exampleB });
-    expect(ai).toMatchObject({ status: "ok", provider: "Mock AI", promptVersion: "1", adjustments: [] });
+    expect(ai).toMatchObject({ status: "ok", provider: "Mock AI", promptVersion: "2", adjustments: [] });
     expect(ai.explanation.topPick.styleId).toBe("space-based");
     expect((await aiFor({ input: exampleB })).status).toBe("cached");
   });
@@ -46,7 +46,7 @@ describe("POST /api/explain", () => {
     async (fixture) => {
       vi.stubEnv("AI_MODE", "mock");
       vi.stubEnv("AI_MOCK", fixture);
-      expect(await aiFor({ input: exampleB })).toEqual({ status: "unavailable", adjustments: [], promptVersion: "1" });
+      expect(await aiFor({ input: exampleB })).toEqual({ status: "unavailable", adjustments: [], promptVersion: "2" });
     },
   );
 
