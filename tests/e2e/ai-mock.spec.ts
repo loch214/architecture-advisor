@@ -36,3 +36,15 @@ test("AI moves another style to #1: the 'AI changed the order' banner explains i
   await expect(page.getByText(/Our rule engine ranked Service-based architecture first/)).toBeVisible();
   await axe(page);
 });
+
+test("a shared link shows the rule result and asks the AI again", async ({ page }) => {
+  await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+  await submitPreset(page, at("ok"), "Student project");
+  await page.getByRole("button", { name: "Copy link" }).click();
+  const link = await page.evaluate(() => navigator.clipboard.readText());
+
+  await page.evaluate(() => localStorage.clear());
+  await page.goto(link);
+  await expect(page.getByRole("heading", { level: 1, name: "Modular monolith" })).toBeVisible();
+  await expect(page.getByText(/Mock explanation: modular-monolith ranks first/)).toBeVisible();
+});
