@@ -71,35 +71,39 @@ export function serialiseForm(saved: SavedForm, kb: KnowledgeBase): string {
 }
 
 /**
- * Reads saved answers back. Anything the current KB doesn't know (an id removed in a KB update, a
- * hand-edited value) is dropped rather than trusted, so a stale save can never crash the form.
+ * Keeps only answers the current KB knows. Anything else (an id removed in a KB update, a hand-edited
+ * value) is dropped rather than trusted, so a stale save or an old shared link can never crash the form.
  */
+export function sanitiseForm(f: Partial<FormState>, kb: KnowledgeBase): FormState {
+  return {
+    attributes: Object.fromEntries(
+      Object.entries(f.attributes ?? {}).filter(
+        ([id, level]) => kb.attributes.some((a) => a.id === id) && isLevel(level),
+      ),
+    ) as FormState["attributes"],
+    drivers: Object.fromEntries(
+      Object.entries(f.drivers ?? {}).filter(([id, v]) =>
+        kb.drivers.some((d) => d.id === id && d.options.some((o) => o.id === v)),
+      ),
+    ),
+    characteristics: Object.fromEntries(
+      Object.entries(f.characteristics ?? {}).filter(([id, v]) => {
+        const c = kb.characteristics.find((x) => x.id === id);
+        return c && (c.type === "boolean" ? typeof v === "boolean" : c.options.some((o) => o.id === v));
+      }),
+    ),
+    notes: typeof f.notes === "string" ? f.notes : "",
+    useAi: f.useAi !== false,
+  };
+}
+
+/** Reads saved answers back, cleaned with `sanitiseForm`. */
 export function restoreForm(raw: string | null, kb: KnowledgeBase): SavedForm | undefined {
   if (!raw) return undefined;
   try {
     const data = JSON.parse(raw) as { v?: number; form?: Partial<FormState>; step?: number };
     if (data.v !== STORAGE_VERSION || typeof data.form !== "object" || data.form === null) return undefined;
-    const f = data.form;
-    const form: FormState = {
-      attributes: Object.fromEntries(
-        Object.entries(f.attributes ?? {}).filter(
-          ([id, level]) => kb.attributes.some((a) => a.id === id) && isLevel(level),
-        ),
-      ) as FormState["attributes"],
-      drivers: Object.fromEntries(
-        Object.entries(f.drivers ?? {}).filter(([id, v]) =>
-          kb.drivers.some((d) => d.id === id && d.options.some((o) => o.id === v)),
-        ),
-      ),
-      characteristics: Object.fromEntries(
-        Object.entries(f.characteristics ?? {}).filter(([id, v]) => {
-          const c = kb.characteristics.find((x) => x.id === id);
-          return c && (c.type === "boolean" ? typeof v === "boolean" : c.options.some((o) => o.id === v));
-        }),
-      ),
-      notes: typeof f.notes === "string" ? f.notes : "",
-      useAi: f.useAi !== false,
-    };
+    const form = sanitiseForm(data.form, kb);
     const step = STEPS.some((s) => s.id === data.step) ? (data.step as StepId) : 1;
     return { form, step };
   } catch {
