@@ -1,6 +1,6 @@
-# Handoff: launch session 6 (v1.0 live) → next
+# Handoff: session 7 (v1.1, owner feedback) → next
 
-Last updated 2026-10-21. Read `CLAUDE.md` first (note the **commit identity rule**), then this file. Phases 1–6 are done and **v1.0 is live at https://architecture-advisor-pink.vercel.app** (tag `v1.0.0`). What's left: three yes/no owner answers (Q25, Q28, Q29, launched with the defaults) and small leftovers.
+Last updated 2026-10-21. Read `CLAUDE.md` first (note the **commit identity rule**), then this file. Phases 1–6 are done and **v1.0 is live at https://architecture-advisor-pink.vercel.app** (tag `v1.0.0`). **v1.1** (session 7, Q30–Q32) fixed style selection (microservices no longer wins almost everything; KB 1.1.0), the flow (blank form first, examples secondary, Start over everywhere, fresh form per visit) and the result's explanations. What's left: three yes/no owner answers (Q25, Q28, Q29, launched with the defaults) and small leftovers.
 
 ## Where things are
 - **Branch:** everything is on `main`. Start new work on a fresh branch from `main`. **Claude opens and merges its own PRs (Q27, also in CLAUDE.md)**; the owner does no PR, review or merge steps, ever. Old merged branches still exist on GitHub (harmless). No CI server (Q23): run `npm run check` and `npm run build` (+ `npm run bundle:check`) before pushing. Commits are authored as `Lochana Dahanayake <loch214@gmail.com>`, no Claude trailers. Set `git config user.name/user.email` in a fresh clone before committing. Keep commits grouped by logical step.
@@ -25,7 +25,8 @@ Last updated 2026-10-21. Read `CLAUDE.md` first (note the **commit identity rule
 | AI layer (Phase 5) | `src/modules/ai/`, `src/modules/platform/`, `/api/explain`. Details: `AI_INTEGRATION.md` §12 |
 | Phase 6 polish (sessions 4–5) | AI-changed-order banner, `/privacy`, a11y pass, README + ADRs, shareable "Copy link" |
 | **Launch (session 6)** | Vercel deploy, live smoke test, Lighthouse on production, README screenshots (`scripts/screenshots.mjs` → `docs/screenshots/`), tag `v1.0.0`. Details: UI_UX "As built (launch)" |
-| Tests | 228 Vitest tests in `npm run check`; no test calls a real provider. Optional Playwright: 20 tests |
+| **v1.1 (session 7)** | KB 1.1.0 (R20–R23, two new step-1 questions), `plainReasons`, prompt v2, new flow. Details: KNOWLEDGE_BASE_DRAFT §8, UI_UX "As built (v1.1)" |
+| Tests | 240 Vitest tests in `npm run check` (22 golden scenarios); no test calls a real provider. Optional Playwright: 24 tests |
 
 ## Waiting on the owner
 1. **Q25 Upstash**, **Q28 analytics**, **Q29 notes in shared links:** launched with the defaults (no / no / notes out). Apply only if the owner answers.

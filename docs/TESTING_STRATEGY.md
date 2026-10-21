@@ -49,8 +49,14 @@ Realistic inputs with an **expected top pick** and **expected top 3 (any order)*
 | G14 | On-site low-latency processing + async events | Event-driven or edge | edge in top 2 | EDA 87.6, edge 76.0 | EDA 88.1, edge 71.9 ✓ |
 | G15 | Changes mostly technical (UI/DB swaps), small beginner team | Layered | MM #2 | 58.8 / 56.0 | 56.3 / 53.8 ✓ |
 | G16 | Only "maintainability High", every driver "Not sure" | (no fixed pick) | warning N3 shown | microservices 71.7 + warning | microservices 71.7 + N3 ✓ |
+| G17 | Cross-platform desktop IDE with plug-ins, works offline (installed app, one set of needs) | Microkernel | microservices and service-based excluded | — | microkernel 70.1, MM 37.5 ✓ |
+| G18 | Growing SaaS: 11–30 devs, clear domains, rapid growth, parts with different needs | Microservices or service-based | note N1 shown | — | ✓ |
+| G19 | Ordinary business web app, 4–10 devs, one set of needs | Modular monolith or layered | microservices not in top 2 | — | MM 45.0, SBA 39.0 ✓ |
+| G20 | Server product with customer plug-ins (CI-server style), one set of needs | Microkernel | — | — | microkernel 70.1, microservices 42.9 ✓ |
+| G21 | The IDE answers with both v1.1 questions left "Not sure" (owner report) | Microkernel | — | — | microkernel 70.1, SBA 61.8 ✓ |
+| G22 | Installed app without plug-ins | Modular monolith or layered | microservices excluded | — | ✓ |
 
-**Status: implemented in Phase 2, all 16 pass.** The planning simulation didn't record its inputs (except worked examples A and B, G16 and the G10 tie), so the build session wrote concrete inputs for each scenario from its title. That's why some numbers differ from the simulated column; the expected picks did not change. Notes:
+**Status: implemented in Phase 2, all 16 pass. G17–G22 added in v1.1 (2026-10-21) after the owner's IDE report (KNOWLEDGE_BASE_DRAFT §8, KB 1.1.0); all 22 pass, and G1–G16 keep their expected picks.** The planning simulation didn't record its inputs (except worked examples A and B, G16 and the G10 tie), so the build session wrote concrete inputs for each scenario from its title. That's why some numbers differ from the simulated column; the expected picks did not change. Notes:
 - **G7 sensitivity:** with an ETL input that rates maintainability and testability High (instead of simplicity and cost), microservices ties pipeline at 68.8 and wins on base score. The final input uses simplicity High + cost High, which fits a typical data-processing tool. Logged as Q20.
 - **G11 sensitivity:** with clear domains, 30+ devs and *deployability* High, microservices edges out cell-based (87.8 vs 86.9) despite the blast-radius requirement. The final input rates performance High instead (global users). Logged as Q20.
 - **G10** with "deployability High, scalability Low" reproduces the simulated tie exactly, so it's likely the original input.
@@ -78,7 +84,8 @@ When a KB or rule change breaks a golden test, that's a signal to stop and think
 
 ## 4b. Result, form and route tests (built in session 2)
 - `tests/recommendation/`: `buildResult` is pure, wraps `score()`, snapshots the KB (flagged estimates marked), matches mentions; `finalScores` reproduces example B's AI illustration (+4 → #2).
-- `tests/form/`: every preset passes `checkInput` and uses its golden scenario's input (G1, G10, G4, G3, G6; Growing SaaS must rank a domain-partitioned distributed style first); per-step validation; local-storage restore drops unknown ids.
+- `tests/form/`: there are six examples; every example passes `checkInput` and uses its golden scenario's input (student G1, ide G17, saas G18, iot G4, ticketing G3, enterprise G6; Growing SaaS must rank a domain-partitioned distributed style first); per-step validation; restoring saved answers drops unknown ids.
+- `tests/recommendation/reasons.test.ts` (v1.1): `plainReasons()` explains the IDE pick with the plug-in rule and the installed-app exclusions, names the runner-up's biggest penalty, and is pure.
 - `tests/scoring/preview.test.ts`: floor chips match the engine for complete input.
 - `tests/api/explain.test.ts`: `disabled` with `AI_MODE=off`/unset, 400 on bad JSON or invalid input, 413 on an oversized body, no internals echoed; Phase 5 adds `AI_MODE=mock` ok → cached, each failing fixture → `unavailable`, live without keys calls nothing, 11th request → `rate_limited`, client-sent scores ignored, keys never echoed and notes never logged.
 
@@ -89,7 +96,9 @@ When a KB or rule change breaks a golden test, that's a signal to stop and think
 
 **Status (session 5):** shareable link cases added: Copy link → reopen in a fresh browser context gives the same top pick; a broken link shows its notice (via `hashchange`, no reload); on the `AI_MOCK=ok` server a shared link asks the AI again. 20 tests (10 × 2 viewports). The encode/decode logic itself is unit-tested in `tests/form/share-link.test.ts` (round-trip of every preset, URL-safe characters, broken/old/partial links, and a fast-check "never throws" property).
 
-1. Preset → submit → ranked list + trade-off table visible with `AI_MODE=off`.
+**Status (v1.1, 2026-10-21):** rewritten for the new flow: examples open their result from `/advisor?example=<id>`, the desktop IDE example recommends Microkernel with "Ruled out: … Microservices", a new tab starts blank and Start over clears the answers, a broken link opens a blank step 1, and the "AI changed the order" case uses a share link to golden G10. 24 tests (12 × 2 viewports). Set `PW_CHANNEL=msedge` to use an installed Edge instead of Playwright's Chromium; with Edge, the test after the "Download JSON" step can fail at `browser.newContext` (Edge closes after a headless download), so use Playwright's Chromium for a clean run.
+
+1. Example → result → ranked list + trade-off table visible with `AI_MODE=off`.
 2. Same with `AI_MODE=mock` (ok): explanation appears, AI delta pill visible.
 3. `AI_MODE=mock` (fail): fallback message, ranking still visible.
 4. Validation: can't submit without a High/Critical attribute.

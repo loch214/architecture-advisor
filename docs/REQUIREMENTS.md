@@ -14,8 +14,8 @@ Priority: **M** = must (v1), **S** = should (v1 if time allows), **F** = future.
 | FR-5 | Form validates input with clear messages; requires at least one High/Critical attribute | M |
 | FR-6 | Form warns when more than 3 attributes are Critical | M |
 | FR-7 | Form shows attribute floors implied by driver answers before submit | S |
-| FR-8 | User can start from preset examples | S |
-| FR-9 | Answers survive a page refresh (local storage) | S |
+| FR-8 | User can open one of six example results (secondary to "Start a new recommendation") | S |
+| FR-9 | Answers survive a page refresh in the same tab (session storage); a new visit starts with a blank form; "Start over" is available on every step and on the result | S |
 
 ### Rule engine
 | ID | Requirement | P |

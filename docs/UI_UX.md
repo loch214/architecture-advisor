@@ -5,21 +5,21 @@ Principles: plain language first, jargon explained inline (tooltips with a one-l
 ## Pages (v1)
 | Route | Purpose |
 |---|---|
-| `/` | Landing: what it does (3 steps), sample result screenshot, "Start", "How it works" link, honest note: "Rule-based scores + AI explanation; not a substitute for your judgement" |
-| `/advisor` | The form (stepper) and the result on the same page (result replaces form; "Edit answers" goes back with state kept) |
+| `/` | Landing: one main button **"Start a new recommendation"** (`/advisor?new`, always a blank form), then **"Or explore an example"** with the six example cards (`/advisor?example=<id>`, secondary), then "How it works" in 3 steps. The honest note lives in the footer |
+| `/advisor` | The form (stepper) and the result on the same page (result replaces form; "Edit answers" goes back with state kept). Opens straight on a blank step 1 |
 | `/methodology` | How scoring works: formula, levels, rules, sources, what's general knowledge. Generated from KB data. Builds trust and is great for a portfolio |
 | `/styles` + `/styles/[id]` | *(v1.1)* Browsable catalog of styles, scores and patterns from the KB |
 | `/about` | Project, author, limitations, short privacy summary |
 | `/privacy` | What is sent where and what is kept; the AI providers and host with links to their terms (AI_INTEGRATION §9.6). Linked from the notes notice, `/about` and the footer |
 
 ## Form: 4-step stepper
-Progress bar at the top. Each step fits one screen on desktop. State is kept in the URL hash or `localStorage` so a refresh doesn't lose answers.
+Progress bar at the top, with **Start over** (inline "Clear all answers?" confirm, no browser dialog) once anything is answered. Each step fits one screen on desktop. Answers are kept in **session storage**: a refresh in the same tab keeps them, but a new visit or a new tab always starts blank, so nobody lands on someone else's half-filled form (owner decision, 2026-10-21).
 
-**Step 0 (optional): Start from an example.** Preset cards: *Student project*, *Startup MVP*, *Growing SaaS*, *Event-heavy / IoT*, *High-traffic ticketing*, *Enterprise migration*. Picking one pre-fills everything (editable). "Start blank" is equally visible.
+**Examples (not a step):** six example cards on the landing page: *Student project*, *Desktop IDE with plug-ins*, *Growing SaaS*, *Event-heavy / IoT*, *High-traffic ticketing*, *Enterprise migration*. Each mirrors a golden scenario. Opening one shows its result straight away with an "Example: …" box offering **Start my own** and **Edit these answers**. Step 1 also links to them ("Open an example").
 
 **Step 1: Your project & team (business drivers)**
 Radio groups (segmented buttons), all required, each with a "Not sure" option:
-time to market · budget · team size · team experience with distributed systems/DevOps · expected growth · expected lifespan · how often requirements change. One-line helper text under each label.
+**what you're building** (website/web app/API · installed app · installed app + own back end) · **do all parts need the same qualities?** (the book's "one quantum or several" question, in plain words) · time to market · budget · team size · team experience with distributed systems/DevOps · expected growth · expected lifespan · how often requirements change. One-line helper text under each label.
 
 **Step 2: What matters most (quality attributes)**
 - Row per attribute: name, plain one-liner, ⓘ tooltip (definition + example scenario), segmented control **Not needed / Low / Medium / High / Critical**. Default **Low**.
@@ -29,7 +29,7 @@ time to market · budget · team size · team experience with distributed system
 - Validation: at least one High or Critical.
 
 **Step 3: Your system's shape & constraints**
-- Checkbox cards for workload characteristics (async events, spiky load, sequential processing, plug-ins, strict workflow, steady heavy load, blast radius, device-to-device sharing, on-site/edge processing, mostly-technical changes, parts with very different needs, several frontend teams) with a small example under each. Rare ones sit under "More situations".
+- Checkbox cards for workload characteristics (async events, spiky load, sequential processing, plug-ins, strict workflow, steady heavy load, blast radius, device-to-device sharing, on-site/edge processing, mostly-technical changes, several frontend teams) with a small example under each. Rare ones sit under "More situations".
 - "Does it split into clear business areas?" Yes / No / Not sure.
 - Constraints: hosting (3 options), avoid lock-in, strict ACID, legacy migration, regulated data.
 
@@ -83,7 +83,7 @@ Details:
 ## States
 | State | Behaviour |
 |---|---|
-| Empty (first visit) | Landing / step 0 presets |
+| Empty (first visit) | Landing; `/advisor` opens a blank step 1 |
 | Form invalid | Inline message under the field + summary at the step top; Next disabled with reason |
 | Computing rules | Effectively instant; no spinner |
 | AI loading | Explanation panel shows skeleton lines + "Writing an explanation… (usually 3–10 s)". Rest of the result fully usable |
@@ -91,7 +91,7 @@ Details:
 | AI unavailable | Neutral info box (not red): "AI explanation isn't available right now. Your ranking is complete and comes from our rule engine." + Retry |
 | Rate limited | Same style: "You've hit the AI limit for now (resets in ~X min). Rule-based results still work." |
 | Network offline | Rules still work (they run in the browser); AI panel says offline |
-| Unexpected error | Friendly message + "Try again"; result object is never lost (kept in state/localStorage) |
+| Unexpected error | Friendly message + "Try again"; result object is never lost (kept in state/session storage) |
 
 ## As built (session 2): deviations from the plan above
 - **ⓘ help** is an inline expandable panel (button with `aria-expanded`), not a hover tooltip: it works on touch and keyboard and avoids shipping a positioning library (the popover version pushed `/advisor` over its bundle budget).
@@ -102,7 +102,7 @@ Details:
 - Flagged estimates show as `≈` in the trade-off table and the methodology matrix (Q21).
 
 ## As built (session 4, Phase 6)
-- **"AI changed the order" banner:** a neutral info box under the header when the AI's #1 differs from the rule engine's (`topPickChange()` in `recommendation`), naming both styles. Not shown while the AI is loading. Score bars animate to the adjusted width (off with `prefers-reduced-motion`). Check it locally with `AI_MODE=mock AI_MOCK=reorder` and the Startup MVP preset.
+- **"AI changed the order" banner:** a neutral info box under the header when the AI's #1 differs from the rule engine's (`topPickChange()` in `recommendation`), naming both styles. Not shown while the AI is loading. Score bars animate to the adjusted width (off with `prefers-reduced-motion`). Check it locally with `AI_MODE=mock AI_MOCK=reorder` and a share link to golden G10 (the Startup MVP preset was replaced in v1.1).
 - **States checked:** loading skeleton, ok, reused/adapted note, unavailable + Retry, rate limited, disabled and skipped all render in the AI panel; ok, unavailable and reorder are covered by e2e with `AI_MODE=mock`. A refresh while the AI is loading shows "isn't available right now" + Retry (the pending request isn't resumed), which is acceptable. The rate-limited message doesn't show a reset time yet ("resets in ~X min" in the table above).
 - **`/privacy`** page added; the footer links to it.
 - **Accessibility pass:** `Alert` no longer defaults to `role="alert"` (a result page used to fire several assertive announcements); only the form's error summary keeps it. A polite, screen-reader-only live region on the result says when the AI part settles ("AI explanation ready." / the status title, plus "AI changed the order."). The light-mode info colour is darker (`oklch(0.5 0.14 255)`) so the "AI ±n" badge passes 4.5:1. Preset cards use spans inside the button instead of a Card's div/h3/p (invalid inside a button, and it skipped a heading level). axe now also runs on `/about`, `/privacy` and the AI result states.
@@ -130,6 +130,15 @@ Details:
 
   Mobile performance is the median of 3 runs for `/` (77–87) and `/advisor` (79–90), one run elsewhere. LCP 1.2–2.3 s and CLS ≈ 0 everywhere; what costs points is total blocking time (300–800 ms, the main thread busy running JavaScript), which swings a lot with this PC's CPU load. Session 4's run (a production build inside the cloud container) scored 96–100, so treat the mobile numbers as a range, not a regression. If mobile performance matters later, the lever is less client JavaScript at start-up (hydration), not images or layout.
 - **Screenshots:** `docs/screenshots/` (landing, form step, result with the AI explanation, trade-off table), taken from the live site by `node scripts/screenshots.mjs` with Playwright's `msedge` channel, so nothing is downloaded.
+
+## As built (v1.1, 2026-10-21): owner feedback on flow and results
+The owner found the flow confusing (examples first, no way to start fresh on `/advisor`, old answers reappearing) and the AI text messy. Changes:
+- **Flow:** the start screen with preset cards is gone. `/advisor` opens on a blank step 1. The landing page's main button goes to `/advisor?new` (clears this tab's saved answers); the six examples are a secondary section below it and open their result directly. `?new` and `?example=` are read once and removed from the address bar. A broken share link now opens a blank step 1 with its notice.
+- **Storage:** answers and the last result moved from local storage to session storage (see Form). Any copies left in local storage by v1.0 are deleted on Start over.
+- **Start over** is on every form step (once something is answered) and is a full button on the result, next to "Edit answers".
+- **Result page order:** top pick → **"Why <style> fits your project"** (plain sentences built by `plainReasons()` from the rule result: rules that favoured it, the priorities it rates well on, the trade-off, why not #2, and what was ruled out and why) → notes/conflicts → **"In plain words (AI)"** → all styles ranked → trade-off table → patterns → "You mentioned". "Adjustments made", "Not recommended" and "How this was calculated" sit together under one collapsed **"Full scoring details"**. The rule/AI score line only shows when the AI changed the top pick's score.
+- **AI panel:** a short summary in larger text, then "Why <style>", "Why the others rank lower" and "Watch out for" as headed blocks. The prompt (v2) asks for a summary tied to the user's answers instead of a list of definitions (AI_INTEGRATION §3).
+- **"AI changed the order"** is checked in e2e with a share link to golden G10 (a tie), since the Startup MVP example was replaced by the desktop IDE.
 
 ## Copy tone
 Short, friendly, second person. Explain terms once: e.g. "Elasticity: scaling up *and back down* quickly when traffic spikes." No hype words ("revolutionary", "AI-powered magic").
