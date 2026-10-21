@@ -112,18 +112,18 @@ Implementation notes: base and final are rounded to 6 decimals internally so equ
 **Modular monolith base** (book ratings 5,2,2,2,2,2,3,1,1,1, cost 5, sec 3, cons 5):
 (3·5 + 1·2 + 3·2 + 2·2 + 2·2 + 1·2 + 1·3 + 1·1 + 0·1 + 1·1 + 5·5 + 2·3 + 3·5) / 25 = 84 / 25 = 3.36 → (3.36 − 1)/4·100 = **59.0**
 
-**Rules fired:** R1 (Beginner), R18 (stable growth + prototype → new system, direction uncertain), and the "otherwise" penalties of R6/R7/R8/R14/R16/R17 (no niche characteristics selected).
+**Rules fired:** R1 (Beginner), R18 (stable growth + prototype → new system, direction uncertain), R23 (small team, no fast growth → no clear need for microservices), and the "otherwise" penalties of R4/R6/R7/R8/R14/R16/R17 (no event workload or niche characteristics selected). Numbers updated for KB 1.1.0 (2026-10-21).
 
 | Rank | Style | Base | Rules | Final |
 |---|---|---|---|---|
 | 1 | Modular monolith | 59.0 | +10 (R18) | **69.0** |
 | 2 | Layered | 52.0 | +5 (R18) | 57.0 |
 | 3 | Service-based | 66.0 | −10 (R1) | 56.0 |
-| 4 | Event-driven | 53.0 | −5 (R1) | 48.0 |
-| 5 | Pipeline | 62.0 | −15 (R7) | 47.0 |
-| 6 | Microkernel | 62.0 | −15 (R8) | 47.0 (tie → pipeline wins on simplicity) |
-| 7 | Serverless | 48.0 | −10 (R1) | 38.0 |
-| 8 | Microservices | 52.0 | −15 (R1) | 37.0 |
+| 4 | Pipeline | 62.0 | −15 (R7) | 47.0 |
+| 5 | Microkernel | 62.0 | −15 (R8) | 47.0 (tie → pipeline wins on simplicity) |
+| 6 | Event-driven | 53.0 | −15 (R1, R4) | 38.0 |
+| 7 | Serverless | 48.0 | −10 (R1) | 38.0 (tie → event-driven wins on base) |
+| 8 | Microservices | 52.0 | −30 (R1, R23) | 22.0 |
 | 9 | Cell-based | 44.0 | −25 (R1, R14) | 19.0 |
 | 10 | Space-based | 35.0 | −20 (R1, R6) | 15.0 |
 | 11 | Peer-to-peer | 38.0 | −30 (cap) | 8.0 |
@@ -135,19 +135,19 @@ Reads as expected: modular monolith for a beginner team on a budget, with servic
 ## Worked example B: concert ticketing platform
 **Input:** team 11–30, experience Experienced, budget Moderate, growth Unpredictable spikes, lifespan 1–5 yrs. User: performance, scalability, elasticity Critical; availability High; security, maintainability, deployability Medium; rest Low. Characteristics: spiky-concurrency ✔, domains-clear = not sure.
 
-Effective Σw = 32. Rules fired: R6 (+15 space-based, +5 serverless) and the "otherwise" penalties of R7/R8/R14/R16/R17.
+Effective Σw = 32. Rules fired: R6 (+15 space-based, +5 serverless) and the "otherwise" penalties of R4/R7/R8/R14/R16/R17.
 
 | Rank | Style | Base | Rules | Final |
 |---|---|---|---|---|
 | 1 | Space-based | 65.6 | +15 | **80.6** |
 | 2 | Serverless | 65.6 | +5 | 70.6 |
 | 3 | Microservices | 69.5 | 0 | 69.5 |
-| 4 | Event-driven | 68.8 | 0 | 68.8 |
-| 5 | Cell-based | 70.3 | −10 | 60.3 |
+| 4 | Cell-based | 70.3 | −10 | 60.3 |
+| 5 | Event-driven | 68.8 | −10 (R4) | 58.8 |
 | 6 | Service-based | 53.1 | 0 | 53.1 |
 | … | P2P 38.6, SOA 35.9, Edge 34.7, Modular monolith 29.7, Layered 24.2, Microkernel 19.4, Pipeline 14.7 | | | |
 
-**AI layer on top (illustration):** notes say *"Order flow must be fully auditable and we already run Kafka."* The AI may return `event-driven +4` ("existing Kafka skills; an event log supports auditability"). Event-driven → 72.8, moving from #4 to #2. Space-based stays #1 because a 10-point lead can't be overturned by a ±5 adjustment. The UI shows *Event-driven: rules 68.8, AI +4, final 72.8*. That's a small, visible, justified change, which is what the hybrid design is for.
+**AI layer on top (illustration):** notes say *"We already run everything on Kubernetes and the team knows it well."* The AI may return `microservices +4` ("existing Kubernetes skills lower the operating cost"). Microservices → 73.5, moving from #3 to #2. Space-based stays #1 because a 10-point lead can't be overturned by a ±5 adjustment. The UI shows *Microservices: rules 69.5, AI +4, final 73.5*. That's a small, visible, justified change, which is what the hybrid design is for. (Until KB 1.1.0 this example used event-driven +4 for "we already run Kafka"; event-driven now loses 10 points without an event workload, so a +4 no longer moves it to #2. A user with Kafka-style workloads should tick "It mainly reacts to events".)
 
 ## Determinism and safety properties (tested)
 1. Same input ⇒ identical output (deep-equal), across browser and server.

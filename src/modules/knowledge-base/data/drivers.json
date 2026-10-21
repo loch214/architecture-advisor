@@ -1,5 +1,54 @@
 [
   {
+    "id": "system-type",
+    "label": "What are you building?",
+    "help": "An app people install runs as one program on each device, so splitting it across servers isn't an option.",
+    "options": [
+      {
+        "id": "unsure",
+        "label": "Not sure",
+        "floors": {}
+      },
+      {
+        "id": "server",
+        "label": "Website, web app or API",
+        "floors": {}
+      },
+      {
+        "id": "installed",
+        "label": "Installed app (desktop or mobile)",
+        "floors": {}
+      },
+      {
+        "id": "both",
+        "label": "Installed app + our own back end",
+        "floors": {}
+      }
+    ]
+  },
+  {
+    "id": "qa-scope",
+    "label": "Do all parts of the system need the same qualities?",
+    "help": "Most systems are \"Yes\". Pick \"No\" only if parts differ a lot, e.g. a public shop that must survive huge traffic and a back office that mainly needs security.",
+    "options": [
+      {
+        "id": "unsure",
+        "label": "Not sure",
+        "floors": {}
+      },
+      {
+        "id": "one",
+        "label": "Yes, the same everywhere",
+        "floors": {}
+      },
+      {
+        "id": "different",
+        "label": "No, some parts differ a lot",
+        "floors": {}
+      }
+    ]
+  },
+  {
     "id": "time-to-market",
     "label": "How soon must the first version go live?",
     "help": "Tight deadlines favour simpler styles.",

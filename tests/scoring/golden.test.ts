@@ -23,11 +23,17 @@ const extra: Record<string, (r: RuleResult) => void> = {
   G14: (r) => expect(ids(r, 2)).toContain("edge"),
   G15: (r) => expect(r.ranked[1]!.styleId).toBe("modular-monolith"),
   G16: (r) => expect(r.warnings.map((w) => w.ruleId)).toContain("N3"),
+  // An installed app ships as one program: no style that splits it into network services may appear.
+  G17: (r) =>
+    expect(r.excluded.map((e) => e.styleId)).toEqual(expect.arrayContaining(["microservices", "service-based"])),
+  G18: (r) => expect(r.notes.map((n) => n.ruleId)).toContain("N1"),
+  G19: (r) => expect(ids(r, 2)).not.toContain("microservices"),
+  G22: (r) => expect(r.excluded.map((e) => e.styleId)).toContain("microservices"),
 };
 
 describe("golden scenarios", () => {
-  it("covers all 16 scenarios", () => {
-    expect(goldenScenarios.map((g) => g.id)).toEqual(Array.from({ length: 16 }, (_, i) => `G${i + 1}`));
+  it("covers all 22 scenarios", () => {
+    expect(goldenScenarios.map((g) => g.id)).toEqual(Array.from({ length: 22 }, (_, i) => `G${i + 1}`));
   });
 
   it.each(goldenScenarios)("$id $title", ({ id, input, expectedTop }) => {

@@ -234,10 +234,7 @@ describe("rules", () => {
   });
 
   it("turns note effects into notes, and warning notes into warnings", () => {
-    const r = score(
-      makeInput({ attributes: { maintainability: "high" }, characteristics: { "mixed-scopes": true } }),
-      kb,
-    );
+    const r = score(makeInput({ attributes: { maintainability: "high" }, drivers: { "qa-scope": "different" } }), kb);
     expect(r.notes.map((n) => n.ruleId)).toEqual(["N1"]);
     expect(r.warnings.map((w) => w.ruleId)).toEqual(["N3"]);
     expect(r.notes.map((n) => n.ruleId)).not.toContain("N3");

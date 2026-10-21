@@ -8,6 +8,8 @@ export interface Preset {
 }
 
 const unsure = {
+  "system-type": "unsure",
+  "qa-scope": "unsure",
   "time-to-market": "unsure",
   budget: "unsure",
   "team-size": "unsure",
@@ -18,8 +20,8 @@ const unsure = {
 };
 
 /**
- * Example starting points (UI_UX "Step 0"). Each mirrors a golden scenario so its result is tested:
- * student = G1, startup = G10, saas = new, iot = G4, ticketing = G3, enterprise = G6.
+ * The six showcase examples (UI_UX "Examples"). Each mirrors a golden scenario so its result is tested:
+ * student = G1, ide = G17, saas = G18, iot = G4, ticketing = G3, enterprise = G6.
  */
 export const presets: Preset[] = [
   {
@@ -37,6 +39,7 @@ export const presets: Preset[] = [
       },
       drivers: {
         ...unsure,
+        "system-type": "server",
         "team-size": "4-10",
         experience: "beginner",
         budget: "very-limited",
@@ -49,31 +52,46 @@ export const presets: Preset[] = [
     },
   },
   {
-    id: "startup",
-    title: "Startup MVP",
-    description: "1–3 people, very limited money, and traffic that could spike after a launch.",
+    id: "ide",
+    title: "Desktop IDE with plug-ins",
+    description: "A code editor for Windows, macOS and Linux that works offline and grows through plug-ins.",
     input: {
-      attributes: { deployability: "high", scalability: "low" },
-      drivers: {
-        ...unsure,
-        "team-size": "1-3",
-        experience: "some",
-        budget: "very-limited",
-        "time-to-market": "tight",
-        growth: "spiky",
+      attributes: {
+        consistency: "high",
+        modularity: "high",
+        evolvability: "critical",
+        deployability: "medium",
+        testability: "high",
+        maintainability: "high",
+        security: "medium",
+        availability: "critical",
+        performance: "high",
       },
-      characteristics: {},
+      drivers: {
+        "system-type": "installed",
+        "qa-scope": "one",
+        "time-to-market": "relaxed",
+        budget: "moderate",
+        "team-size": "4-10",
+        experience: "some",
+        growth: "moderate",
+        lifespan: "5+",
+        "change-rate": "sometimes",
+      },
+      characteristics: { plugins: true, "domains-clear": "yes" },
       notes: "",
     },
   },
   {
     id: "saas",
     title: "Growing SaaS",
-    description: "11–30 developers, clear business areas, fast growth, here for the long run.",
+    description: "11–30 developers, clear business areas, fast growth, and parts with very different needs.",
     input: {
       attributes: { scalability: "high", deployability: "high", maintainability: "high", availability: "medium" },
       drivers: {
-        ...unsure,
+        "system-type": "server",
+        "qa-scope": "different",
+        "time-to-market": "unsure",
         "team-size": "11-30",
         experience: "some",
         budget: "moderate",
@@ -93,6 +111,7 @@ export const presets: Preset[] = [
       attributes: { availability: "critical", scalability: "high", performance: "high" },
       drivers: {
         ...unsure,
+        "system-type": "server",
         "team-size": "4-10",
         experience: "experienced",
         budget: "moderate",
@@ -119,6 +138,7 @@ export const presets: Preset[] = [
       },
       drivers: {
         ...unsure,
+        "system-type": "server",
         "team-size": "11-30",
         experience: "experienced",
         budget: "moderate",
@@ -137,6 +157,7 @@ export const presets: Preset[] = [
       attributes: { maintainability: "high", testability: "high", deployability: "medium", consistency: "high" },
       drivers: {
         ...unsure,
+        "system-type": "server",
         "team-size": "11-30",
         experience: "some",
         budget: "moderate",

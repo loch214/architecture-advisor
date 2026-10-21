@@ -5,9 +5,18 @@ import { presets } from "@/components/form/presets";
 import { goldenScenarios } from "../scoring/golden";
 
 const golden = (id: string) => goldenScenarios.find((g) => g.id === id)!;
-const mirrors: Record<string, string> = { student: "G1", startup: "G10", iot: "G4", ticketing: "G3", enterprise: "G6" };
+const mirrors: Record<string, string> = {
+  student: "G1",
+  ide: "G17",
+  saas: "G18",
+  iot: "G4",
+  ticketing: "G3",
+  enterprise: "G6",
+};
 
 describe("presets", () => {
+  it("has six examples", () => expect(presets).toHaveLength(6));
+
   it.each(presets)("$title is a valid input", (p) => {
     expect(checkInput(p.input, kb)).toEqual({ ok: true, issues: [] });
   });

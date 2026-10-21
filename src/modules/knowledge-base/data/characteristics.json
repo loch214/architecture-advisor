@@ -152,19 +152,6 @@
     }
   },
   {
-    "id": "mixed-scopes",
-    "type": "boolean",
-    "label": "Parts of the system have very different needs",
-    "help": "E.g. a public site with huge traffic and a small back office.",
-    "group": "workload",
-    "rare": true,
-    "source": {
-      "kind": "design",
-      "note": "Form input",
-      "reviewed": true
-    }
-  },
-  {
     "id": "multi-team-frontend",
     "type": "boolean",
     "label": "Several teams will work on one large web frontend",

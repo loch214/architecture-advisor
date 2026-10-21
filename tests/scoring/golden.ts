@@ -10,9 +10,47 @@ export interface GoldenScenario {
 }
 
 /**
- * The 16 golden scenarios from TESTING_STRATEGY.md §2. They encode domain judgement:
+ * The golden scenarios from TESTING_STRATEGY.md §2. They encode domain judgement:
  * if a KB or rule change breaks one, stop and decide whether the change or the expectation is wrong.
  */
+/** The owner's IDE scenario (2026-10-21), as exported from the live app before the new questions existed. */
+const ideDrivers = {
+  "time-to-market": "relaxed",
+  budget: "moderate",
+  "team-size": "4-10",
+  experience: "some",
+  growth: "moderate",
+  lifespan: "5+",
+  "change-rate": "sometimes",
+};
+const ideAttributes = {
+  consistency: "high",
+  modularity: "high",
+  evolvability: "critical",
+  deployability: "medium",
+  testability: "high",
+  maintainability: "high",
+  security: "medium",
+  availability: "critical",
+  performance: "high",
+} as const;
+const webDrivers = {
+  "system-type": "server",
+  "team-size": "4-10",
+  experience: "some",
+  budget: "moderate",
+  growth: "moderate",
+  lifespan: "5+",
+  "time-to-market": "tight",
+  "change-rate": "sometimes",
+};
+const webAttributes = {
+  maintainability: "high",
+  testability: "high",
+  consistency: "high",
+  security: "medium",
+} as const;
+
 export const goldenScenarios: GoldenScenario[] = [
   {
     id: "G1",
@@ -45,7 +83,14 @@ export const goldenScenarios: GoldenScenario[] = [
     id: "G4",
     title: "IoT sensor platform, async events, high availability",
     input: makeInput({
-      drivers: { "team-size": "4-10", experience: "experienced", budget: "moderate", growth: "rapid", lifespan: "5+" },
+      drivers: {
+        "system-type": "server",
+        "team-size": "4-10",
+        experience: "experienced",
+        budget: "moderate",
+        growth: "rapid",
+        lifespan: "5+",
+      },
       attributes: { availability: "critical", scalability: "high", performance: "high" },
       characteristics: { "async-events": true },
     }),
@@ -73,6 +118,7 @@ export const goldenScenarios: GoldenScenario[] = [
     title: "Mid-size business app, clear domains, migrating a legacy monolith",
     input: makeInput({
       drivers: {
+        "system-type": "server",
         "team-size": "11-30",
         experience: "some",
         budget: "moderate",
@@ -222,5 +268,73 @@ export const goldenScenarios: GoldenScenario[] = [
     title: 'Only "maintainability High", every driver "Not sure"',
     input: makeInput({ attributes: { maintainability: "high" } }),
     expectedTop: [],
+  },
+  {
+    id: "G17",
+    title: "Cross-platform desktop IDE with plug-ins, works offline",
+    input: makeInput({
+      drivers: { ...ideDrivers, "system-type": "installed", "qa-scope": "one" },
+      attributes: ideAttributes,
+      characteristics: { plugins: true, "domains-clear": "yes" },
+    }),
+    expectedTop: ["microkernel"],
+  },
+  {
+    id: "G18",
+    title: "Growing SaaS: 11–30 devs, clear domains, rapid growth, parts with different needs",
+    input: makeInput({
+      drivers: {
+        "system-type": "server",
+        "qa-scope": "different",
+        "team-size": "11-30",
+        experience: "some",
+        budget: "moderate",
+        growth: "rapid",
+        lifespan: "5+",
+        "change-rate": "constantly",
+      },
+      attributes: { scalability: "high", deployability: "high", maintainability: "high", availability: "medium" },
+      characteristics: { "domains-clear": "yes" },
+    }),
+    expectedTop: ["microservices", "service-based"],
+  },
+  {
+    id: "G19",
+    title: "Ordinary business web app, 4–10 devs, one set of needs",
+    input: makeInput({
+      drivers: { ...webDrivers, "qa-scope": "one" },
+      attributes: webAttributes,
+      characteristics: { "domains-clear": "yes" },
+    }),
+    expectedTop: ["modular-monolith", "layered"],
+  },
+  {
+    id: "G20",
+    title: "Server product with customer plug-ins (CI-server style), one set of needs",
+    input: makeInput({
+      drivers: { ...ideDrivers, "system-type": "server", "qa-scope": "one" },
+      attributes: ideAttributes,
+      characteristics: { plugins: true, "domains-clear": "yes" },
+    }),
+    expectedTop: ["microkernel"],
+  },
+  {
+    id: "G21",
+    title: 'Desktop IDE answers with both new questions left "Not sure" (owner report, 2026-10-21)',
+    input: makeInput({
+      drivers: ideDrivers,
+      attributes: ideAttributes,
+      characteristics: { plugins: true, "domains-clear": "yes" },
+    }),
+    expectedTop: ["microkernel"],
+  },
+  {
+    id: "G22",
+    title: "Installed app without plug-ins",
+    input: makeInput({
+      drivers: { ...webDrivers, "system-type": "installed" },
+      attributes: webAttributes,
+    }),
+    expectedTop: ["modular-monolith", "layered"],
   },
 ];
