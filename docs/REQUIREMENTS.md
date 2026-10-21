@@ -45,7 +45,7 @@ Priority: **M** = must (v1), **S** = should (v1 if time allows), **F** = future.
 | FR-34 | "How this was calculated" section (weights, rules, contributions) | M |
 | FR-35 | Companion patterns and anti-pattern warnings for the top pick, from KB | S |
 | FR-36 | Download result as JSON | S |
-| FR-37 | Shareable link (input encoded in URL; rules recomputed; AI re-fetched/cached) | S |
+| FR-37 | Shareable link (input encoded in URL; rules recomputed; AI re-fetched/cached). ✅ Built in session 5; notes stay out of the link (Q29) | S |
 | FR-38 | Methodology page generated from KB | M |
 | FR-39 | Style catalog pages | F (v1.1) |
 

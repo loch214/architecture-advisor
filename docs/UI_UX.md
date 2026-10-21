@@ -72,7 +72,7 @@ Mobile: same steps, stacked; segmented controls become full-width radio lists.
 │ ▸ How this was calculated (weights table, formula link)      │
 └──────────────────────────────────────────────────────────────┘
 ```
-\* Copy link (shareable URL with input encoded) is a v1 "should"; see REQUIREMENTS.
+\* Copy link (shareable URL with input encoded) is a v1 "should"; see REQUIREMENTS. Built in session 5 (see "As built (session 5)").
 
 Details:
 - **Score display:** each style row shows `rule score`, an `AI ±n` pill when adjusted (with hover/tap reason), and the final score. Bars use the final score; a thin marker shows the rule score.
@@ -108,6 +108,12 @@ Details:
 - **Accessibility pass:** `Alert` no longer defaults to `role="alert"` (a result page used to fire several assertive announcements); only the form's error summary keeps it. A polite, screen-reader-only live region on the result says when the AI part settles ("AI explanation ready." / the status title, plus "AI changed the order."). The light-mode info colour is darker (`oklch(0.5 0.14 255)`) so the "AI ±n" badge passes 4.5:1. Preset cards use spans inside the button instead of a Card's div/h3/p (invalid inside a button, and it skipped a heading level). axe now also runs on `/about`, `/privacy` and the AI result states.
 - **Lighthouse (local production build, 2026-10-20):** `/`, `/advisor`, `/about`, `/privacy` score 99–100 on performance, 100 on accessibility, best practices and SEO; `/methodology` 96 performance. Re-run on the deployed site.
 - **Copy:** the landing page defines "quality attributes"; the "Adjustments made" description no longer says "base scores"; the landing button reads "Start the advisor".
+
+## As built (session 5, Phase 6): shareable link
+- **Format:** `/advisor#a=<base64url JSON>` holding `{ v: 1, a: attributes, d: drivers, c: characteristics }` by KB id (`src/components/form/share-link.ts`). About 450 characters for a preset. The hash never reaches the server. **Notes are not included** (Q29), and the AI opt-out isn't either: the person opening the link gets the default (AI on) and can still opt out.
+- **Opening a link:** it wins over local storage. The answers are cleaned with the same KB filter as saved answers (`sanitiseForm`) and checked with the engine's `checkInput`. All valid → the result shows straight away and the AI is requested as usual. Some answers dropped or missing (the KB changed) → the form opens at the first step that needs fixing, with a "Some answers in that link need checking" notice. Unreadable or unknown version → the start screen with "We couldn't open that link". The hash is then removed from the address bar, so a refresh uses the saved copy. Pasting a link while `/advisor` is already open works too (`hashchange`).
+- **Copy link button:** between "Edit answers" and "Download JSON". It turns into "Link copied" (also announced politely), with a line under the buttons: "Anyone with the link sees this rule-based result; the AI explanation is fetched again", plus "Your notes are not included in the link" when there were notes. If the browser blocks the clipboard, a read-only field shows the link to copy by hand.
+- **Bundle:** `/advisor` 187.5 KB gz (was 186.5).
 
 ## Copy tone
 Short, friendly, second person. Explain terms once: e.g. "Elasticity: scaling up *and back down* quickly when traffic spikes." No hype words ("revolutionary", "AI-powered magic").

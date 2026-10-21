@@ -46,9 +46,14 @@
 |---|---|---|
 | Q26 | Groq live check | `api.groq.com` is now reachable from the cloud container. One real call through `/api/explain` (`AI_MODE=live`, empty `GEMINI_API_KEY`) returned `ok` from Groq `openai/gpt-oss-120b` in ~1.6 s; the first reply failed validation and the repair retry fixed it. Details: AI_INTEGRATION §12 |
 
+## Closed by build session 5 (2026-10-21)
+| # | Topic | Outcome |
+|---|---|---|
+| Q26 duplicate | Stale row | The old "Groq live check" row under "Still open" was a leftover; Q26 was closed in session 4 (above). Removed |
+
 ## Still open
 | # | Topic | Question |
 |---|---|---|
-| Q25 | Upstash | Phase 5 runs without Upstash (owner: "skip unless needed; ask first"). The cache, rate limit, global budget and breaker use an in-memory store per server instance. That is fine locally and for low traffic, but on Vercel each instance keeps its own copy, so limits are per instance. **Owner: add Upstash Redis (Vercel Marketplace, free) before or at launch?** If yes, it's one `KvStore` adapter. Asked again in session 4; no answer yet, nothing blocked |
-| Q28 | Analytics | ROADMAP Phase 6 lists optional privacy-friendly analytics (Vercel Web Analytics, free tier: page views only, no cookies). The privacy page currently says "no analytics". **Owner: turn on Vercel Web Analytics at launch, yes or no?** If yes: one `<Analytics />` component, a line on `/privacy`, and a bundle check |
-| Q26 | Groq live check | The build container's network policy denies `api.groq.com`, so the Groq adapter is tested with mocks only. **Owner:** allow `api.groq.com` in the cloud environment's network settings (or run `AI_MODE=live` locally with only `GROQ_API_KEY` set) so one real Groq call can be checked |
+| Q25 | Upstash | Phase 5 runs without Upstash (owner: "skip unless needed; ask first"). The cache, rate limit, global budget and breaker use an in-memory store per server instance. That is fine locally and for low traffic, but on Vercel each instance keeps its own copy, so limits are per instance. **Owner: add Upstash Redis (Vercel Marketplace, free) before or at launch?** If yes, it's one `KvStore` adapter. Asked again in sessions 4 and 5; no answer yet, nothing blocked |
+| Q28 | Analytics | ROADMAP Phase 6 lists optional privacy-friendly analytics (Vercel Web Analytics, free tier: page views only, no cookies). The privacy page currently says "no analytics". **Owner: turn on Vercel Web Analytics at launch, yes or no?** If yes: one `<Analytics />` component, a line on `/privacy`, and a bundle check. Asked again in session 5; no answer yet |
+| Q29 | Notes in shared links | The "Copy link" URL carries the answers to steps 1–3 but **not the free-text notes**, because links get pasted into chats and notes may hold project details. The rule ranking doesn't use notes, so the opened link shows the same ranking; only the "You mentioned" cards and the AI's view of the notes are missing. The result says "Your notes are not included in the link" when there were notes. **Owner: keep notes out (default), or include them?** If included: one field in `share-link.ts` and a line on `/privacy` |
