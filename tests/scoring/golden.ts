@@ -34,6 +34,25 @@ const ideAttributes = {
   availability: "critical",
   performance: "high",
 } as const;
+/** The owner's hospital management system (2026-10-21): one back end, a staff web app and a mobile view for patients. */
+const hospitalDrivers = {
+  "time-to-market": "tight",
+  budget: "moderate",
+  "team-size": "4-10",
+  experience: "some",
+  growth: "moderate",
+  lifespan: "5+",
+  "change-rate": "rarely",
+};
+const hospitalAttributes = {
+  performance: "medium",
+  scalability: "high",
+  availability: "critical",
+  security: "high",
+  maintainability: "high",
+  testability: "medium",
+  consistency: "critical",
+} as const;
 const webDrivers = {
   "system-type": "server",
   "team-size": "4-10",
@@ -336,5 +355,26 @@ export const goldenScenarios: GoldenScenario[] = [
       attributes: webAttributes,
     }),
     expectedTop: ["modular-monolith", "layered"],
+  },
+  {
+    id: "G23",
+    title:
+      "Hospital system: staff web app + mobile view, one back end, 4–10 devs, parts differ (owner report, 2026-10-21)",
+    input: makeInput({
+      drivers: { ...hospitalDrivers, "system-type": "server", "qa-scope": "different" },
+      attributes: hospitalAttributes,
+      characteristics: { "domains-clear": "yes" },
+    }),
+    expectedTop: ["service-based"],
+  },
+  {
+    id: "G24",
+    title: 'Hospital system with the contradictory answers "installed app only" + "parts differ a lot"',
+    input: makeInput({
+      drivers: { ...hospitalDrivers, "system-type": "installed", "qa-scope": "different" },
+      attributes: hospitalAttributes,
+      characteristics: { "domains-clear": "yes" },
+    }),
+    expectedTop: [],
   },
 ];

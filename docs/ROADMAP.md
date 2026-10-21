@@ -72,6 +72,12 @@ Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner 
 - ✅ Flow: blank form first, six examples secondary, Start over everywhere, session storage so each visit starts fresh
 - ✅ Result: plain-language "Why <style> fits your project" from the rules; AI prompt v2 and a clearer AI panel; scoring internals folded into "Full scoring details"
 
+## v1.2 (2026-10-21): hospital report
+- ✅ "Where will your software run?" with an example under every option (radio cards), so a web app with a mobile view isn't mistaken for an installed app; "same qualities?" reworded the same way
+- ✅ Warning N5 when "only on the user's device" meets "parts differ a lot"; R22/N1 skipped then
+- ✅ R23 for any small team without fast growth, so a 4–10 team whose parts differ gets service-based rather than microservices (KB 1.2.0, golden G23–G24)
+- ✅ `/advisor` 189.7 / 200 KB gz
+
 ## Phase 7 (future): Accounts and history
 - Supabase Auth + Postgres; `results` table storing `AdvisorResult` JSON; history list; delete.
 **Milestone:** logged-in users can save and reopen results; anonymous flow unchanged.

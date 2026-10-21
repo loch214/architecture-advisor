@@ -85,6 +85,8 @@ export const DriverOptionSchema = z
   .object({
     id: Id,
     label: z.string(),
+    // Shown under the option; a driver whose options have one is drawn as a list of cards (UI_UX "Form").
+    description: z.string().optional(),
     floors: z.record(z.string(), LevelSchema),
     source: SourceSchema.optional(),
   })

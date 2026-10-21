@@ -64,7 +64,11 @@
 | Q31 | Flow | Owner: blank form first, examples secondary; always able to start fresh; a new visit must not show the previous user's answers. Done: landing has one main button (`/advisor?new`) and six examples below it; `/advisor` opens on a blank step 1; Start over on every step and on the result; answers kept in session storage instead of local storage. The Startup MVP example was replaced by "Desktop IDE with plug-ins" (G10 stays a golden scenario). UI_UX "As built (v1.1)" |
 | Q32 | Messy AI explanation | Owner: the AI text was messy and should explain the scenario. Done: prompt v2 (summary tied to the user's answers, no list of definitions; AI_INTEGRATION §3); the AI panel uses headed blocks; and a rule-based "Why <style> fits your project" section now leads the result, so a clear explanation exists even with AI off |
 
-## Still open
+## Closed by session 8 (2026-10-21, local Claude Code): hospital report, v1.2
+| # | Topic | Outcome |
+|---|---|---|
+| Q33 | Hospital scenario | Owner: a hospital system (staff web app + mobile view, one back end, 4–10 devs) got a confusing result. (1) "Installed app (desktop or mobile)" was misread because of *mobile*: the question is now "Where will your software run?" with an example under every option. (2) "Installed" + "parts differ a lot" contradict each other and gave an all-weak result without a word: new warning N5, and R22/N1 are skipped then. (3) With the right answers microservices won: R23 now applies to any team of up to 10 without fast growth, whatever qa-scope says (R&F ch.14, 18–19), so service-based is #1. KB 1.2.0; golden G23–G24; details in KNOWLEDGE_BASE_DRAFT §8 "KB 1.2.0" |
+
 | # | Topic | Question |
 |---|---|---|
 | Q25 | Upstash | Phase 5 runs without Upstash (owner: "skip unless needed; ask first"). The cache, rate limit, global budget and breaker use an in-memory store per server instance. That is fine locally and for low traffic, but on Vercel each instance keeps its own copy, so limits are per instance. **Owner: add Upstash Redis (Vercel Marketplace, free) before or at launch?** If yes, it's one `KvStore` adapter. Asked again in sessions 4 and 5; no answer yet, nothing blocked |

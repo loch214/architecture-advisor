@@ -29,11 +29,22 @@ const extra: Record<string, (r: RuleResult) => void> = {
   G18: (r) => expect(r.notes.map((n) => n.ruleId)).toContain("N1"),
   G19: (r) => expect(ids(r, 2)).not.toContain("microservices"),
   G22: (r) => expect(r.excluded.map((e) => e.styleId)).toContain("microservices"),
+  // Different needs justify distribution, not many fine-grained services for a small team (R23).
+  G23: (r) => {
+    expect(r.ranked.find((s) => s.styleId === "microservices")!.firedRuleIds).toContain("R23");
+    expect(r.notes.map((n) => n.ruleId)).toContain("N1");
+  },
+  // "Installed only" + "parts differ a lot" contradict each other: warn, and don't also punish the monoliths.
+  G24: (r) => {
+    expect(r.warnings.map((w) => w.ruleId)).toContain("N5");
+    expect(r.firedRules.map((f) => f.ruleId)).not.toContain("R22");
+    expect(r.notes.map((n) => n.ruleId)).not.toContain("N1");
+  },
 };
 
 describe("golden scenarios", () => {
-  it("covers all 22 scenarios", () => {
-    expect(goldenScenarios.map((g) => g.id)).toEqual(Array.from({ length: 22 }, (_, i) => `G${i + 1}`));
+  it("covers all 24 scenarios", () => {
+    expect(goldenScenarios.map((g) => g.id)).toEqual(Array.from({ length: 24 }, (_, i) => `G${i + 1}`));
   });
 
   it.each(goldenScenarios)("$id $title", ({ id, input, expectedTop }) => {

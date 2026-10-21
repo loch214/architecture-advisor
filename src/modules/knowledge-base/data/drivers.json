@@ -1,27 +1,31 @@
 [
   {
     "id": "system-type",
-    "label": "What are you building?",
-    "help": "An app people install runs as one program on each device, so splitting it across servers isn't an option.",
+    "label": "Where will your software run?",
+    "help": "This decides whether the system can be split into separate services on servers. A website that works on phones runs on your server; a phone app people download counts as an app.",
     "options": [
       {
         "id": "unsure",
         "label": "Not sure",
+        "description": "Every style stays in the running.",
         "floors": {}
       },
       {
         "id": "server",
-        "label": "Website, web app or API",
-        "floors": {}
-      },
-      {
-        "id": "installed",
-        "label": "Installed app (desktop or mobile)",
+        "label": "On our server, used in a web browser",
+        "description": "Websites, web apps, admin portals and APIs. People on phones open it in their browser.",
         "floors": {}
       },
       {
         "id": "both",
-        "label": "Installed app + our own back end",
+        "label": "On our server, plus an app people download",
+        "description": "A mobile or desktop app (e.g. from an app store) that talks to our server.",
+        "floors": {}
+      },
+      {
+        "id": "installed",
+        "label": "Only on the user's own device, with no server of ours",
+        "description": "A program that works on its own, e.g. a text editor, a photo editor or an offline game.",
         "floors": {}
       }
     ]
@@ -29,21 +33,24 @@
   {
     "id": "qa-scope",
     "label": "Do all parts of the system need the same qualities?",
-    "help": "Most systems are \"Yes\". Pick \"No\" only if parts differ a lot, e.g. a public shop that must survive huge traffic and a back office that mainly needs security.",
+    "help": "Qualities are things like speed, uptime, handling many users and security. Most systems are \"Yes\", even with several screens or user groups.",
     "options": [
       {
         "id": "unsure",
         "label": "Not sure",
+        "description": "The ranking won't lean either way.",
         "floors": {}
       },
       {
         "id": "one",
-        "label": "Yes, the same everywhere",
+        "label": "Yes, roughly the same everywhere",
+        "description": "E.g. a booking or records system where every part needs similar uptime and security.",
         "floors": {}
       },
       {
         "id": "different",
-        "label": "No, some parts differ a lot",
+        "label": "No, some parts need very different things",
+        "description": "E.g. a public shop that must survive huge traffic spikes next to a back office that mainly needs strict security.",
         "floors": {}
       }
     ]
