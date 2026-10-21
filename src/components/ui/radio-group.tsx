@@ -73,7 +73,7 @@ function RadioCard({
       aria-labelledby={`${id}-label`}
       aria-describedby={description ? `${id}-description` : undefined}
       className={cn(
-        "flex w-full items-start gap-3 rounded-lg border border-input p-3 text-left outline-none transition-colors hover:bg-muted/50 focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[state=checked]:border-primary data-[state=checked]:bg-primary/5",
+        "flex w-full items-start gap-3 rounded-lg border border-input p-3 text-left outline-none transition-colors hover:bg-muted/50 focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[state=checked]:border-primary data-[state=checked]:bg-primary/5 data-[state=checked]:inset-ring-1 data-[state=checked]:inset-ring-primary",
         className,
       )}
       {...props}
