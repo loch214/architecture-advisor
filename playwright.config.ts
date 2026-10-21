@@ -13,6 +13,9 @@ const server = (port: number, env: Record<string, string>) => ({
   env,
 });
 
+/** Set PW_CHANNEL=msedge (or chrome) to use an installed browser instead of Playwright's own Chromium. */
+const channel = process.env.PW_CHANNEL;
+
 /** A few end-to-end checks of the main flow (TESTING_STRATEGY §5), run against a production build. */
 export default defineConfig({
   testDir: "tests/e2e",
@@ -23,8 +26,8 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"] } },
-    { name: "mobile", use: { ...devices["Pixel 7"] } },
+    { name: "desktop", use: { ...devices["Desktop Chrome"], channel } },
+    { name: "mobile", use: { ...devices["Pixel 7"], channel } },
   ],
   webServer: [
     server(PORT, { AI_MODE: "off" }),

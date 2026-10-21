@@ -7,5 +7,5 @@ export const axe = async (page: Page) => {
   expect(violations.map((v) => `${v.id}: ${v.nodes.map((n) => n.target).join(", ")}`)).toEqual([]);
 };
 
-/** The "AI explanation" section of a result (a page-level live region repeats its status for screen readers). */
-export const aiPanel = (page: Page) => page.getByRole("region", { name: "AI explanation" });
+/** The AI section of a result (a page-level live region repeats its status for screen readers). */
+export const aiPanel = (page: Page) => page.getByRole("region", { name: "In plain words (AI)" });

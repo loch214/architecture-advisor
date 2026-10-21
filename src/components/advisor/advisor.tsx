@@ -16,7 +16,7 @@ import {
   type FormState,
   type StepId,
 } from "@/components/form/form-state";
-import { PresetPicker } from "@/components/form/preset-picker";
+import { presets, type Preset } from "@/components/form/presets";
 import { decodeShareHash } from "@/components/form/share-link";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { APP_VERSION } from "@/lib/version";
@@ -27,7 +27,7 @@ const ResultView = dynamic(() => import("@/components/result/result-view").then(
   loading: () => <p role="status">Preparing your result…</p>,
 });
 
-type View = "start" | "form" | "result";
+type View = "form" | "result";
 
 const NOTICES = {
   broken: {
@@ -64,19 +64,23 @@ async function fetchAi(result: AdvisorResult): Promise<AiBlock> {
   }
 }
 
-/** The /advisor page: presets → 4-step form → result, with answers kept in local storage. */
+/**
+ * The /advisor page: a blank 4-step form → result. `?new` (the home page's main button) always starts fresh;
+ * `?example=<id>` opens one of the six examples' results. Answers are kept for this tab only (form-state.ts).
+ */
 export function Advisor() {
-  const [view, setView] = useState<View>("start");
+  const [view, setView] = useState<View>("form");
   const [form, setForm] = useState<FormState>(emptyForm);
   const [step, setStep] = useState<StepId>(1);
   const [result, setResult] = useState<AdvisorResult>();
   const [aiPending, setAiPending] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [notice, setNotice] = useState<keyof typeof NOTICES>();
+  const [example, setExample] = useState<Preset>();
 
   useEffect(() => {
-    if (loaded && view !== "start") saveForm({ form, step }, kb);
-  }, [form, step, view, loaded]);
+    if (loaded) saveForm({ form, step }, kb);
+  }, [form, step, loaded]);
 
   const requestAi = useCallback(async (r: AdvisorResult) => {
     setAiPending(true);
@@ -119,16 +123,49 @@ export function Advisor() {
       setView("form");
       setNotice("partial");
     } else {
-      setView("start");
+      clearSavedForm();
+      clearSavedResult();
+      setForm(emptyForm());
+      setStep(1);
+      setView("form");
       setNotice("broken");
     }
     return true;
   }, [showResult]);
 
-  // Restore after hydration (local storage isn't available while prerendering).
+  const reset = () => {
+    clearSavedForm();
+    clearSavedResult();
+    setForm(emptyForm());
+    setStep(1);
+    setResult(undefined);
+    setNotice(undefined);
+    setExample(undefined);
+    setView("form");
+    window.scrollTo({ top: 0 });
+  };
+
+  /** `?new` and `?example=<id>` are read once and then removed, so a refresh keeps what's on screen. */
+  const openFromQuery = useCallback(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (!params.has("new") && !params.has("example")) return false;
+    window.history.replaceState(null, "", window.location.pathname + window.location.hash);
+    clearSavedForm();
+    clearSavedResult();
+    const preset = presets.find((p) => p.id === params.get("example"));
+    if (!preset) return true; // ?new, or an unknown example: a blank form.
+    const f = fromInput(preset.input);
+    setForm(f);
+    setStep(4);
+    setExample(preset);
+    showResult(f);
+    return true;
+  }, [showResult]);
+
+  // Restore after hydration (browser storage isn't available while prerendering).
   useEffect(() => {
-    /* eslint-disable react-hooks/set-state-in-effect -- one-time sync from the URL hash or local storage */
-    if (!openSharedLink()) {
+    /* eslint-disable react-hooks/set-state-in-effect -- one-time sync from the URL or session storage */
+    if (!openSharedLink() && !openFromQuery()) {
       const saved = loadSavedForm(kb);
       const savedResult = loadSavedResult();
       if (saved) {
@@ -147,18 +184,11 @@ export function Advisor() {
     const onHashChange = () => void openSharedLink();
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
-  }, [openSharedLink]);
+  }, [openSharedLink, openFromQuery]);
 
-  const submit = () => showResult(form);
-
-  const startOver = () => {
-    clearSavedForm();
-    clearSavedResult();
-    setForm(emptyForm());
-    setStep(1);
-    setResult(undefined);
-    setNotice(undefined);
-    setView("start");
+  const submit = () => {
+    setExample(undefined);
+    showResult(form);
   };
 
   const noticeBox = notice && (
@@ -174,40 +204,28 @@ export function Advisor() {
       <ResultView
         result={result}
         aiPending={aiPending}
+        example={example?.title}
         onEdit={() => {
           clearSavedResult();
+          setExample(undefined);
           setView("form");
           setStep(4);
         }}
-        onStartOver={startOver}
+        onStartOver={reset}
         onRetryAi={() => void requestAi(result)}
       />
-    );
-  }
-  if (view === "form") {
-    return (
-      <>
-        {noticeBox}
-        <AdvisorForm form={form} step={step} onFormChange={setForm} onStepChange={setStep} onSubmit={submit} />
-      </>
     );
   }
   return (
     <>
       {noticeBox}
-      <PresetPicker
-        onPick={(p) => {
-          setNotice(undefined);
-          setForm(fromInput(p.input));
-          setStep(4);
-          setView("form");
-        }}
-        onBlank={() => {
-          setNotice(undefined);
-          setForm(emptyForm());
-          setStep(1);
-          setView("form");
-        }}
+      <AdvisorForm
+        form={form}
+        step={step}
+        onFormChange={setForm}
+        onStepChange={setStep}
+        onSubmit={submit}
+        onStartOver={reset}
       />
     </>
   );

@@ -25,7 +25,8 @@ export default function AboutPage() {
         <h2 className="text-xl font-semibold">Privacy</h2>
         <ul className="list-disc space-y-1 pl-5">
           <li>
-            No accounts and no personal data. Your answers stay in your browser (local storage) so a refresh keeps them.
+            No accounts and no personal data. Your answers stay in this browser tab (session storage), so a refresh
+            keeps them and a new visit starts fresh.
           </li>
           <li>The rule-based result is calculated in your browser.</li>
           <li>

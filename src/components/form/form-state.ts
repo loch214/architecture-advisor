@@ -111,9 +111,13 @@ export function restoreForm(raw: string | null, kb: KnowledgeBase): SavedForm | 
   }
 }
 
+/**
+ * Answers live in session storage: they survive a refresh in the same tab, but a new visit (or a new tab)
+ * always starts with a blank form, so nobody lands on someone else's half-filled answers.
+ */
 export const loadSavedForm = (kb: KnowledgeBase): SavedForm | undefined => {
   try {
-    return restoreForm(window.localStorage.getItem(STORAGE_KEY), kb);
+    return restoreForm(window.sessionStorage.getItem(STORAGE_KEY), kb);
   } catch {
     return undefined;
   }
@@ -121,7 +125,7 @@ export const loadSavedForm = (kb: KnowledgeBase): SavedForm | undefined => {
 
 export const saveForm = (saved: SavedForm, kb: KnowledgeBase) => {
   try {
-    window.localStorage.setItem(STORAGE_KEY, serialiseForm(saved, kb));
+    window.sessionStorage.setItem(STORAGE_KEY, serialiseForm(saved, kb));
   } catch {
     // Storage full or blocked (private mode): answers just won't survive a refresh.
   }
@@ -129,6 +133,8 @@ export const saveForm = (saved: SavedForm, kb: KnowledgeBase) => {
 
 export const clearSavedForm = () => {
   try {
+    window.sessionStorage.removeItem(STORAGE_KEY);
+    // Versions up to 1.0 kept answers in local storage, which outlives the visit; drop any left behind.
     window.localStorage.removeItem(STORAGE_KEY);
   } catch {
     // Nothing to clear.
