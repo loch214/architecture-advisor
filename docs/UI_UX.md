@@ -115,5 +115,21 @@ Details:
 - **Copy link button:** between "Edit answers" and "Download JSON". It turns into "Link copied" (also announced politely), with a line under the buttons: "Anyone with the link sees this rule-based result; the AI explanation is fetched again", plus "Your notes are not included in the link" when there were notes. If the browser blocks the clipboard, a read-only field shows the link to copy by hand.
 - **Bundle:** `/advisor` 187.5 KB gz (was 186.5).
 
+## As built (launch, session 6): live site
+- **URL:** https://architecture-advisor-pink.vercel.app (Vercel Hobby, `AI_MODE=live`, auto-redeploy from `main`).
+- **Smoke test (2026-10-21), all passed:** `/`, `/advisor`, `/methodology`, `/about`, `/privacy` return 200. Rules-only path: High-traffic ticketing preset → Space-based architecture, ranked list and trade-off table shown. AI ok: Startup MVP → "Explanation by Google Gemini." in ~2.6 s. The very first AI call after the deploy hit Gemini's 10 s timeout (cold start) and Groq answered instead ("Explanation by Groq.", ~12 s in total), which is the fallback working as designed. AI opt-out: "AI turned off for this request", nothing sent. Copy link: opened in a new tab, same top pick (Service-based architecture) with a fresh Gemini explanation.
+- **Lighthouse 12.8.2 on production** (performance / accessibility / best practices / SEO). Run from the owner's Windows PC with Edge (Chrome isn't installed), default simulated throttling:
+
+| Page | Mobile | Desktop |
+|---|---|---|
+| `/` | 80 / 100 / 100 / 100 | 97 / 100 / 100 / 100 |
+| `/advisor` | 81 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
+| `/methodology` | 91 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
+| `/about` | 95 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
+| `/privacy` | 93 / 100 / 100 / 100 | 100 / 100 / 100 / 100 |
+
+  Mobile performance is the median of 3 runs for `/` (77–87) and `/advisor` (79–90), one run elsewhere. LCP 1.2–2.3 s and CLS ≈ 0 everywhere; what costs points is total blocking time (300–800 ms, the main thread busy running JavaScript), which swings a lot with this PC's CPU load. Session 4's run (a production build inside the cloud container) scored 96–100, so treat the mobile numbers as a range, not a regression. If mobile performance matters later, the lever is less client JavaScript at start-up (hydration), not images or layout.
+- **Screenshots:** `docs/screenshots/` (landing, form step, result with the AI explanation, trade-off table), taken from the live site by `node scripts/screenshots.mjs` with Playwright's `msedge` channel, so nothing is downloaded.
+
 ## Copy tone
 Short, friendly, second person. Explain terms once: e.g. "Elasticity: scaling up *and back down* quickly when traffic spikes." No hype words ("revolutionary", "AI-powered magic").
