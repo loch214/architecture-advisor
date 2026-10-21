@@ -8,13 +8,15 @@ Describe your system (the quality attributes you care about, business drivers, c
 - a **plain-language explanation** of the top pick and why the others ranked lower,
 - a **trade-off table** built from a curated knowledge base (never AI-generated).
 
+Share a result with **Copy link**: the answers travel in the link, so whoever opens it sees the same ranking.
+
 ## How it works
 
 A **deterministic rule engine** scores 13 styles against your weighted priorities using a knowledge base drawn from established literature (e.g. Richards & Ford, _Fundamentals of Software Architecture_). An **AI layer** (free-tier Gemini Flash-Lite, falling back to Groq) can nudge scores by at most ±5 points, each with a stated reason, and writes the explanation. If the AI is unavailable, you still get the complete rule-based result.
 
 ## Status
 
-v1 feature-complete, not yet deployed. Built: knowledge base, scoring engine, 4-step form, result, methodology, about and privacy pages, and the AI explanation (Gemini → Groq → rules-only, both providers checked live). Deployment to Vercel is next. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
+v1 feature-complete, not yet deployed. Built: knowledge base, scoring engine, 4-step form, result (with a shareable link), methodology, about and privacy pages, and the AI explanation (Gemini → Groq → rules-only, both providers checked live). Deployment to Vercel is next. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## Architecture
 

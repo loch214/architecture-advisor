@@ -1,5 +1,6 @@
 "use client";
 
+import { CircleAlertIcon } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { kb } from "@/modules/knowledge-base";
@@ -16,6 +17,8 @@ import {
   type StepId,
 } from "@/components/form/form-state";
 import { PresetPicker } from "@/components/form/preset-picker";
+import { decodeShareHash } from "@/components/form/share-link";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { APP_VERSION } from "@/lib/version";
 import { clearSavedResult, loadSavedResult, saveResult } from "./result-storage";
 
@@ -25,6 +28,26 @@ const ResultView = dynamic(() => import("@/components/result/result-view").then(
 });
 
 type View = "start" | "form" | "result";
+
+const NOTICES = {
+  broken: {
+    title: "We couldn't open that link",
+    text: "It may be cut off or made by an older version of the app. You can start again below.",
+  },
+  partial: {
+    title: "Some answers in that link need checking",
+    text: "The questions have changed since the link was made. We kept every answer that still fits; please fill in the rest.",
+  },
+} as const;
+
+const newResult = (form: FormState) =>
+  buildResult(
+    toUserInput(form),
+    kb,
+    { id: crypto.randomUUID(), createdAt: new Date().toISOString(), appVersion: APP_VERSION },
+    // Until /api/explain answers, the AI block reads "unavailable"; the panel shows a loading state meanwhile.
+    { status: form.useAi ? "unavailable" : "skipped", adjustments: [] },
+  );
 
 async function fetchAi(result: AdvisorResult): Promise<AiBlock> {
   try {
@@ -49,24 +72,7 @@ export function Advisor() {
   const [result, setResult] = useState<AdvisorResult>();
   const [aiPending, setAiPending] = useState(false);
   const [loaded, setLoaded] = useState(false);
-
-  // Restore after hydration (local storage isn't available while prerendering).
-  useEffect(() => {
-    const saved = loadSavedForm(kb);
-    const savedResult = loadSavedResult();
-    /* eslint-disable react-hooks/set-state-in-effect -- one-time sync from local storage */
-    if (saved) {
-      setForm(saved.form);
-      setStep(saved.step);
-      setView("form");
-    }
-    if (savedResult) {
-      setResult(savedResult);
-      setView("result");
-    }
-    setLoaded(true);
-    /* eslint-enable react-hooks/set-state-in-effect */
-  }, []);
+  const [notice, setNotice] = useState<keyof typeof NOTICES>();
 
   useEffect(() => {
     if (loaded && view !== "start") saveForm({ form, step }, kb);
@@ -84,20 +90,66 @@ export function Advisor() {
     });
   }, []);
 
-  const submit = () => {
-    const r = buildResult(
-      toUserInput(form),
-      kb,
-      { id: crypto.randomUUID(), createdAt: new Date().toISOString(), appVersion: APP_VERSION },
-      // Until /api/explain answers, the AI block reads "unavailable"; the panel shows a loading state meanwhile.
-      { status: form.useAi ? "unavailable" : "skipped", adjustments: [] },
-    );
-    setResult(r);
-    saveResult(r);
-    setView("result");
-    window.scrollTo({ top: 0 });
-    if (form.useAi) void requestAi(r);
-  };
+  const showResult = useCallback(
+    (f: FormState) => {
+      const r = newResult(f);
+      setNotice(undefined);
+      setResult(r);
+      saveResult(r);
+      setView("result");
+      window.scrollTo({ top: 0 });
+      if (f.useAi) void requestAi(r);
+    },
+    [requestAi],
+  );
+
+  // A shared link (#a=…) wins over local storage. The hash is removed once read, so a refresh uses the saved copy.
+  const openSharedLink = useCallback(() => {
+    const link = decodeShareHash(window.location.hash, kb);
+    if (link.status === "none") return false;
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    if (link.status === "ok") {
+      setForm(link.form);
+      setStep(4);
+      showResult(link.form);
+    } else if (link.status === "partial") {
+      clearSavedResult();
+      setForm(link.form);
+      setStep(link.step);
+      setView("form");
+      setNotice("partial");
+    } else {
+      setView("start");
+      setNotice("broken");
+    }
+    return true;
+  }, [showResult]);
+
+  // Restore after hydration (local storage isn't available while prerendering).
+  useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- one-time sync from the URL hash or local storage */
+    if (!openSharedLink()) {
+      const saved = loadSavedForm(kb);
+      const savedResult = loadSavedResult();
+      if (saved) {
+        setForm(saved.form);
+        setStep(saved.step);
+        setView("form");
+      }
+      if (savedResult) {
+        setResult(savedResult);
+        setView("result");
+      }
+    }
+    setLoaded(true);
+    /* eslint-enable react-hooks/set-state-in-effect */
+    // A link pasted into the address bar while /advisor is open only changes the hash.
+    const onHashChange = () => void openSharedLink();
+    window.addEventListener("hashchange", onHashChange);
+    return () => window.removeEventListener("hashchange", onHashChange);
+  }, [openSharedLink]);
+
+  const submit = () => showResult(form);
 
   const startOver = () => {
     clearSavedForm();
@@ -105,8 +157,17 @@ export function Advisor() {
     setForm(emptyForm());
     setStep(1);
     setResult(undefined);
+    setNotice(undefined);
     setView("start");
   };
+
+  const noticeBox = notice && (
+    <Alert variant="warning" role="alert" className={view === "form" ? "mx-auto mb-6 max-w-4xl" : "mb-6"}>
+      <CircleAlertIcon aria-hidden />
+      <AlertTitle>{NOTICES[notice].title}</AlertTitle>
+      <AlertDescription>{NOTICES[notice].text}</AlertDescription>
+    </Alert>
+  );
 
   if (view === "result" && result) {
     return (
@@ -124,20 +185,30 @@ export function Advisor() {
     );
   }
   if (view === "form") {
-    return <AdvisorForm form={form} step={step} onFormChange={setForm} onStepChange={setStep} onSubmit={submit} />;
+    return (
+      <>
+        {noticeBox}
+        <AdvisorForm form={form} step={step} onFormChange={setForm} onStepChange={setStep} onSubmit={submit} />
+      </>
+    );
   }
   return (
-    <PresetPicker
-      onPick={(p) => {
-        setForm(fromInput(p.input));
-        setStep(4);
-        setView("form");
-      }}
-      onBlank={() => {
-        setForm(emptyForm());
-        setStep(1);
-        setView("form");
-      }}
-    />
+    <>
+      {noticeBox}
+      <PresetPicker
+        onPick={(p) => {
+          setNotice(undefined);
+          setForm(fromInput(p.input));
+          setStep(4);
+          setView("form");
+        }}
+        onBlank={() => {
+          setNotice(undefined);
+          setForm(emptyForm());
+          setStep(1);
+          setView("form");
+        }}
+      />
+    </>
   );
 }

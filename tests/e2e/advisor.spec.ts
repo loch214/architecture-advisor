@@ -81,3 +81,27 @@ test("landing, methodology, about and privacy pages render and are accessible", 
     await axe(page);
   }
 });
+
+test("Copy link reopens the same result in a fresh browser, and a broken link says so", async ({ page, browser }) => {
+  await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
+  await page.getByRole("button", { name: /High-traffic ticketing/ }).click();
+  await page.getByRole("button", { name: "Get recommendation" }).click();
+  await page.getByRole("button", { name: "Copy link" }).click();
+  await expect(page.getByRole("button", { name: "Link copied" })).toBeVisible();
+  const link = await page.evaluate(() => navigator.clipboard.readText());
+  expect(link).toMatch(/\/advisor#a=[\w-]+$/);
+
+  const context = await browser.newContext();
+  const other = await context.newPage();
+  await other.goto(link);
+  await expect(other.getByRole("heading", { level: 1, name: "Space-based architecture" })).toBeVisible();
+  await expect(other).toHaveURL(/\/advisor$/);
+  await axe(other);
+
+  // Same page, new hash: the app reacts to the hash change without a reload.
+  await other.goto(link.replace(/#.*/, "#a=broken"));
+  await expect(other.getByText("We couldn't open that link")).toBeVisible();
+  await expect(other.getByRole("button", { name: "Start blank" })).toBeVisible();
+  await axe(other);
+  await context.close();
+});

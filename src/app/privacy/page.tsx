@@ -56,6 +56,10 @@ export default function PrivacyPage() {
             lose them. &quot;Start over&quot; deletes them.
           </li>
           <li>The rule-based ranking is calculated in your browser. It needs no server and no AI.</li>
+          <li>
+            &quot;Copy link&quot; puts your answers (not your notes) in the part of the link after the &quot;#&quot;.
+            Browsers don&apos;t send that part to our server, but anyone you give the link to can see the answers.
+          </li>
           <li>We don&apos;t use cookies, accounts or analytics.</li>
         </ul>
       </section>

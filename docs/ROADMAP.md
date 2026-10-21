@@ -6,7 +6,7 @@ Each phase ends with something demonstrable. The app is deployable from phase 4 
 Done locally 2026-10-21. Building continues in **Claude Code on the web** (cloud session) on repo `loch214/architecture-advisor`, starting from `docs/KICKOFF_PROMPT.md`. First cloud session scope: research tasks + Phases 1–4 (rules-only app, not deployed). Phase 5 needs owner-provided API keys; deployment needs the owner's Vercel account.
 
 ## Build status (updated 2026-10-20, end of build session 4)
-Phases 1–5 are built and merged into `main`. Phase 6 polish that needs no owner account is done (branch `phase-6-polish`, merged). Not deployed yet: Vercel waits for the owner. Handoff for the next session: `docs/HANDOFF.md`.
+Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner account is done, including the shareable link (session 5). Not deployed yet: Vercel waits for the owner. Handoff for the next session: `docs/HANDOFF.md`.
 
 ## Phase 1: Knowledge base finalised ✅
 - ✅ Research for Q14/Q15 + spot-checks (KB draft §8)
@@ -52,7 +52,7 @@ Phases 1–5 are built and merged into `main`. Phase 6 polish that needs no owne
 - Mock mode, AI tests, `eval:ai` script; tune prompt.
 **Milestone:** AI explanations live with fallback proven by tests (and by temporarily disabling a key in preview).
 
-## Phase 6: Polish and launch 🟡 (account-free part done in session 4)
+## Phase 6: Polish and launch 🟡 (account-free part done in sessions 4–5)
 - Loading/fallback states, AI-changed-order banner, shareable link, copy review, a11y audit, Lighthouse, README with architecture diagrams and ADRs, screenshots/GIF for the portfolio.
 - Simple privacy page; optional privacy-friendly analytics (Vercel Web Analytics, free tier).
 - ✅ "AI changed the order" banner (`topPickChange()`, `AI_MOCK=reorder` fixture); loading, ok, reused/adapted, unavailable, rate-limited, disabled and skipped states checked
@@ -61,8 +61,8 @@ Phases 1–5 are built and merged into `main`. Phase 6 polish that needs no owne
 - ✅ Copy review and accessibility pass (alert roles, live region, info-colour contrast, preset card markup); axe on every page and AI state
 - ✅ Lighthouse on a local production build: 96–100 everywhere (UI_UX "As built (session 4)")
 - ✅ README: run/test/build, Mermaid architecture + request-flow diagrams, ADR table
-- ✅ `/advisor` 186.5 / 200 KB gz
-- ⬜ Shareable "Copy link" (REQUIREMENTS "should"; watch the ~13 KB bundle headroom)
+- ✅ Shareable "Copy link" (FR-37, session 5): answers in the URL hash, checked by the engine's `checkInput`; partial and broken links show a notice; notes left out (Q29)
+- ✅ `/advisor` 187.5 / 200 KB gz
 - ⏳ Vercel project + env vars (owner), then a live smoke test, Lighthouse on the real URL, screenshots/GIF
 - ⏳ Upstash (Q25) and analytics (Q28): owner decisions
 **Milestone:** v1.0 launch.

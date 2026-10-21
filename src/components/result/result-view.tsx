@@ -1,13 +1,22 @@
 "use client";
 
-import { ArrowDownUpIcon, ChevronRightIcon, DownloadIcon, PencilIcon, PrinterIcon, RotateCcwIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import {
+  ArrowDownUpIcon,
+  ChevronRightIcon,
+  DownloadIcon,
+  LinkIcon,
+  PencilIcon,
+  PrinterIcon,
+  RotateCcwIcon,
+} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { kb } from "@/modules/knowledge-base";
 import { topPickChange, type AdvisorResult } from "@/modules/recommendation";
 import { fitFor } from "@/modules/scoring";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { encodeShareHash } from "@/components/form/share-link";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { AiPanel, aiAnnouncement } from "./ai-panel";
 import { FIT_LABELS, fmt, signed, styleName } from "./format";
@@ -24,6 +33,50 @@ function downloadJson(result: AdvisorResult) {
   a.download = `architecture-advice-${result.createdAt.slice(0, 10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+/** "Copy link" (FR-37): copies a URL that reopens this rule result; shows the link to copy by hand if the clipboard is blocked. */
+function CopyLink({ result }: { result: AdvisorResult }) {
+  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
+  const url = () => `${window.location.origin}${window.location.pathname}${encodeShareHash(result.input)}`;
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(url());
+      setState("copied");
+    } catch {
+      setState("failed");
+    }
+  };
+  const hasNotes = result.input.notes.trim() !== "";
+  return (
+    <>
+      <Button variant="outline" onClick={() => void copy()}>
+        <LinkIcon aria-hidden /> {state === "copied" ? "Link copied" : "Copy link"}
+      </Button>
+      <p className="sr-only" aria-live="polite">
+        {state === "copied" ? "Link copied." : ""}
+      </p>
+      {state !== "idle" && (
+        <div className="order-last basis-full space-y-1 text-sm text-muted-foreground">
+          {state === "failed" && (
+            <label className="block space-y-1">
+              <span>Your browser blocked copying. Copy this link instead:</span>
+              <input
+                readOnly
+                value={url()}
+                onFocus={(e) => e.currentTarget.select()}
+                className="w-full rounded-md border bg-background px-2 py-1 font-mono text-xs text-foreground"
+              />
+            </label>
+          )}
+          <p>
+            Anyone with the link sees this rule-based result; the AI explanation is fetched again.
+            {hasNotes && " Your notes are not included in the link."}
+          </p>
+        </div>
+      )}
+    </>
+  );
 }
 
 export function ResultView({
@@ -72,6 +125,7 @@ export function ResultView({
           <Button variant="outline" onClick={onEdit}>
             <PencilIcon aria-hidden /> Edit answers
           </Button>
+          <CopyLink result={result} />
           <Button variant="outline" onClick={() => downloadJson(result)}>
             <DownloadIcon aria-hidden /> Download JSON
           </Button>

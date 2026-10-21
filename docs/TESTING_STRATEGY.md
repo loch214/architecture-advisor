@@ -87,6 +87,8 @@ When a KB or rule change breaks a golden test, that's a signal to stop and think
 
 **Status (session 4):** 2 and 3 are in `tests/e2e/ai-mock.spec.ts`, plus a third case for the "AI changed the order" banner (`AI_MOCK=reorder`). `playwright.config.ts` starts one production server per setting: AI off on port 3100, and `AI_MODE=mock` with `AI_MOCK=ok`/`fail`/`reorder` on 3101–3103. Shared helpers (`axe`, `aiPanel`) are in `tests/e2e/helpers.ts`. 16 tests (8 × desktop and Pixel 7), ~25 s after `npm run build`. Still optional (Q24).
 
+**Status (session 5):** shareable link cases added: Copy link → reopen in a fresh browser context gives the same top pick; a broken link shows its notice (via `hashchange`, no reload); on the `AI_MOCK=ok` server a shared link asks the AI again. 20 tests (10 × 2 viewports). The encode/decode logic itself is unit-tested in `tests/form/share-link.test.ts` (round-trip of every preset, URL-safe characters, broken/old/partial links, and a fast-check "never throws" property).
+
 1. Preset → submit → ranked list + trade-off table visible with `AI_MODE=off`.
 2. Same with `AI_MODE=mock` (ok): explanation appears, AI delta pill visible.
 3. `AI_MODE=mock` (fail): fallback message, ranking still visible.
