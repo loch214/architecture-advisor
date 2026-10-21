@@ -33,7 +33,8 @@ A free web app that recommends software architectural styles. A deterministic ru
 
 ## Working style
 
-- Small, focused commits with clear messages. Work on a feature branch and open a PR; don't push straight to `main`.
+- Small, focused commits with clear messages. Work on a feature branch, never push straight to `main`.
+- **Claude owns the whole PR flow (owner decision, Q27):** open the PR **and merge it yourself** (merge commit) once `npm run check`, `npm run build` and `npm run bundle:check` pass and the docs are updated. The owner never opens, reviews or merges PRs, so never stop at "PR opened" or ask them to merge.
 - Test first for engine logic (see `TESTING_STRATEGY.md`). Run lint, typecheck and tests before every commit.
 - Write code that reads like the surrounding code; keep modules within the boundaries in `ARCHITECTURE.md` §6.
 - Use plain language in user-facing text; define jargon briefly the first time.

@@ -38,7 +38,7 @@
 ## Closed by build session 3 (2026-10-20)
 | # | Topic | Outcome |
 |---|---|---|
-| Q27 | PR workflow | Owner: "I'm not gonna do any of those merge, making PR anything by myself." Claude opens **and merges** its own PRs (merge commit) once `npm run check`, `npm run build` and `npm run bundle:check` pass and the docs are updated, then starts the next work on a fresh branch from `main`. This overrides the "open a PR" line in CLAUDE.md's working style, which Claude can't edit from the container |
+| Q27 | PR workflow | Owner: "I'm not gonna do any of those merge, making PR anything by myself." Claude opens **and merges** its own PRs (merge commit) once `npm run check`, `npm run build` and `npm run bundle:check` pass and the docs are updated, then starts the next work on a fresh branch from `main`. CLAUDE.md's working style now says the same (session 5); the kickoff prompt spells the steps out |
 | Q22 follow-up | Old branches | `build/phase-1-4`, `claude/nice-gates-3nyb3w` and `claude/peaceful-fermat-0prbs1` are fully merged into `main`. The container's permission rules block deleting remote branches, so they stay. They're harmless; delete them on GitHub's Branches page whenever convenient |
 
 ## Closed by build session 4 (2026-10-20)
