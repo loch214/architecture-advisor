@@ -14,7 +14,7 @@ describe("plainReasons", () => {
     expect(r.top[0]).toMatch(/plug-ins/);
     expect(r.ruledOut).toHaveLength(1);
     expect(r.ruledOut[0]!.styleIds).toEqual(expect.arrayContaining(["microservices", "service-based"]));
-    expect(r.ruledOut[0]!.why).toMatch(/installed/);
+    expect(r.ruledOut[0]!.why).toMatch(/only on each user.s own computer or phone/);
   });
 
   it("names the runner-up's biggest penalty", () => {

@@ -711,7 +711,7 @@
   {
     "id": "R20",
     "name": "Installed application",
-    "explanation": "It's an app installed on each user's computer or phone, so it ships as one deployable program. Styles that split a system into separately deployed services talking over a network don't fit the app itself. (Pick \"Installed app + our own back end\" if you also run servers.)",
+    "explanation": "It runs only on each user's own computer or phone, so it ships as one deployable program. Styles that split a system into separately deployed services talking over a network don't fit. (Pick \"On our server, plus an app people download\" if you also run servers.)",
     "when": {
       "eq": [
         "driver.system-type",
@@ -812,9 +812,21 @@
     "name": "Parts need different qualities",
     "explanation": "Parts of the system need different qualities, which points to several separately deployed units (quanta), i.e. a distributed style.",
     "when": {
-      "eq": [
-        "driver.qa-scope",
-        "different"
+      "all": [
+        {
+          "eq": [
+            "driver.qa-scope",
+            "different"
+          ]
+        },
+        {
+          "not": {
+            "eq": [
+              "driver.system-type",
+              "installed"
+            ]
+          }
+        }
       ]
     },
     "effects": [
@@ -848,7 +860,7 @@
   {
     "id": "R23",
     "name": "No clear need for microservices",
-    "explanation": "Microservices pay off when several teams must release independently, parts of the system need very different things, or usage grows fast. None of these applies here, so their cost and running complexity aren't paid back.",
+    "explanation": "Microservices pay off when several teams must release independently, or usage grows fast. Neither applies here, so their cost and running complexity aren't paid back. If parts of the system need different qualities, a few larger services (service-based) give that split more cheaply.",
     "when": {
       "all": [
         {
@@ -869,14 +881,6 @@
               "moderate"
             ]
           ]
-        },
-        {
-          "not": {
-            "eq": [
-              "driver.qa-scope",
-              "different"
-            ]
-          }
         }
       ]
     },
@@ -890,7 +894,7 @@
     "source": {
       "kind": "book",
       "ref": "RF2",
-      "locator": "ch.18–19 (organisational factors; distribution must be justified)"
+      "locator": "ch.14, ch.18–19 (organisational factors; service-based as the pragmatic distributed style)"
     }
   },
   {
@@ -898,9 +902,21 @@
     "name": "Parts with different needs",
     "explanation": "You said some parts of the system need very different qualities.",
     "when": {
-      "eq": [
-        "driver.qa-scope",
-        "different"
+      "all": [
+        {
+          "eq": [
+            "driver.qa-scope",
+            "different"
+          ]
+        },
+        {
+          "not": {
+            "eq": [
+              "driver.system-type",
+              "installed"
+            ]
+          }
+        }
       ]
     },
     "effects": [
@@ -995,6 +1011,39 @@
       "kind": "book",
       "ref": "RF2",
       "locator": "ch.7 (architecture quanta)"
+    }
+  },
+  {
+    "id": "N5",
+    "name": "Contradictory answers",
+    "explanation": "You said it runs only on each user's device, and also that some parts need very different qualities.",
+    "when": {
+      "all": [
+        {
+          "eq": [
+            "driver.system-type",
+            "installed"
+          ]
+        },
+        {
+          "eq": [
+            "driver.qa-scope",
+            "different"
+          ]
+        }
+      ]
+    },
+    "effects": [
+      {
+        "type": "note",
+        "warning": true,
+        "message": "Two of your answers don't fit together. You said the software runs only on each user's own device, but parts with very different needs usually run as separate pieces on servers. If people use it in a browser, or through an app that talks to your server, change \"Where will your software run?\" to one of the server answers. As it stands, the ranking treats it as one installed program."
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.7 (architecture quanta), ch.19 (monolithic or distributed?)"
     }
   }
 ]
