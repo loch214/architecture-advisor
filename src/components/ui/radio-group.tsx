@@ -55,4 +55,44 @@ function SegmentedControlItem({ className, ...props }: React.ComponentProps<type
   );
 }
 
-export { RadioGroup, RadioGroupItem, SegmentedControl, SegmentedControlItem };
+/**
+ * Radio card: one option of a `RadioGroup` drawn as a bordered card with a short description under the label,
+ * for questions whose options need an example on screen (UI_UX "Form"). The label is the accessible name and
+ * the description its accessible description.
+ */
+function RadioCard({
+  className,
+  label,
+  description,
+  ...props
+}: React.ComponentProps<typeof RadioGroupPrimitive.Item> & { label: string; description?: string }) {
+  const id = React.useId();
+  return (
+    <RadioGroupPrimitive.Item
+      data-slot="radio-card"
+      aria-labelledby={`${id}-label`}
+      aria-describedby={description ? `${id}-description` : undefined}
+      className={cn(
+        "flex w-full items-start gap-3 rounded-lg border border-input p-3 text-left outline-none transition-colors hover:bg-muted/50 focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[state=checked]:border-primary data-[state=checked]:bg-primary/5",
+        className,
+      )}
+      {...props}
+    >
+      <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full border border-input">
+        <RadioGroupPrimitive.Indicator className="size-2 rounded-full bg-primary" />
+      </span>
+      <span className="space-y-0.5">
+        <span id={`${id}-label`} className="block text-sm font-medium">
+          {label}
+        </span>
+        {description && (
+          <span id={`${id}-description`} className="block text-sm text-muted-foreground">
+            {description}
+          </span>
+        )}
+      </span>
+    </RadioGroupPrimitive.Item>
+  );
+}
+
+export { RadioGroup, RadioGroupItem, RadioCard, SegmentedControl, SegmentedControlItem };

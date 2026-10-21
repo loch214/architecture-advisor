@@ -1,7 +1,7 @@
 "use client";
 
 import { kb } from "@/modules/knowledge-base";
-import { SegmentedControl, SegmentedControlItem } from "@/components/ui/radio-group";
+import { RadioCard, RadioGroup, SegmentedControl, SegmentedControlItem } from "@/components/ui/radio-group";
 import type { InputIssue } from "@/modules/scoring";
 import type { FormState } from "./form-state";
 import { FieldError } from "./field-error";
@@ -33,18 +33,33 @@ export function StepDrivers({
             <p id={helpId} className="text-sm text-muted-foreground">
               {d.help}
             </p>
-            <SegmentedControl
-              value={form.drivers[d.id] ?? ""}
-              onValueChange={(v) => onChange({ ...form.drivers, [d.id]: v })}
-              aria-label={d.label}
-              aria-invalid={!!issue}
-            >
-              {ordered(d.options).map((o) => (
-                <SegmentedControlItem key={o.id} value={o.id}>
-                  {o.label}
-                </SegmentedControlItem>
-              ))}
-            </SegmentedControl>
+            {d.options.some((o) => o.description) ? (
+              // Options that need an example on screen are cards, so nobody has to guess what they mean.
+              <RadioGroup
+                value={form.drivers[d.id] ?? ""}
+                onValueChange={(v) => onChange({ ...form.drivers, [d.id]: v })}
+                aria-label={d.label}
+                aria-invalid={!!issue}
+                className="gap-2 sm:grid-cols-2"
+              >
+                {ordered(d.options).map((o) => (
+                  <RadioCard key={o.id} value={o.id} label={o.label} description={o.description} />
+                ))}
+              </RadioGroup>
+            ) : (
+              <SegmentedControl
+                value={form.drivers[d.id] ?? ""}
+                onValueChange={(v) => onChange({ ...form.drivers, [d.id]: v })}
+                aria-label={d.label}
+                aria-invalid={!!issue}
+              >
+                {ordered(d.options).map((o) => (
+                  <SegmentedControlItem key={o.id} value={o.id}>
+                    {o.label}
+                  </SegmentedControlItem>
+                ))}
+              </SegmentedControl>
+            )}
             {issue && <FieldError id={errorId}>{issue.message}</FieldError>}
           </fieldset>
         );
