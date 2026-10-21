@@ -80,25 +80,28 @@ export function AiPanel({
   const e = ai.explanation;
   if (!e) return null;
   return (
-    <div className="space-y-3 rounded-lg border p-4 text-sm">
-      <p>{e.summary}</p>
-      <p>
-        <span className="font-medium">Why {nameOf(e.topPick.styleId)}: </span>
-        {e.topPick.why}
-      </p>
+    <div className="space-y-4 rounded-lg border p-4 text-sm">
+      <p className="text-base">{e.summary}</p>
+      <div className="space-y-1">
+        <h3 className="font-medium">Why {nameOf(e.topPick.styleId)}</h3>
+        <p>{e.topPick.why}</p>
+      </div>
       {e.others.length > 0 && (
-        <ul className="space-y-1">
-          {e.others.map((o) => (
-            <li key={o.styleId}>
-              <span className="font-medium">{nameOf(o.styleId)}: </span>
-              <span className="text-muted-foreground">{o.why}</span>
-            </li>
-          ))}
-        </ul>
+        <div className="space-y-1">
+          <h3 className="font-medium">Why the others rank lower</h3>
+          <ul className="space-y-1">
+            {e.others.map((o) => (
+              <li key={o.styleId}>
+                <span className="font-medium">{nameOf(o.styleId)}: </span>
+                <span className="text-muted-foreground">{o.why}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
       {e.cautions.length > 0 && (
-        <div>
-          <p className="font-medium">Watch out for</p>
+        <div className="space-y-1">
+          <h3 className="font-medium">Watch out for</h3>
           <ul className="list-disc space-y-1 pl-5">
             {e.cautions.map((c) => (
               <li key={c}>{c}</li>
