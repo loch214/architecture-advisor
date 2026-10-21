@@ -10,13 +10,27 @@ Describe your system (the quality attributes you care about, business drivers, c
 
 Share a result with **Copy link**: the answers travel in the link, so whoever opens it sees the same ranking.
 
+## Screenshots
+
+| Landing page                                  | A form step                                                      |
+| --------------------------------------------- | ---------------------------------------------------------------- |
+| ![Landing page](docs/screenshots/landing.png) | ![Form step: quality attributes](docs/screenshots/form-step.png) |
+
+| Result with the AI explanation                                         | Trade-off table (from the knowledge base)                |
+| ---------------------------------------------------------------------- | -------------------------------------------------------- |
+| ![Result page with the AI explanation](docs/screenshots/result-ai.png) | ![Trade-off table](docs/screenshots/trade-off-table.png) |
+
+Retake them with `node scripts/screenshots.mjs` (uses the installed Edge; pass `chrome` as the second argument to use Chrome).
+
 ## How it works
 
 A **deterministic rule engine** scores 13 styles against your weighted priorities using a knowledge base drawn from established literature (e.g. Richards & Ford, _Fundamentals of Software Architecture_). An **AI layer** (free-tier Gemini Flash-Lite, falling back to Groq) can nudge scores by at most ±5 points, each with a stated reason, and writes the explanation. If the AI is unavailable, you still get the complete rule-based result.
 
 ## Status
 
-v1 feature-complete, not yet deployed. Built: knowledge base, scoring engine, 4-step form, result (with a shareable link), methodology, about and privacy pages, and the AI explanation (Gemini → Groq → rules-only, both providers checked live). Deployment to Vercel is next. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
+**Deployed (v1.0):** https://architecture-advisor-pink.vercel.app
+
+Built: knowledge base, scoring engine, 4-step form, result (with a shareable link), methodology, about and privacy pages, and the AI explanation (Gemini → Groq → rules-only, both providers checked live). Hosted on Vercel's free tier; every push to `main` redeploys. See [`docs/ROADMAP.md`](docs/ROADMAP.md).
 
 ## Architecture
 

@@ -6,7 +6,7 @@ Each phase ends with something demonstrable. The app is deployable from phase 4 
 Done locally 2026-10-21. Building continues in **Claude Code on the web** (cloud session) on repo `loch214/architecture-advisor`, starting from `docs/KICKOFF_PROMPT.md`. First cloud session scope: research tasks + Phases 1–4 (rules-only app, not deployed). Phase 5 needs owner-provided API keys; deployment needs the owner's Vercel account.
 
 ## Build status (updated 2026-10-20, end of build session 4)
-Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner account is done, including the shareable link (session 5). Not deployed yet: Vercel waits for the owner. Handoff for the next session: `docs/HANDOFF.md`.
+Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner account is done, including the shareable link (session 5). v1.0 is live at https://architecture-advisor-pink.vercel.app (session 6, 2026-10-21). Handoff for the next session: `docs/HANDOFF.md`.
 
 ## Phase 1: Knowledge base finalised ✅
 - ✅ Research for Q14/Q15 + spot-checks (KB draft §8)
@@ -35,11 +35,11 @@ Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner 
 **Milestone:** form produces a valid `UserInput` for every preset; Playwright validation test passes.
 ✅ Done in session 2: presets tied to golden scenarios, live floor chips (`previewFloors`), per-step validation from the engine, local storage, axe-checked on desktop and mobile. Deviations in UI_UX "As built".
 
-## Phase 4: Results page (rules only) + first deploy 🚀 🟡 (built; deploy needs the owner)
+## Phase 4: Results page (rules only) + first deploy 🚀 ✅
 - Ranked list, "why this score", trade-off table from KB, excluded styles, patterns, methodology page, JSON download.
 - Deploy to Vercel (`AI_MODE=off`).
 **Milestone:** public URL that gives useful, explainable recommendations with no AI. Share with a few classmates for feedback.
-✅ Built in session 2: result page (ranked list, why this score, KB trade-off table, adjustments, conflicts, excluded, patterns, mentions, how calculated, JSON download, print), `/methodology` and `/about`, `/api/explain` returning `disabled` with `AI_MODE=off`. ⬜ Vercel deploy (owner's account).
+✅ Built in session 2: result page (ranked list, why this score, KB trade-off table, adjustments, conflicts, excluded, patterns, mentions, how calculated, JSON download, print), `/methodology` and `/about`, `/api/explain` returning `disabled` with `AI_MODE=off`. ✅ Vercel deploy (session 6, 2026-10-21): https://architecture-advisor-pink.vercel.app, deployed straight with `AI_MODE=live` since Phase 5 was already done.
 
 ## Phase 5: AI layer ✅ (built 2026-10-20; Upstash deferred, Q25)
 - ✅ `src/modules/ai/` + `/api/explain`: prompt, schema, validation, redaction, Gemini/Groq adapters, chain with timeouts, breaker and repair retry, T1/T2 cache, rate limit, global budget, mock mode, mocked tests
@@ -52,7 +52,7 @@ Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner 
 - Mock mode, AI tests, `eval:ai` script; tune prompt.
 **Milestone:** AI explanations live with fallback proven by tests (and by temporarily disabling a key in preview).
 
-## Phase 6: Polish and launch 🟡 (account-free part done in sessions 4–5)
+## Phase 6: Polish and launch ✅ (v1.0 launched 2026-10-21)
 - Loading/fallback states, AI-changed-order banner, shareable link, copy review, a11y audit, Lighthouse, README with architecture diagrams and ADRs, screenshots/GIF for the portfolio.
 - Simple privacy page; optional privacy-friendly analytics (Vercel Web Analytics, free tier).
 - ✅ "AI changed the order" banner (`topPickChange()`, `AI_MOCK=reorder` fixture); loading, ok, reused/adapted, unavailable, rate-limited, disabled and skipped states checked
@@ -63,8 +63,8 @@ Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner 
 - ✅ README: run/test/build, Mermaid architecture + request-flow diagrams, ADR table
 - ✅ Shareable "Copy link" (FR-37, session 5): answers in the URL hash, checked by the engine's `checkInput`; partial and broken links show a notice; notes left out (Q29)
 - ✅ `/advisor` 187.5 / 200 KB gz
-- ⏳ Vercel project + env vars (owner), then a live smoke test, Lighthouse on the real URL, screenshots/GIF
-- ⏳ Upstash (Q25) and analytics (Q28): owner decisions
+- ✅ Vercel project + env vars, auto-redeploy from `main` (session 6); live smoke test passed (rules, AI ok, opt-out, shared link); Lighthouse on the real URL (UI_UX "As built (launch)"); README screenshots in `docs/screenshots/`; tagged `v1.0.0`
+- ⏳ Upstash (Q25) and analytics (Q28): owner decisions; launched with the defaults (no / no)
 **Milestone:** v1.0 launch.
 
 ## Phase 7 (future): Accounts and history
