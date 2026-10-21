@@ -1,43 +1,39 @@
-# Handoff: build session 5 (shareable link) → launch
+# Handoff: launch session 6 (v1.0 live) → next
 
-Last updated 2026-10-21. Read `CLAUDE.md` first (note the **commit identity rule**), then this file. Phases 1–5 are built, and all Phase 6 work that needs no owner account is done, including the shareable link. What's left: deployment and launch checks once the owner creates the Vercel project, plus three yes/no owner answers (Q25, Q28, Q29).
+Last updated 2026-10-21. Read `CLAUDE.md` first (note the **commit identity rule**), then this file. Phases 1–6 are done and **v1.0 is live at https://architecture-advisor-pink.vercel.app** (tag `v1.0.0`). What's left: three yes/no owner answers (Q25, Q28, Q29, launched with the defaults) and small leftovers.
 
 ## Where things are
-- **Branch:** everything is on `main` (Phase 5 via PR #4, Phase 6 polish via PR #5, the shareable link via the session 5 PR). Start new work on a fresh branch from `main`. **Claude opens and merges its own PRs (Q27, also in CLAUDE.md)**; the owner does no PR, review or merge steps, ever. Old merged branches still exist on GitHub because the container can't delete them (harmless). No CI server (Q23): run `npm run check` and `npm run build` (+ `npm run bundle:check`) before pushing. Commits are authored as `Lochana Dahanayake <loch214@gmail.com>`, no Claude trailers. Set `git config user.name/user.email` in a fresh clone before committing. Keep commits grouped by logical step.
+- **Branch:** everything is on `main`. Start new work on a fresh branch from `main`. **Claude opens and merges its own PRs (Q27, also in CLAUDE.md)**; the owner does no PR, review or merge steps, ever. Old merged branches still exist on GitHub (harmless). No CI server (Q23): run `npm run check` and `npm run build` (+ `npm run bundle:check`) before pushing. Commits are authored as `Lochana Dahanayake <loch214@gmail.com>`, no Claude trailers. Set `git config user.name/user.email` in a fresh clone before committing. Keep commits grouped by logical step.
+- **Hosting:** Vercel project `architecture-advisor` on the owner's Hobby team (`lochanas-projects-84ba1138`). The GitHub repo is connected: **every push to `main` redeploys production**, and each PR branch gets a preview URL. Env vars (Production): `AI_MODE=live` (Config), `GEMINI_API_KEY` and `GROQ_API_KEY` (Secret, entered by the owner). Runtime logs show one `{"event":"ai",…}` line per `/api/explain` call with the provider attempts. Preview deployments have no env vars, so they run with AI off.
 - **Stack:** Next 16.4.2 (App Router, `cacheComponents`; read `node_modules/next/dist/docs/` before writing Next code), React 19.3, Tailwind 4, Zod 4 (server/tests only), Vercel AI SDK (`ai` 7, `@ai-sdk/google` 4, `@ai-sdk/groq` 4; docs in `node_modules/ai/docs/`), Vitest 5, fast-check, ESLint 10 (with an npm `overrides` entry), Playwright 1.56 + `playwright-core` 1.56 pinned, dependency-cruiser, `radix-ui`, `lucide-react`.
-- **Owner's machine:** Windows + PowerShell, Node 24, folder path has spaces. `.gitattributes` forces LF line endings. Local tool files (`.claude/`, `.mcp.json`, `.ignore`, `graft/`) are excluded via `.git/info/exclude` and must never be committed.
+- **Owner's machine:** Windows + PowerShell, Node 24, folder path has spaces. **Google Chrome is not installed; the browser is Microsoft Edge** (Claude in Chrome runs there). Use `CHROME_PATH=".../Microsoft/Edge/Application/msedge.exe"` for Lighthouse and Playwright's `channel: "msedge"`. `.gitattributes` forces LF line endings. Local tool files (`.claude/`, `.mcp.json`, `.ignore`, `graft/`) are excluded via `.git/info/exclude` and must never be committed.
 - **Keep it simple (owner, Q24):** the daily check is `npm run check` (+ `npm run build` before pushing). No CI, no new test tooling. AI tests use mocked providers only. E2E (Playwright) is optional.
 
 ## API keys (where they live)
-- **Cloud sessions (Claude Code on the web):** `GEMINI_API_KEY` and `GROQ_API_KEY` are set as environment variables in the **cloud environment settings** (not in any file). Set `AI_MODE=live` only for the command that needs it (e.g. `AI_MODE=live npx next start`).
+- **Production:** in Vercel's project settings (Secret type, so not readable back). Only the owner types them in.
+- **Cloud sessions (Claude Code on the web):** `GEMINI_API_KEY` and `GROQ_API_KEY` are set in the cloud environment settings. The cloud container **can't reach vercel.com or *.vercel.app**, so anything touching the live site needs a local session.
 - **Local runs:** copy `.env.example` to `.env.local` (git-ignored) and fill in the keys there.
 - Never print, log or commit the keys, and never prefix them with `NEXT_PUBLIC_` (a fitness check fails the build if a secret-looking `NEXT_PUBLIC_` name appears).
-- **Container network:** npm, `generativelanguage.googleapis.com` and (since session 4) `api.groq.com` work. Most other websites and WebFetch are blocked; WebSearch works. Chromium for Playwright is at `/opt/pw-browsers` (don't run `playwright install`); a one-off `npx -y lighthouse@12.8.2` with `CHROME_PATH=/opt/pw-browsers/chromium-1194/chrome-linux/chrome` works for Lighthouse.
 
 ## Done
 | Area | Where |
 |---|---|
 | KB JSON + Zod, integrity, snapshot, release gate | `src/modules/knowledge-base/` |
 | Pure scoring engine + `previewFloors` | `src/modules/scoring/` |
-| Result object | `src/modules/recommendation/` (`buildResult`, `withAi` now stamps `versions.prompt`) |
+| Result object | `src/modules/recommendation/` |
 | Form, results, methodology, about (Phases 3–4) | `src/components/`, `src/app/` |
-| **AI layer (Phase 5)** | `src/modules/ai/` (prompt, schema, validation, redaction, chain, T1/T2 cache, providers Gemini/Groq/mock) and `src/modules/platform/` (`KvStore` in memory, rate limit, `aiEnv()`); `/api/explain` wires them. Details and deviations: `AI_INTEGRATION.md` §12 |
-| AI panel | `src/components/result/ai-panel.tsx` shows summary, top pick, others, cautions, provider and the reused/adapted note; mention cards show the AI's answer |
-| **Phase 6 polish (session 4)** | "AI changed the order" banner (`topPickChange()` in `recommendation`, `AI_MOCK=reorder`), `/privacy` page (+ links from notes notice, about, footer), copy and a11y pass, Lighthouse fixes, README with diagrams and ADRs. Details: UI_UX "As built (session 4)" |
-| **Shareable link (session 5)** | `src/components/form/share-link.ts` (`encodeShareHash` / `decodeShareHash`, `#a=<base64url JSON>`, notes left out, Q29), `sanitiseForm` shared with local storage in `form-state.ts`, "Copy link" in `result-view.tsx`, link handling + notices in `advisor.tsx`, a line on `/privacy`. Details: UI_UX "As built (session 5)" |
-| Tests | 228 Vitest tests in `npm run check`; no test calls a real provider. Optional Playwright: 20 tests (AI off + `AI_MODE=mock` ok/fail/reorder servers), axe on every page and AI state |
-| Live check | Gemini OK through `/api/explain` (~5.8 s, valid first try, session 3). Groq OK (~1.6 s, valid after one repair retry, session 4) |
-| ADRs | `docs/adr/001…007` |
+| AI layer (Phase 5) | `src/modules/ai/`, `src/modules/platform/`, `/api/explain`. Details: `AI_INTEGRATION.md` §12 |
+| Phase 6 polish (sessions 4–5) | AI-changed-order banner, `/privacy`, a11y pass, README + ADRs, shareable "Copy link" |
+| **Launch (session 6)** | Vercel deploy, live smoke test, Lighthouse on production, README screenshots (`scripts/screenshots.mjs` → `docs/screenshots/`), tag `v1.0.0`. Details: UI_UX "As built (launch)" |
+| Tests | 228 Vitest tests in `npm run check`; no test calls a real provider. Optional Playwright: 20 tests |
 
-## Waiting on the owner (only things Claude can't do)
-1. **Q25 Upstash:** yes/no on adding Upstash Redis (free, via Vercel Marketplace) for launch. Without it, cache and rate limits are per server instance. Asked three times; don't block on it.
-2. **Q28 Analytics:** yes/no on Vercel Web Analytics (free, no cookies). The privacy page says "no analytics" until then. Asked twice; don't block on it.
-3. **Q29 Notes in shared links:** keep the notes out of "Copy link" URLs (current default) or include them?
-4. **Vercel:** the owner creates the Vercel project (import the GitHub repo) and adds the env vars: `AI_MODE=live`, `GEMINI_API_KEY`, `GROQ_API_KEY` (models default; optional `AI_DAILY_BUDGET`). Claude never creates accounts.
+## Waiting on the owner
+1. **Q25 Upstash**, **Q28 analytics**, **Q29 notes in shared links:** launched with the defaults (no / no / notes out). Apply only if the owner answers.
 
 The prompt for the next session is in `docs/KICKOFF_PROMPT.md`.
 
 ## Next
-1. **After the owner creates the Vercel project:** a live smoke test on the real URL (rules, AI ok, opt-out), Lighthouse on production, screenshots/GIF for the README/portfolio, then tag v1.0.
-2. If Q25 = yes: an Upstash `KvStore` adapter. If Q28 = yes: `<Analytics />` + a line on `/privacy`. If Q29 = include notes: add `n` to the link and update `/privacy`.
-3. Smaller leftovers (fine to do while waiting; keep `/advisor` under 200 KB gz, 187.5 now): the rate-limited message could show when the limit resets (UI_UX States table); a refresh during the AI request doesn't resume it (shows Retry).
+1. If Q25 = yes: an Upstash `KvStore` adapter. If Q28 = yes: `<Analytics />` + a line on `/privacy`. If Q29 = include notes: add `n` to the link and update `/privacy`.
+2. Smaller leftovers (keep `/advisor` under 200 KB gz, 187.5 now): the rate-limited message could show when the limit resets (UI_UX States table); a refresh during the AI request doesn't resume it (shows Retry).
+3. Watch the logs: the first AI call after a deploy hit Gemini's 10 s timeout (cold start) and Groq answered instead; later calls took Gemini ~2.6 s. If Gemini timeouts keep showing up in the `event: "ai"` lines, consider a slightly longer Gemini timeout (AI_INTEGRATION §1).
+4. Optional: share the URL with a few classmates for feedback (Phase 4 milestone), then `eval:ai` and prompt tuning with real traffic (Phase 5 leftover).

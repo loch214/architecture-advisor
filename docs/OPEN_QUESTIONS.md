@@ -51,6 +51,12 @@
 |---|---|---|
 | Q26 duplicate | Stale row | The old "Groq live check" row under "Still open" was a leftover; Q26 was closed in session 4 (above). Removed |
 
+## Closed by launch session 6 (2026-10-21, local Claude Code)
+| # | Topic | Outcome |
+|---|---|---|
+| Vercel | Deploy | Project `architecture-advisor` on the owner's Hobby team, imported from GitHub with the Next.js defaults. Live at https://architecture-advisor-pink.vercel.app. `AI_MODE=live` set by Claude (Config type, Production); `GEMINI_API_KEY` and `GROQ_API_KEY` typed in by the owner (Secret type). The GitHub repo is connected, so every push to `main` redeploys production and each PR branch gets a preview URL (owner asked for auto-redeploys) |
+| Q25, Q28, Q29 | Defaults kept | No answer this session either, so launch ships with the defaults: no Upstash, no analytics, notes left out of shared links. Still listed below in case the owner changes their mind |
+
 ## Still open
 | # | Topic | Question |
 |---|---|---|
