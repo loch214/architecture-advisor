@@ -50,7 +50,7 @@ Only:
 
 Estimated size: ~1,200 input tokens, ~600 output tokens. That fits Groq's 8K TPM at ~5 requests/min, and caching cuts it further.
 
-### System prompt (draft)
+### System prompt (v1 draft; v2 in use since 2026-10-21, see below)
 ```
 You are an assistant inside a software-architecture recommendation tool.
 A deterministic rule engine has already ranked candidate styles. Your job:
@@ -67,6 +67,8 @@ Rules:
 - topPick must be the style that ranks first AFTER your adjustments.
 Return ONLY JSON matching the schema.
 ```
+
+**Prompt v2 (2026-10-21, `PROMPT_VERSION = "2"`).** The owner found live answers messy: Gemini read "define jargon briefly" as "open the summary with a definition of every style" (e.g. a summary that defined microservices, microkernel, event-driven, service-based and serverless instead of talking about the user's IDE). v2 keeps every rule above and adds writing rules: the summary is 2–3 sentences naming the pick and its main reason *tied to the user's answers*, with no list or definitions of other styles; `topPick.why` describes what the style looks like for this project; `others` get one sentence each; a technical term is explained inside the sentence that uses it; no markdown. The EXCLUDED line now also names the rule that excluded each style (e.g. `microservices (Installed application)`), so the AI can say why. The schema is unchanged. Bumping the version invalidates every cached v1 answer (§7).
 
 ## 4. Response schema
 ```ts
@@ -188,7 +190,7 @@ Response schema adds: `reuse: { fits: boolean, changes: string[] (max 5) }`. If 
 As built: the `AiBlock` type lives in `src/modules/recommendation/types.ts`. `/api/explain` returns 400 for an invalid body (413 over 16 KB), never a stack trace; `disabled` with `AI_MODE=off`; `rate_limited` over the per-client limit; otherwise the result of the chain (`ok`, `cached`, `adapted` or `unavailable`).
 
 ## 11. Testing hooks
-`AI_MODE=off|mock|live` env var. `mock` returns fixture responses so the chain and UI states can be tested without spending quota: `AI_MOCK=ok` (default), `reorder` (raises the rule engine's #2 by 5 so the "AI changed the order" banner shows; valid only when the top two are within 5 points, e.g. the Startup MVP preset), `invalid`, `slow`, `429` or `fail`. See `TESTING_STRATEGY.md`.
+`AI_MODE=off|mock|live` env var. `mock` returns fixture responses so the chain and UI states can be tested without spending quota: `AI_MOCK=ok` (default), `reorder` (raises the rule engine's #2 by 5 so the "AI changed the order" banner shows; valid only when the top two are within 5 points, e.g. golden G10, a tie), `invalid`, `slow`, `429` or `fail`. See `TESTING_STRATEGY.md`.
 
 ## 12. As built (Phase 5, 2026-10-20)
 Code: `src/modules/ai/` (`context.ts`, `prompt.ts`, `schema.ts`, `validate.ts`, `redact.ts`, `chain.ts`, `cache.ts`, `explain.ts`, `providers/{types,sdk,gemini,groq,mock}.ts`) and `src/modules/platform/` (`store.ts`, `rate-limit.ts`, `env.ts`).

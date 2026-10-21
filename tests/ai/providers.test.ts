@@ -10,6 +10,7 @@ import { geminiProvider } from "@/modules/ai/providers/gemini";
 import { groqProvider } from "@/modules/ai/providers/groq";
 import { ProviderError } from "@/modules/ai/providers/types";
 import { exampleB } from "../scoring/fixtures";
+import { goldenScenarios } from "../scoring/golden";
 import { ctxFor } from "./helpers";
 
 const prompt = buildPrompt(ctxFor(exampleB));
@@ -119,8 +120,8 @@ describe("mock provider (AI_MODE=mock)", () => {
 });
 
 describe("mock reorder fixture (AI_MOCK=reorder)", () => {
-  it("is a valid reply that moves #2 to the top when the top two are close (Startup MVP preset)", async () => {
-    const c = ctxFor(presets.find((p) => p.id === "startup")!.input);
+  it("is a valid reply that moves #2 to the top when the top two are close (golden G10, a tie)", async () => {
+    const c = ctxFor(goldenScenarios.find((g) => g.id === "G10")!.input);
     const p = buildPrompt(c);
     const v = validateReply(await mockProvider("reorder").generate(p, signal()), c, p.ids);
     expect(v).toMatchObject({ ok: true, explanation: { topPick: { styleId: p.ids.top[1] } } });

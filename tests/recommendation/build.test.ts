@@ -43,12 +43,17 @@ describe("buildResult", () => {
 });
 
 describe("finalScores / withAi", () => {
-  it("applies AI deltas and re-sorts (worked example B: event-driven +4 moves to #2)", () => {
+  it("applies AI deltas and re-sorts (worked example B: microservices +4 moves to #2)", () => {
     const rules = score(exampleB, kb);
-    const final = finalScores(rules, [{ styleId: "event-driven", delta: 4, reason: "Kafka", basis: "notes" }], kb);
-    expect(final.slice(0, 2).map((f) => f.styleId)).toEqual(["space-based", "event-driven"]);
-    // Displayed as 68.8 → 72.8 (SCORING_ENGINE example B); stored unrounded.
-    expect(final[1]).toMatchObject({ ruleScore: 68.75, aiDelta: 4, finalScore: 72.75, rank: 2 });
+    const final = finalScores(
+      rules,
+      [{ styleId: "microservices", delta: 4, reason: "Kubernetes", basis: "notes" }],
+      kb,
+    );
+    expect(final.slice(0, 2).map((f) => f.styleId)).toEqual(["space-based", "microservices"]);
+    // Displayed as 69.5 → 73.5 (SCORING_ENGINE example B); stored unrounded.
+    expect(final[1]).toMatchObject({ aiDelta: 4, rank: 2 });
+    expect(Math.round(final[1]!.finalScore * 10) / 10).toBe(73.5);
   });
 
   it("withAi replaces the AI block and recomputes final scores without touching the rule result", () => {

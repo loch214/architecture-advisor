@@ -33,7 +33,7 @@
 | Q21 | Flagged items | Owner asked for "the better way": flagged estimates stay as they are but are **shown as estimates** to users: `≈` in the trade-off table and the methodology ratings matrix, with a note naming pipeline, SOA and serverless. A future owner check against the book remains welcome but is no longer a launch blocker |
 | Q22 | Branch name | Work moved to `build/phase-1-4` (pushing there works); the PR is opened from it. The build container isn't allowed to delete branches, so the owner deletes the old `claude/peaceful-fermat-0prbs1` branch on GitHub (Branches page → bin icon); it holds nothing that isn't on `build/phase-1-4` |
 | Q23 | CI | Owner asked to drop CI to keep things simple (2026-10-20). The GitHub Actions workflow is removed after one green run; the same checks run locally with `npm run check`, `npm run build`, `npm run bundle:check` and `npm run test:e2e`. `.env.example` added for local keys |
-| Q24 | Test scope | Owner: "don't overcomplicate". Required checks are `npm run check` (lint, typecheck, format, fitness, unit/golden/KB tests) and `npm run build`. The Playwright e2e suite stays in the repo but is **optional** (no Chromium install needed day to day). No new test tooling without asking. The Startup MVP preset's scalability conflict is intentional (golden G10) |
+| Q24 | Test scope | Owner: "don't overcomplicate". Required checks are `npm run check` (lint, typecheck, format, fitness, unit/golden/KB tests) and `npm run build`. The Playwright e2e suite stays in the repo but is **optional** (no Chromium install needed day to day). No new test tooling without asking. Golden G10's scalability conflict is intentional (it was the Startup MVP preset until v1.1) |
 
 ## Closed by build session 3 (2026-10-20)
 | # | Topic | Outcome |
@@ -56,6 +56,13 @@
 |---|---|---|
 | Vercel | Deploy | Project `architecture-advisor` on the owner's Hobby team, imported from GitHub with the Next.js defaults. Live at https://architecture-advisor-pink.vercel.app. `AI_MODE=live` set by Claude (Config type, Production); `GEMINI_API_KEY` and `GROQ_API_KEY` typed in by the owner (Secret type). The GitHub repo is connected, so every push to `main` redeploys production and each PR branch gets a preview URL (owner asked for auto-redeploys) |
 | Q25, Q28, Q29 | Defaults kept | No answer this session either, so launch ships with the defaults: no Upstash, no analytics, notes left out of shared links. Still listed below in case the owner changes their mind |
+
+## Closed by session 7 (2026-10-21, local Claude Code): owner feedback, v1.1
+| # | Topic | Outcome |
+|---|---|---|
+| Q30 | "Recommends microservices for almost everything" | Owner: a desktop IDE with plug-ins (a textbook microkernel case) got microservices first. Root cause and fix in KNOWLEDGE_BASE_DRAFT §8 "KB 1.1.0": two new required questions ("What are you building?", "Do all parts need the same qualities?") and rules R20–R23 plus an otherwise branch on R4, all sourced to Richards & Ford ch.7, 9, 13, 15, 18, 19. No style score changed. Golden G17–G22 added |
+| Q31 | Flow | Owner: blank form first, examples secondary; always able to start fresh; a new visit must not show the previous user's answers. Done: landing has one main button (`/advisor?new`) and six examples below it; `/advisor` opens on a blank step 1; Start over on every step and on the result; answers kept in session storage instead of local storage. The Startup MVP example was replaced by "Desktop IDE with plug-ins" (G10 stays a golden scenario). UI_UX "As built (v1.1)" |
+| Q32 | Messy AI explanation | Owner: the AI text was messy and should explain the scenario. Done: prompt v2 (summary tied to the user's answers, no list of definitions; AI_INTEGRATION §3); the AI panel uses headed blocks; and a rule-based "Why <style> fits your project" section now leads the result, so a clear explanation exists even with AI off |
 
 ## Still open
 | # | Topic | Question |

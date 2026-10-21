@@ -22,6 +22,7 @@ export function makeInput(p: Partial2 = {}): UserInput {
 /** Worked example A (SCORING_ENGINE.md): student group project. */
 export const exampleA = makeInput({
   drivers: {
+    "system-type": "server",
     "team-size": "4-10",
     experience: "beginner",
     budget: "very-limited",
@@ -42,6 +43,7 @@ export const exampleA = makeInput({
 /** Worked example B (SCORING_ENGINE.md): concert ticketing platform. */
 export const exampleB = makeInput({
   drivers: {
+    "system-type": "server",
     "team-size": "11-30",
     experience: "experienced",
     budget: "moderate",

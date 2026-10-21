@@ -67,6 +67,11 @@ Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner 
 - ⏳ Upstash (Q25) and analytics (Q28): owner decisions; launched with the defaults (no / no)
 **Milestone:** v1.0 launch.
 
+## v1.1 (2026-10-21): owner feedback
+- ✅ Style selection follows R&F ch.19's order: "what are you building?" and "one set of needs or several?" first (R20–R23), so installed apps and single-quantum systems no longer get microservices; plug-in products get microkernel (KB 1.1.0, golden G17–G22)
+- ✅ Flow: blank form first, six examples secondary, Start over everywhere, session storage so each visit starts fresh
+- ✅ Result: plain-language "Why <style> fits your project" from the rules; AI prompt v2 and a clearer AI panel; scoring internals folded into "Full scoring details"
+
 ## Phase 7 (future): Accounts and history
 - Supabase Auth + Postgres; `results` table storing `AdvisorResult` JSON; history list; delete.
 **Milestone:** logged-in users can save and reopen results; anonymous flow unchanged.

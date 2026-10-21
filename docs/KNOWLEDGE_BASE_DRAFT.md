@@ -2,7 +2,7 @@
 
 Human-readable source for the JSON knowledge base (structure in `KNOWLEDGE_BASE_SCHEMA.md`). All descriptions are written in our own words.
 
-**Status:** reviewed by Claude on 2026-10-21 at the owner's request, against published sources. Converted to JSON (`src/modules/knowledge-base/data/`, KB v1.0.0) in build session 1; research findings for Q14/Q15 in §8. Calibrated with a scoring simulation (see §8). The owner can still override anything. Items marked ⚠ are the ones most worth a human look.
+**Status:** reviewed by Claude on 2026-10-21 at the owner's request, against published sources. Converted to JSON (`src/modules/knowledge-base/data/`, KB v1.0.0) in build session 1; research findings for Q14/Q15 in §8. **KB v1.1.0 (2026-10-21)** adds the "what are you building?" and "one set of needs?" questions and rules R20–R23 after the owner reported microservices winning almost everything (§8). Calibrated with a scoring simulation (see §8). The owner can still override anything. Items marked ⚠ are the ones most worth a human look.
 
 ## Source tags
 | Tag | Meaning |
@@ -230,6 +230,8 @@ Every driver has **"Not sure"** (no floor). Nothing is pre-selected. A floor mea
 
 | Driver | Option → floors |
 |---|---|
+| **What are you building?** (`system-type`, v1.1) | Website, web app or API · Installed app (desktop or mobile) · Installed app + our own back end. No floors; used by R20 and N4 |
+| **Do all parts need the same qualities?** (`qa-scope`, v1.1) | Yes, the same everywhere · No, some parts differ a lot. No floors; used by R21, R22, R23 and N1. This is R&F ch.19's first decision ("monolithic or distributed?") in plain words |
 | Time to market | Tight → simplicity ≥ Medium · Very tight → simplicity ≥ High, deployability ≥ Medium |
 | Budget | Moderate → cost ≥ Medium · **Very limited → cost ≥ Critical**, simplicity ≥ Medium |
 | Team size | **1–3 → simplicity ≥ Critical** · 4–10 → simplicity ≥ Medium · 11–30 → modularity ≥ Medium, deployability ≥ Medium · 30+ → modularity ≥ High, deployability ≥ High, maintainability ≥ Medium |
@@ -259,7 +261,6 @@ Levels: Not needed 0 · Low 1 · Medium 2 · High 3 · Critical 5.
 | `p2p` | Users/devices share directly with each other, little or no central server | bool |
 | `edge` | Must process near devices: ultra-low latency, or keep working offline on site | bool |
 | `tech-changes` | Most expected changes are technical (swap UI framework, database) rather than business features | bool |
-| `mixed-scopes` | Parts of the system have very different needs (e.g. public site vs back office) | bool |
 | `multi-team-frontend` | Several teams will work on one large web frontend | bool |
 | `hosting` | Managed cloud OK / VMs or containers only / on-premise or single server | choice |
 | `no-lock-in` | Must avoid vendor lock-in | bool |
@@ -279,7 +280,7 @@ Points are on the 0–100 scale; each style's rule total is capped at ±30. **Pr
 | R1b Tiny team | R1 AND team 1–3 | microservices −5, cell-based −5 | ref:TeamTopologies |
 | R2 No clear domains | domains-clear = no | microservices −15, service-based −5 | book:RF ch.18 |
 | R3 Many teams + domains | domains-clear = yes AND team ≥ 11 | microservices +5, service-based +5, modular monolith +3 | book:RF; ref:TeamTopologies |
-| R4 Event workload | async-events | event-driven +15, serverless +5 | book:RF ch.15 |
+| R4 Event workload | async-events | event-driven +15, serverless +5; ***else* event-driven −10** (v1.1) | book:RF ch.15 |
 | R5 Strict workflow | strict-workflow | event-driven −10 | book:RF ch.15 |
 | R6 Spiky concurrency | spiky-concurrency | space-based +15, serverless +5; *else* space-based −10 | book:RF ch.16 |
 | R7 Sequential processing | sequential-processing | pipeline +20; *else* −15 | book:RF |
@@ -296,10 +297,15 @@ Points are on the 0–100 scale; each style's rule total is capped at ±30. **Pr
 | R17 Edge | edge | edge +20; *else* −20 | ref:edge |
 | R18 **New system, direction uncertain** | growth ∈ {stable, not sure} AND lifespan ≠ 5+ | modular monolith +10, layered +5 | book:RF ch.10–11 (start simple, evolve later) |
 | R19 **Technical changes dominate** | tech-changes | modular monolith −10, layered +5 | book:RF ch.11 |
+| R20 **Installed application** (v1.1) | system-type = installed | service-based, event-driven, space-based, microservices, SOA, serverless, cell-based EXCLUDED | book:RF ch.9, ch.19 (a distributed style = several deployment units talking over a network; an installed app is one deployable per device) |
+| R21 **One set of quality needs** (v1.1) | qa-scope = one | the same 7 distributed styles −25 each | book:RF ch.7, ch.19 ("a single set of characteristics means a monolith would be suitable, even if other factors favour distribution") |
+| R22 **Parts need different qualities** (v1.1) | qa-scope = different | layered, modular monolith, microkernel, pipeline −10 each | book:RF ch.7, ch.19 (different sets imply separate quanta, i.e. a distributed architecture) |
+| R23 **No clear need for microservices** (v1.1) | team 1–3 or 4–10 AND growth ∈ {not sure, stable, moderate} AND qa-scope ≠ different | microservices −15 | book:RF ch.18–19 (organisational factors; microservices need several teams, clean bounded contexts and operational maturity); ref:TeamTopologies |
 
 **Notes (no score change, shown on the result and sent to the AI):**
-- N1 `mixed-scopes` → "Consider a hybrid: different parts may deserve different styles (separate architectural quanta)." (book:RF ch.7)
+- N1 qa-scope = different → "Consider a hybrid: parts with different needs can be separate deployable units (architecture quanta), each with the style that suits it." (book:RF ch.7). Until v1.1 this was the `mixed-scopes` checkbox, which the new required question replaces.
 - N2 `multi-team-frontend` → suggest micro-frontends as an add-on.
+- N4 system-type = installed app + own back end → "These are two separately deployed parts with different needs. The ranking mainly fits the back end. The installed app is one program on each device: usually a modular monolith, or a microkernel if it needs plug-ins." (book:RF ch.7)
 - N3 Budget, team size and experience all "Not sure" → warning: "Without budget/team info, results lean towards feature-rich distributed styles, which may underweight cost and complexity."
 
 ---
@@ -324,6 +330,23 @@ A scratch simulation ran all golden scenarios (`TESTING_STRATEGY.md`).
 **No score or rule value changed.**
 
 10. **Q20 resolved: keep R7 (+20) and R14 (+15).** G7 sensitivity: maintainability and testability are where R&F rate pipeline weakly (testability 3, maintainability our flagged estimate) and microservices strongly, so a user who makes them High *should* see microservices close; the result page shows both with reasons. G11 sensitivity: AWS's cell-based guidance and practitioner write-ups (ref:AWS-cells; Rackspace, "Cell-Based Architecture on AWS") describe each cell as a full copy of the application stack behind a thin router, i.e. cells usually *wrap* services, so microservices ranking a close second is consistent. No source gives a specific larger bonus, so raising either rule would be an unsourced change.
+
+### KB 1.1.0 (2026-10-21): "it recommends microservices for almost everything"
+**Owner report.** A cross-platform desktop IDE with plug-ins, offline use and "add languages without changing the core" (plug-ins ticked, 4–10 devs, 5+ years, evolvability and availability Critical) got **microservices 72.9** first and **microkernel 70.1** second. Richards & Ford name IDEs (Eclipse) as the textbook microkernel case. An ordinary 4–10-person business web app also got microservices first.
+
+**Why it happened.** R&F's star ratings give microservices 5/5 on modularity, maintainability, testability, deployability, evolvability, scalability and fault tolerance. A weighted average over those ratings favours microservices whenever a user marks several "-ilities" High, which most users do. Cost and simplicity are only two of 13 attributes. The engine never asked the two questions R&F ch.19 put *before* comparing star ratings: (1) monolithic or distributed, decided by whether one set of characteristics covers the whole system (one architecture quantum, ch.7); (2) does the problem's shape match a style (domain/architecture isomorphism: "the microkernel architecture is a perfect fit for systems that need customisation"). It also had no way to say "this runs on the user's machine", where a style made of network services can't apply at all.
+
+**Sources checked:** R&F 2nd ed. ch.7 (scope of characteristics, quanta), ch.9 (monolithic vs distributed: deployment units), ch.13 (microkernel: IDEs, browsers, CI servers), ch.15 (prefer request-based models for well-structured, deterministic requests; EDA when the business reacts to events), ch.18 (microservices need operational automation and clean bounded contexts), ch.19 (decision criteria: domain/architecture isomorphism, organisational factors, "monolithic or distributed?", the Silicon Sandwiches monolith/microkernel case vs the Going Going Gone microservices case). The "Rethinking microservices" trend (renewed interest in modular monoliths; ref:PrimeVideo) points the same way.
+
+**Changes (no style score changed):**
+11. Two new required step-1 questions (`system-type`, `qa-scope`), each with "Not sure". `mixed-scopes` removed (folded into `qa-scope`; old share links with it open as "partial" and ask for the new answers).
+12. R20 excludes the seven server-side distributed styles for an installed app. P2P and edge stay (each has its own gate).
+13. R21: one set of quality needs → distributed styles −25. Tried −15 first: an ordinary web app (G19) still ranked microservices 52.0 over modular monolith 45.0, contradicting the book's "a monolith would be suitable". −25 makes the monolith win (45.0 vs 39.0) while extreme cases survive (worked example B's space-based would still be 55.6 vs 29.7).
+14. R22: parts with different needs → monolithic styles −10.
+15. R23: small team, no fast growth, and no parts with different needs → microservices −15. Distribution must be justified by need (several teams, independent scaling, fault isolation, different needs per part); none is present.
+16. R4 gains an otherwise branch: no event workload → event-driven −10 (R&F ch.15: a request-based model is generally preferable for well-structured, deterministic requests).
+
+**Result:** all 16 existing golden scenarios keep their expected picks (worked examples A and B: only lower ranks moved, tables updated in SCORING_ENGINE). New golden scenarios G17–G22 (TESTING_STRATEGY §2): the IDE → microkernel 70.1 with the seven distributed styles ruled out; the same IDE answers with both new questions left "Not sure" → microkernel 70.1 vs service-based 61.8 (R23 and R4's otherwise branch alone fix it); a plug-in server product with one set of needs → microkernel; an ordinary web app with one set of needs → modular monolith; the same app with "parts differ a lot" → microservices / service-based.
 
 ---
 

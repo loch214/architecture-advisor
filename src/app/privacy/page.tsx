@@ -52,8 +52,8 @@ export default function PrivacyPage() {
         </h2>
         <ul className="list-disc space-y-1 pl-5">
           <li>
-            Your answers and your last result are saved in your browser&apos;s local storage, so a refresh doesn&apos;t
-            lose them. &quot;Start over&quot; deletes them.
+            Your answers and your last result are saved in this browser tab&apos;s session storage, so a refresh
+            doesn&apos;t lose them. Closing the tab or pressing &quot;Start over&quot; deletes them.
           </li>
           <li>The rule-based ranking is calculated in your browser. It needs no server and no AI.</li>
           <li>

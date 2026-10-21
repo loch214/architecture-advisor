@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowLeftIcon, ArrowRightIcon, CircleAlertIcon } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeftIcon, ArrowRightIcon, CircleAlertIcon, RotateCcwIcon } from "lucide-react";
 import { kb } from "@/modules/knowledge-base";
 import { previewFloors } from "@/modules/scoring";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -14,7 +15,7 @@ import { StepReview } from "./step-review";
 import { StepSituation } from "./step-situation";
 
 const STEP_INTROS: Record<StepId, string> = {
-  1: 'Business drivers shape which styles are realistic. Every question has a "Not sure" option.',
+  1: "Start with what you're building, then your team and business. Every question has a “Not sure” option.",
   2: "Rate how much each quality attribute matters. Anything you leave alone counts as Low.",
   3: "Some styles fit specific situations. Tick what applies; leave the rest.",
   4: "Add any context the questions missed, check your answers, then get your recommendation.",
@@ -26,12 +27,14 @@ export function AdvisorForm({
   onFormChange,
   onStepChange,
   onSubmit,
+  onStartOver,
 }: {
   form: FormState;
   step: StepId;
   onFormChange: (f: FormState) => void;
   onStepChange: (s: StepId) => void;
   onSubmit: () => void;
+  onStartOver: () => void;
 }) {
   // Messages appear only after the user tries to move on, not while they're still filling the step in.
   const [attempted, setAttempted] = useState<Set<StepId>>(new Set());
@@ -73,12 +76,19 @@ export function AdvisorForm({
   };
 
   const current = STEPS[step - 1]!;
+  const started =
+    step > 1 ||
+    form.notes !== "" ||
+    [form.attributes, form.drivers, form.characteristics].some((o) => Object.keys(o).length > 0);
   return (
     <section aria-labelledby="step-heading" className="mx-auto max-w-4xl space-y-6">
       <div className="space-y-2">
-        <p className="text-sm text-muted-foreground">
-          Step {step} of {STEPS.length}
-        </p>
+        <div className="flex min-h-8 flex-wrap items-center justify-between gap-2">
+          <p className="text-sm text-muted-foreground">
+            Step {step} of {STEPS.length}
+          </p>
+          {started && <StartOver onConfirm={onStartOver} />}
+        </div>
         <Progress value={(step / STEPS.length) * 100} aria-label={`Step ${step} of ${STEPS.length}`} />
         <ol className="hidden gap-4 text-sm sm:flex" aria-label="Steps">
           {STEPS.map((s) => (
@@ -104,6 +114,15 @@ export function AdvisorForm({
           {current.title}
         </h2>
         <p className="text-muted-foreground">{STEP_INTROS[step]}</p>
+        {step === 1 && (
+          <p className="text-sm text-muted-foreground">
+            Want to see what you get first?{" "}
+            <Link href="/#examples" className="underline underline-offset-4 hover:text-foreground">
+              Open an example
+            </Link>
+            .
+          </p>
+        )}
       </div>
 
       {shownIssues.length > 0 && (
@@ -156,5 +175,27 @@ export function AdvisorForm({
         </Button>
       </div>
     </section>
+  );
+}
+
+/** "Start over" clears every answer, so it asks once, inline (no browser dialog). */
+function StartOver({ onConfirm }: { onConfirm: () => void }) {
+  const [asking, setAsking] = useState(false);
+  if (!asking)
+    return (
+      <Button variant="ghost" size="sm" onClick={() => setAsking(true)}>
+        <RotateCcwIcon aria-hidden /> Start over
+      </Button>
+    );
+  return (
+    <p role="group" aria-label="Start over?" className="flex items-center gap-2 text-sm">
+      Clear all answers?
+      <Button variant="destructive" size="sm" onClick={onConfirm}>
+        Yes, start over
+      </Button>
+      <Button variant="ghost" size="sm" onClick={() => setAsking(false)}>
+        Cancel
+      </Button>
+    </p>
   );
 }

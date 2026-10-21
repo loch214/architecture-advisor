@@ -198,7 +198,15 @@
       "kind": "book",
       "ref": "RF2",
       "locator": "ch.15"
-    }
+    },
+    "otherwise": [
+      {
+        "type": "modify",
+        "style": "event-driven",
+        "points": -10
+      }
+    ],
+    "otherwiseExplanation": "You didn't say the system mainly reacts to events. For ordinary request-and-response work, asynchronous events add testing, debugging and consistency problems without paying them back."
   },
   {
     "id": "R5",
@@ -701,19 +709,204 @@
     }
   },
   {
-    "id": "N1",
-    "name": "Mixed scopes",
-    "explanation": "Parts of your system have very different needs.",
+    "id": "R20",
+    "name": "Installed application",
+    "explanation": "It's an app installed on each user's computer or phone, so it ships as one deployable program. Styles that split a system into separately deployed services talking over a network don't fit the app itself. (Pick \"Installed app + our own back end\" if you also run servers.)",
     "when": {
       "eq": [
-        "char.mixed-scopes",
-        true
+        "driver.system-type",
+        "installed"
+      ]
+    },
+    "effects": [
+      {
+        "type": "exclude",
+        "style": "service-based"
+      },
+      {
+        "type": "exclude",
+        "style": "event-driven"
+      },
+      {
+        "type": "exclude",
+        "style": "space-based"
+      },
+      {
+        "type": "exclude",
+        "style": "microservices"
+      },
+      {
+        "type": "exclude",
+        "style": "soa"
+      },
+      {
+        "type": "exclude",
+        "style": "serverless"
+      },
+      {
+        "type": "exclude",
+        "style": "cell-based"
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.9 and ch.19 (monolithic vs distributed: deployment units)"
+    }
+  },
+  {
+    "id": "R21",
+    "name": "One set of quality needs",
+    "explanation": "The whole system needs the same qualities, so one deployable unit (one architecture quantum) can serve it. Richards & Ford: a single set of characteristics means a monolith is suitable, even if other factors favour distribution.",
+    "when": {
+      "eq": [
+        "driver.qa-scope",
+        "one"
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "service-based",
+        "points": -25
+      },
+      {
+        "type": "modify",
+        "style": "event-driven",
+        "points": -25
+      },
+      {
+        "type": "modify",
+        "style": "space-based",
+        "points": -25
+      },
+      {
+        "type": "modify",
+        "style": "microservices",
+        "points": -25
+      },
+      {
+        "type": "modify",
+        "style": "soa",
+        "points": -25
+      },
+      {
+        "type": "modify",
+        "style": "serverless",
+        "points": -25
+      },
+      {
+        "type": "modify",
+        "style": "cell-based",
+        "points": -25
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.7 and ch.19 (\"Monolithic or distributed?\")"
+    }
+  },
+  {
+    "id": "R22",
+    "name": "Parts need different qualities",
+    "explanation": "Parts of the system need different qualities, which points to several separately deployed units (quanta), i.e. a distributed style.",
+    "when": {
+      "eq": [
+        "driver.qa-scope",
+        "different"
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "layered",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "modular-monolith",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "microkernel",
+        "points": -10
+      },
+      {
+        "type": "modify",
+        "style": "pipeline",
+        "points": -10
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.7 and ch.19 (\"Monolithic or distributed?\")"
+    }
+  },
+  {
+    "id": "R23",
+    "name": "No clear need for microservices",
+    "explanation": "Microservices pay off when several teams must release independently, parts of the system need very different things, or usage grows fast. None of these applies here, so their cost and running complexity aren't paid back.",
+    "when": {
+      "all": [
+        {
+          "in": [
+            "driver.team-size",
+            [
+              "1-3",
+              "4-10"
+            ]
+          ]
+        },
+        {
+          "in": [
+            "driver.growth",
+            [
+              "unsure",
+              "stable",
+              "moderate"
+            ]
+          ]
+        },
+        {
+          "not": {
+            "eq": [
+              "driver.qa-scope",
+              "different"
+            ]
+          }
+        }
+      ]
+    },
+    "effects": [
+      {
+        "type": "modify",
+        "style": "microservices",
+        "points": -15
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.18–19 (organisational factors; distribution must be justified)"
+    }
+  },
+  {
+    "id": "N1",
+    "name": "Parts with different needs",
+    "explanation": "You said some parts of the system need very different qualities.",
+    "when": {
+      "eq": [
+        "driver.qa-scope",
+        "different"
       ]
     },
     "effects": [
       {
         "type": "note",
-        "message": "Consider a hybrid: different parts may deserve different styles (separate architectural quanta)."
+        "message": "Consider a hybrid: parts with different needs can be separate deployable units (architecture quanta), each with the style that suits it."
       }
     ],
     "source": {
@@ -780,6 +973,28 @@
       "kind": "design",
       "note": "Warning when the inputs that balance cost and complexity are missing",
       "reviewed": true
+    }
+  },
+  {
+    "id": "N4",
+    "name": "Installed app plus back end",
+    "explanation": "You're building an installed app and a back end you run.",
+    "when": {
+      "eq": [
+        "driver.system-type",
+        "both"
+      ]
+    },
+    "effects": [
+      {
+        "type": "note",
+        "message": "These are two separately deployed parts with different needs. The ranking mainly fits the back end. The installed app is one program on each device: usually a modular monolith, or a microkernel if it needs plug-ins."
+      }
+    ],
+    "source": {
+      "kind": "book",
+      "ref": "RF2",
+      "locator": "ch.7 (architecture quanta)"
     }
   }
 ]

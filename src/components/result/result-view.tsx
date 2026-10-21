@@ -3,6 +3,7 @@
 import {
   ArrowDownUpIcon,
   ChevronRightIcon,
+  CompassIcon,
   DownloadIcon,
   LinkIcon,
   PencilIcon,
@@ -11,7 +12,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { kb } from "@/modules/knowledge-base";
-import { topPickChange, type AdvisorResult } from "@/modules/recommendation";
+import { plainReasons, topPickChange, type AdvisorResult } from "@/modules/recommendation";
 import { fitFor } from "@/modules/scoring";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -79,15 +80,53 @@ function CopyLink({ result }: { result: AdvisorResult }) {
   );
 }
 
+/** "Why this fits": the rule engine's reasons in plain words, shown with or without AI. */
+function WhyItFits({ result }: { result: AdvisorResult }) {
+  const r = plainReasons(result, kb);
+  const name = styleName(result, result.final[0]!.styleId);
+  return (
+    <Section id="why-heading" title={`Why ${name} fits your project`}>
+      <div className="space-y-3 rounded-lg border p-4 text-sm">
+        <ul className="list-disc space-y-1.5 pl-5">
+          {r.top.map((t) => (
+            <li key={t}>{t}</li>
+          ))}
+        </ul>
+        {r.tradeOff && (
+          <p>
+            <span className="font-medium">Trade-off: </span>
+            {r.tradeOff}
+          </p>
+        )}
+        {r.runnerUp && (
+          <p>
+            <span className="font-medium">Why not {styleName(result, r.runnerUp.styleId)} (#2): </span>
+            {r.runnerUp.why}
+          </p>
+        )}
+        {r.ruledOut.map((g) => (
+          <p key={g.styleIds.join()}>
+            <span className="font-medium">Ruled out: {g.styleIds.map((id) => styleName(result, id)).join(", ")}. </span>
+            {g.why}
+          </p>
+        ))}
+      </div>
+    </Section>
+  );
+}
+
 export function ResultView({
   result,
   aiPending,
+  example,
   onEdit,
   onStartOver,
   onRetryAi,
 }: {
   result: AdvisorResult;
   aiPending: boolean;
+  /** Set when this result is one of the home page's examples. */
+  example?: string;
   onEdit: () => void;
   onStartOver: () => void;
   onRetryAi: () => void;
@@ -102,6 +141,23 @@ export function ResultView({
 
   return (
     <article aria-labelledby="result-heading" className="space-y-10">
+      {example && (
+        <Alert variant="info" className="no-print">
+          <CompassIcon aria-hidden />
+          <AlertTitle>Example: {example}</AlertTitle>
+          <AlertDescription>
+            <p>This result comes from ready-made answers. Change them to fit your project, or start from scratch.</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Button size="sm" onClick={onStartOver}>
+                Start my own
+              </Button>
+              <Button size="sm" variant="outline" onClick={onEdit}>
+                Edit these answers
+              </Button>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
       <header className="space-y-4">
         <p className="text-sm text-muted-foreground">Top recommendation</p>
         <div className="flex flex-wrap items-center gap-3">
@@ -117,13 +173,18 @@ export function ResultView({
             {FIT_LABELS[fitFor(top.finalScore)]} · {fmt(top.finalScore)}
           </Badge>
         </div>
-        <p className="text-sm text-muted-foreground">
-          Rule score {fmt(top.ruleScore)} · AI adjustment {signed(top.aiDelta)} · Final {fmt(top.finalScore)}
-        </p>
+        {top.aiDelta !== 0 && (
+          <p className="text-sm text-muted-foreground">
+            Rule score {fmt(top.ruleScore)} · AI adjustment {signed(top.aiDelta)} · Final {fmt(top.finalScore)}
+          </p>
+        )}
         {topStyle && <p className="max-w-prose">{topStyle.summary}</p>}
         <div className="no-print flex flex-wrap gap-2">
           <Button variant="outline" onClick={onEdit}>
             <PencilIcon aria-hidden /> Edit answers
+          </Button>
+          <Button variant="outline" onClick={onStartOver}>
+            <RotateCcwIcon aria-hidden /> Start over
           </Button>
           <CopyLink result={result} />
           <Button variant="outline" onClick={() => downloadJson(result)}>
@@ -131,9 +192,6 @@ export function ResultView({
           </Button>
           <Button variant="outline" onClick={() => window.print()}>
             <PrinterIcon aria-hidden /> Print
-          </Button>
-          <Button variant="ghost" onClick={onStartOver}>
-            <RotateCcwIcon aria-hidden /> Start over
           </Button>
         </div>
       </header>
@@ -154,16 +212,20 @@ export function ResultView({
         </Alert>
       )}
 
+      <WhyItFits result={result} />
       <Heads result={result} />
 
-      <div className="grid gap-10 lg:grid-cols-[3fr_2fr]">
-        <Section id="ranked-heading" title="Ranked styles" description="Bars show the final score out of 100.">
-          <RankedList result={result} />
-        </Section>
-        <Section id="ai-heading" title="AI explanation">
-          <AiPanel ai={result.ai} pending={aiPending} onRetry={onRetryAi} nameOf={(id) => styleName(result, id)} />
-        </Section>
-      </div>
+      <Section
+        id="ai-heading"
+        title="In plain words (AI)"
+        description="An optional AI explanation of the ranking. The ranking itself comes from the rules."
+      >
+        <AiPanel ai={result.ai} pending={aiPending} onRetry={onRetryAi} nameOf={(id) => styleName(result, id)} />
+      </Section>
+
+      <Section id="ranked-heading" title="All styles, ranked" description="Bars show the final score out of 100.">
+        <RankedList result={result} />
+      </Section>
 
       <Section
         id="tradeoff-heading"
@@ -173,17 +235,17 @@ export function ResultView({
         <TradeoffTable result={result} />
       </Section>
 
-      <Adjustments result={result} />
-      <Excluded result={result} />
       <Patterns result={result} />
       <Mentions result={result} />
 
       <Collapsible>
         <CollapsibleTrigger className="group flex items-center gap-1 text-lg font-semibold tracking-tight outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50">
           <ChevronRightIcon className="size-5 transition-transform group-data-[state=open]:rotate-90" aria-hidden />
-          How this was calculated
+          Full scoring details
         </CollapsibleTrigger>
-        <CollapsibleContent className="pt-3">
+        <CollapsibleContent className="space-y-10 pt-3">
+          <Adjustments result={result} />
+          <Excluded result={result} />
           <HowCalculated result={result} />
         </CollapsibleContent>
       </Collapsible>

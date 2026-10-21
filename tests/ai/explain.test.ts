@@ -31,7 +31,7 @@ describe("explain", () => {
   it("returns ok with provider details, adjustments and explanation", async () => {
     const { deps: d } = deps();
     const ai = await explain(exampleB, kb, d);
-    expect(ai).toMatchObject({ status: "ok", provider: "a", model: "a-model", promptVersion: "1", adjustments: [] });
+    expect(ai).toMatchObject({ status: "ok", provider: "a", model: "a-model", promptVersion: "2", adjustments: [] });
     expect(ai.explanation?.topPick.styleId).toBe("space-based");
     expect(ai.explanation?.others[0]).toHaveProperty("why");
   });
