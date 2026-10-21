@@ -145,6 +145,7 @@ The owner found the flow confusing (examples first, no way to start fresh on `/a
 - **Radio cards:** a KB driver option may carry a `description`; a question whose options have one is drawn as cards (`RadioCard` in `components/ui/radio-group.tsx`) instead of the segmented control. The label is the accessible name and the example the accessible description. The chosen card gets a primary border and inset ring (an inset ring, so the keyboard focus ring still shows).
 - **Contradiction warning:** "only on the user's device" + "parts need very different things" shows rule warning N5 on the result (KNOWLEDGE_BASE_DRAFT §7), in the same warning box as N3.
 - **Bundle:** `/advisor` 189.7 KB gz (was 187.5).
+- **Live check (2026-10-21, Edge via Playwright, AI call blocked so no quota was used):** the production site reports KB 1.2.0. The hospital share link with "server" + "parts differ" shows Service-based architecture, Good fit 61.4, Serverless #2 at 55.3, and the hybrid note N1. With "installed" + "parts differ" it shows Modular monolith, Weak fit 42.4, the seven server styles ruled out, and the N5 box "Worth a second look". Both match golden G23/G24. README screenshots (`docs/screenshots/`) retaken from the live site with `node scripts/screenshots.mjs`; the result shot shows a Gemini explanation.
 
 ## Copy tone
 Short, friendly, second person. Explain terms once: e.g. "Elasticity: scaling up *and back down* quickly when traffic spikes." No hype words ("revolutionary", "AI-powered magic").
