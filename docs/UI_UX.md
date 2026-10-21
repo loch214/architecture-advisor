@@ -18,8 +18,8 @@ Progress bar at the top, with **Start over** (inline "Clear all answers?" confir
 **Examples (not a step):** six example cards on the landing page: *Student project*, *Desktop IDE with plug-ins*, *Growing SaaS*, *Event-heavy / IoT*, *High-traffic ticketing*, *Enterprise migration*. Each mirrors a golden scenario. Opening one shows its result straight away with an "Example: …" box offering **Start my own** and **Edit these answers**. Step 1 also links to them ("Open an example").
 
 **Step 1: Your project & team (business drivers)**
-Radio groups (segmented buttons), all required, each with a "Not sure" option:
-**what you're building** (website/web app/API · installed app · installed app + own back end) · **do all parts need the same qualities?** (the book's "one quantum or several" question, in plain words) · time to market · budget · team size · team experience with distributed systems/DevOps · expected growth · expected lifespan · how often requirements change. One-line helper text under each label.
+Radio groups, all required, each with a "Not sure" option. The first two are **radio cards** (label plus an example under every option, two columns on desktop); the rest are segmented buttons:
+**where will your software run?** (on our server, used in a web browser · on our server, plus an app people download · only on the user's own device) · **do all parts need the same qualities?** (the book's "one quantum or several" question, in plain words) · time to market · budget · team size · team experience with distributed systems/DevOps · expected growth · expected lifespan · how often requirements change. One-line helper text under each label.
 
 **Step 2: What matters most (quality attributes)**
 - Row per attribute: name, plain one-liner, ⓘ tooltip (definition + example scenario), segmented control **Not needed / Low / Medium / High / Critical**. Default **Low**.
@@ -139,6 +139,12 @@ The owner found the flow confusing (examples first, no way to start fresh on `/a
 - **Result page order:** top pick → **"Why <style> fits your project"** (plain sentences built by `plainReasons()` from the rule result: rules that favoured it, the priorities it rates well on, the trade-off, why not #2, and what was ruled out and why) → notes/conflicts → **"In plain words (AI)"** → all styles ranked → trade-off table → patterns → "You mentioned". "Adjustments made", "Not recommended" and "How this was calculated" sit together under one collapsed **"Full scoring details"**. The rule/AI score line only shows when the AI changed the top pick's score.
 - **AI panel:** a short summary in larger text, then "Why <style>", "Why the others rank lower" and "Watch out for" as headed blocks. The prompt (v2) asks for a summary tied to the user's answers instead of a list of definitions (AI_INTEGRATION §3).
 - **"AI changed the order"** is checked in e2e with a share link to golden G10 (a tie), since the Startup MVP example was replaced by the desktop IDE.
+
+## As built (v1.2, 2026-10-21): clearer step 1
+- **Owner report:** "Installed app (desktop or mobile)" was picked for a web app with a mobile view, because of the word *mobile*. The question is now **"Where will your software run?"** and each option shows its example on screen ("People on phones open it in their browser"; "A mobile or desktop app (e.g. from an app store) that talks to our server"; "e.g. a text editor, a photo editor or an offline game"). "Do all parts need the same qualities?" got the same treatment and a help line defining "qualities". Option ids are unchanged, so old share links still work.
+- **Radio cards:** a KB driver option may carry a `description`; a question whose options have one is drawn as cards (`RadioCard` in `components/ui/radio-group.tsx`) instead of the segmented control. The label is the accessible name and the example the accessible description. The chosen card gets a primary border and inset ring (an inset ring, so the keyboard focus ring still shows).
+- **Contradiction warning:** "only on the user's device" + "parts need very different things" shows rule warning N5 on the result (KNOWLEDGE_BASE_DRAFT §7), in the same warning box as N3.
+- **Bundle:** `/advisor` 189.7 KB gz (was 187.5).
 
 ## Copy tone
 Short, friendly, second person. Explain terms once: e.g. "Elasticity: scaling up *and back down* quickly when traffic spikes." No hype words ("revolutionary", "AI-powered magic").

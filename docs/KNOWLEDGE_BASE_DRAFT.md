@@ -2,7 +2,7 @@
 
 Human-readable source for the JSON knowledge base (structure in `KNOWLEDGE_BASE_SCHEMA.md`). All descriptions are written in our own words.
 
-**Status:** reviewed by Claude on 2026-10-21 at the owner's request, against published sources. Converted to JSON (`src/modules/knowledge-base/data/`, KB v1.0.0) in build session 1; research findings for Q14/Q15 in §8. **KB v1.1.0 (2026-10-21)** adds the "what are you building?" and "one set of needs?" questions and rules R20–R23 after the owner reported microservices winning almost everything (§8). Calibrated with a scoring simulation (see §8). The owner can still override anything. Items marked ⚠ are the ones most worth a human look.
+**Status:** reviewed by Claude on 2026-10-21 at the owner's request, against published sources. Converted to JSON (`src/modules/knowledge-base/data/`, KB v1.0.0) in build session 1; research findings for Q14/Q15 in §8. **KB v1.1.0 (2026-10-21)** adds the "what are you building?" and "one set of needs?" questions and rules R20–R23 after the owner reported microservices winning almost everything (§8). **KB v1.2.0 (2026-10-21)** rewords both questions, applies R23 to any small team, and warns about contradictory answers (N5) after the owner's hospital report (§8). Calibrated with a scoring simulation (see §8). The owner can still override anything. Items marked ⚠ are the ones most worth a human look.
 
 ## Source tags
 | Tag | Meaning |
@@ -230,8 +230,8 @@ Every driver has **"Not sure"** (no floor). Nothing is pre-selected. A floor mea
 
 | Driver | Option → floors |
 |---|---|
-| **What are you building?** (`system-type`, v1.1) | Website, web app or API · Installed app (desktop or mobile) · Installed app + our own back end. No floors; used by R20 and N4 |
-| **Do all parts need the same qualities?** (`qa-scope`, v1.1) | Yes, the same everywhere · No, some parts differ a lot. No floors; used by R21, R22, R23 and N1. This is R&F ch.19's first decision ("monolithic or distributed?") in plain words |
+| **Where will your software run?** (`system-type`, v1.1; reworded v1.2) | On our server, used in a web browser (`server`) · On our server, plus an app people download (`both`) · Only on the user's own device, with no server of ours (`installed`). Each option shows an example on screen. No floors; used by R20, R22, N1, N4 and N5 |
+| **Do all parts need the same qualities?** (`qa-scope`, v1.1; reworded v1.2) | Yes, roughly the same everywhere (`one`) · No, some parts need very different things (`different`). Each option shows an example. No floors; used by R21, R22, N1 and N5. This is R&F ch.19's first decision ("monolithic or distributed?") in plain words |
 | Time to market | Tight → simplicity ≥ Medium · Very tight → simplicity ≥ High, deployability ≥ Medium |
 | Budget | Moderate → cost ≥ Medium · **Very limited → cost ≥ Critical**, simplicity ≥ Medium |
 | Team size | **1–3 → simplicity ≥ Critical** · 4–10 → simplicity ≥ Medium · 11–30 → modularity ≥ Medium, deployability ≥ Medium · 30+ → modularity ≥ High, deployability ≥ High, maintainability ≥ Medium |
@@ -299,13 +299,14 @@ Points are on the 0–100 scale; each style's rule total is capped at ±30. **Pr
 | R19 **Technical changes dominate** | tech-changes | modular monolith −10, layered +5 | book:RF ch.11 |
 | R20 **Installed application** (v1.1) | system-type = installed | service-based, event-driven, space-based, microservices, SOA, serverless, cell-based EXCLUDED | book:RF ch.9, ch.19 (a distributed style = several deployment units talking over a network; an installed app is one deployable per device) |
 | R21 **One set of quality needs** (v1.1) | qa-scope = one | the same 7 distributed styles −25 each | book:RF ch.7, ch.19 ("a single set of characteristics means a monolith would be suitable, even if other factors favour distribution") |
-| R22 **Parts need different qualities** (v1.1) | qa-scope = different | layered, modular monolith, microkernel, pipeline −10 each | book:RF ch.7, ch.19 (different sets imply separate quanta, i.e. a distributed architecture) |
-| R23 **No clear need for microservices** (v1.1) | team 1–3 or 4–10 AND growth ∈ {not sure, stable, moderate} AND qa-scope ≠ different | microservices −15 | book:RF ch.18–19 (organisational factors; microservices need several teams, clean bounded contexts and operational maturity); ref:TeamTopologies |
+| R22 **Parts need different qualities** (v1.1) | qa-scope = different AND system-type ≠ installed (v1.2) | layered, modular monolith, microkernel, pipeline −10 each | book:RF ch.7, ch.19 (different sets imply separate quanta, i.e. a distributed architecture) |
+| R23 **No clear need for microservices** (v1.1; v1.2 drops the qa-scope condition) | team 1–3 or 4–10 AND growth ∈ {not sure, stable, moderate} | microservices −15 | book:RF ch.14 (service-based as the pragmatic, cheaper distributed style), ch.18–19 (organisational factors; microservices need several teams, clean bounded contexts and operational maturity); ref:TeamTopologies |
 
 **Notes (no score change, shown on the result and sent to the AI):**
-- N1 qa-scope = different → "Consider a hybrid: parts with different needs can be separate deployable units (architecture quanta), each with the style that suits it." (book:RF ch.7). Until v1.1 this was the `mixed-scopes` checkbox, which the new required question replaces.
+- N1 qa-scope = different AND system-type ≠ installed (v1.2) → "Consider a hybrid: parts with different needs can be separate deployable units (architecture quanta), each with the style that suits it." (book:RF ch.7). Until v1.1 this was the `mixed-scopes` checkbox, which the new required question replaces.
 - N2 `multi-team-frontend` → suggest micro-frontends as an add-on.
 - N4 system-type = installed app + own back end → "These are two separately deployed parts with different needs. The ranking mainly fits the back end. The installed app is one program on each device: usually a modular monolith, or a microkernel if it needs plug-ins." (book:RF ch.7)
+- N5 (v1.2, **warning**) system-type = installed AND qa-scope = different → "Two of your answers don't fit together. You said the software runs only on each user's own device, but parts with very different needs usually run as separate pieces on servers. If people use it in a browser, or through an app that talks to your server, change "Where will your software run?" to one of the server answers. As it stands, the ranking treats it as one installed program." (book:RF ch.7, ch.19). R22 and N1 are skipped in this case, so the monolithic styles aren't punished twice.
 - N3 Budget, team size and experience all "Not sure" → warning: "Without budget/team info, results lean towards feature-rich distributed styles, which may underweight cost and complexity."
 
 ---
@@ -347,6 +348,21 @@ A scratch simulation ran all golden scenarios (`TESTING_STRATEGY.md`).
 16. R4 gains an otherwise branch: no event workload → event-driven −10 (R&F ch.15: a request-based model is generally preferable for well-structured, deterministic requests).
 
 **Result:** all 16 existing golden scenarios keep their expected picks (worked examples A and B: only lower ranks moved, tables updated in SCORING_ENGINE). New golden scenarios G17–G22 (TESTING_STRATEGY §2): the IDE → microkernel 70.1 with the seven distributed styles ruled out; the same IDE answers with both new questions left "Not sure" → microkernel 70.1 vs service-based 61.8 (R23 and R4's otherwise branch alone fix it); a plug-in server product with one set of needs → microkernel; an ordinary web app with one set of needs → modular monolith; the same app with "parts differ a lot" → microservices / service-based.
+
+### KB 1.2.0 (2026-10-21): the hospital report
+**Owner report.** A hospital management system: one back end, a web app for staff and a mobile view for patients. Availability and consistency Critical; scalability, security, maintainability High; performance, testability Medium. Tight deadline, moderate budget, 4–10 devs, some experience, moderate growth, 5+ years, requirements rarely change, clear domains.
+1. The owner picked "Installed app (desktop or mobile)" because of the word *mobile*, though patients use a mobile *view* in the browser. R20 then ruled out every server style.
+2. That answer plus "No, some parts differ a lot" contradict each other (an installed program is one deployable; different needs mean several). Both R20 and R22 fired, every remaining style lost points, the top pick was modular monolith 32.4 ("weak fit"), and nothing warned.
+3. With the intended answers (server + different), **microservices 66.7** beat **service-based 61.4**, because R23 switched off whenever qa-scope = different.
+
+**Sources checked:** R&F 2nd ed. ch.14 (service-based: "one of the most pragmatic styles", the simplest and cheapest distributed style; uses ACID transactions better than any other distributed style; many organisations don't need the extra power of more complex distributed styles), ch.18 (microservices rely on DevOps automation and clean bounded contexts; its medical example is a *vital-signs monitor* where each sign is independent with its own data, unlike an administrative system with shared, strongly consistent records), ch.19 ("monolithic or distributed?": different sets of characteristics mean *a distributed architecture*, not a specific one; organisational factors; a semantically coupled domain fits an intentionally coupled style such as service-based better than microservices; the Silicon Sandwiches monolith serves phones through one web UI designed for mobile). The course material says the same and was checked privately.
+
+**Changes (no style score changed):**
+17. `system-type` relabelled "Where will your software run?" with on-screen examples per option (e.g. "People on phones open it in their browser"); `qa-scope` options reworded with examples. Option ids unchanged, so old share links still open.
+18. R23 no longer depends on qa-scope. Different needs justify *distribution*, which service-based delivers with fewer, coarser services; they don't justify many fine-grained services for a team of up to 10 without fast growth.
+19. N5 warns about installed + different. R22 and N1 now require system-type ≠ installed, so a contradictory form isn't punished twice.
+
+**Result (`npm run golden:print`):** G1–G22 unchanged (no scenario combines a team ≤ 10 and calm growth with qa-scope = different). New G23, the hospital with server + different: before microservices 66.7 / service-based 61.4; **after service-based 61.4 (#1)**, serverless 55.3, event-driven 53.6, cell-based 52.1, microservices 51.7 (66.7 − 15). New G24, the contradictory answers: before modular monolith 42.4 − 10 = 32.4, layered 26.4; **after modular monolith 42.4, layered 36.4, plus the N5 warning**. It stays a "weak fit" honestly: with Critical availability and High scalability the monoliths' base scores are low, and the warning tells the user which answer to check.
 
 ---
 
