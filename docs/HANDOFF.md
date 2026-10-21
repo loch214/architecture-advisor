@@ -26,7 +26,7 @@ Last updated 2026-10-21. Read `CLAUDE.md` first (note the **commit identity rule
 | Phase 6 polish (sessions 4–5) | AI-changed-order banner, `/privacy`, a11y pass, README + ADRs, shareable "Copy link" |
 | **Launch (session 6)** | Vercel deploy, live smoke test, Lighthouse on production, README screenshots (`scripts/screenshots.mjs` → `docs/screenshots/`), tag `v1.0.0`. Details: UI_UX "As built (launch)" |
 | **v1.1 (session 7)** | KB 1.1.0 (R20–R23, two new step-1 questions), `plainReasons`, prompt v2, new flow. Details: KNOWLEDGE_BASE_DRAFT §8, UI_UX "As built (v1.1)" |
-| **v1.2 (session 8)** | KB 1.2.0 (R23 for any small team, N5 warning, R22/N1 skipped on contradiction), radio cards for step-1 questions with examples. Details: KNOWLEDGE_BASE_DRAFT §8 "KB 1.2.0", UI_UX "As built (v1.2)" |
+| **v1.2 (session 8)** | KB 1.2.0 (R23 for any small team, N5 warning, R22/N1 skipped on contradiction), radio cards for step-1 questions with examples. Details: KNOWLEDGE_BASE_DRAFT §8 "KB 1.2.0", UI_UX "As built (v1.2)". Live check passed on production and README screenshots retaken (PR #11) |
 | Tests | 242 Vitest tests in `npm run check` (24 golden scenarios); no test calls a real provider. Optional Playwright: 24 tests |
 
 ## Waiting on the owner
