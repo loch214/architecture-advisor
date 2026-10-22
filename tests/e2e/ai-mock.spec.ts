@@ -53,6 +53,7 @@ test("AI moves another style to #1: the 'AI changed the order' banner explains i
 test("a shared link shows the rule result and asks the AI again", async ({ page }) => {
   await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
   await openExample(page, at("ok"), "student");
+  await page.getByRole("button", { name: "Share & save" }).click();
   await page.getByRole("button", { name: "Copy link" }).click();
   const link = await page.evaluate(() => navigator.clipboard.readText());
 
