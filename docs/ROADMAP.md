@@ -78,6 +78,13 @@ Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner 
 - ✅ R23 for any small team without fast growth, so a 4–10 team whose parts differ gets service-based rather than microservices (KB 1.2.0, golden G23–G24)
 - ✅ `/advisor` 189.7 / 200 KB gz
 
+## v1.3 (2026-10-22): usability round 1
+- ✅ Result header: Edit answers, Start over and a "Share & save" toggle (Copy link, JSON, Print); "Next best" line with #2 and #3
+- ✅ AI panel: "Why the others rank lower" folded by default, cautions first
+- ✅ Step 1: "n of 9 answered" counter, ✓ on answered questions, next unanswered question scrolled into view
+- ✅ `/advisor` 190.0 / 200 KB gz
+- ⏳ Round 2 (study tool): `/styles` catalog with one page per style from the KB (no AI). Round 3 (decision tool): compare two styles side by side; "what-if" (change one answer on the result, see the ranking move). Owner picked round 1 only for now (Q34)
+
 ## Phase 7 (future): Accounts and history
 - Supabase Auth + Postgres; `results` table storing `AdvisorResult` JSON; history list; delete.
 **Milestone:** logged-in users can save and reopen results; anonymous flow unchanged.
