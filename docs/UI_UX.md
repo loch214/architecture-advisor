@@ -47,7 +47,9 @@ Mobile: same steps, stacked; segmented controls become full-width radio lists.
 │ Top recommendation: Modular monolith      [Good fit · 64.1]  │
 │ Rule score 64.1 · AI adjustment 0 · Final 64.1               │
 │ "One deployable app split into strict domain modules…"       │
-│ [Edit answers] [Copy link*] [Download JSON] [Print]          │
+│ Next best: #2 … · #3 … · All styles                          │
+│ [Edit answers] [Start over] [Share & save ▾]                 │
+│   ↳ [Copy link*] [Download JSON] [Print]  (opens inline)     │
 ├──────────────────────────────┬───────────────────────────────┤
 │ Ranked styles                │ AI explanation                │
 │ 1 Modular monolith ████ 64.1 │ Summary…                      │
@@ -146,6 +148,15 @@ The owner found the flow confusing (examples first, no way to start fresh on `/a
 - **Contradiction warning:** "only on the user's device" + "parts need very different things" shows rule warning N5 on the result (KNOWLEDGE_BASE_DRAFT §7), in the same warning box as N3.
 - **Bundle:** `/advisor` 189.7 KB gz (was 187.5).
 - **Live check (2026-10-21, Edge via Playwright, AI call blocked so no quota was used):** the production site reports KB 1.2.0. The hospital share link with "server" + "parts differ" shows Service-based architecture, Good fit 61.4, Serverless #2 at 55.3, and the hybrid note N1. With "installed" + "parts differ" it shows Modular monolith, Weak fit 42.4, the seven server styles ruled out, and the N5 box "Worth a second look". Both match golden G23/G24. README screenshots (`docs/screenshots/`) retaken from the live site with `node scripts/screenshots.mjs`; the result shot shows a Gemini explanation.
+
+## As built (v1.3, 2026-10-22): usability round 1
+Owner asked for better usability and UI (Q34) and picked "UI quick wins" first. Changes:
+- **Result header:** the five equal buttons became *Edit answers*, *Start over* and **Share & save**, a toggle that opens Copy link, Download JSON and Print in a row below (inline, like the ⓘ tips, so no popover/positioning library is shipped). A **"Next best"** line under the summary shows #2 and #3 with their final scores and links to "All styles, ranked", so a close race is visible without scrolling.
+- **AI panel:** order is summary → "Why <style>" → "Watch out for" → **"Why the others rank lower (n)"**, now folded by default (the ranked list already orders the rest). Folded content isn't printed, like "Full scoring details".
+- **Step 1:** a live "n of 9 answered" counter; a ✓ (plus "(answered)" for screen readers) next to each answered question; answering a question for the first time scrolls the next unanswered one into view with `block: "nearest"` (smooth unless reduced motion is set). Keyboard focus never moves.
+- **Dark mode** was already there (follows the device setting); unchanged.
+- **Tests:** e2e specs open "Share & save" before Copy link / Download JSON; 24/24 Playwright tests and axe pass on desktop and mobile.
+- **Bundle:** `/advisor` 190.0 KB gz (was 189.7).
 
 ## Copy tone
 Short, friendly, second person. Explain terms once: e.g. "Elasticity: scaling up *and back down* quickly when traffic spikes." No hype words ("revolutionary", "AI-powered magic").

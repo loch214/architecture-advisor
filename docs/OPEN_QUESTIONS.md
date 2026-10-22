@@ -69,6 +69,12 @@
 |---|---|---|
 | Q33 | Hospital scenario | Owner: a hospital system (staff web app + mobile view, one back end, 4–10 devs) got a confusing result. (1) "Installed app (desktop or mobile)" was misread because of *mobile*: the question is now "Where will your software run?" with an example under every option. (2) "Installed" + "parts differ a lot" contradict each other and gave an all-weak result without a word: new warning N5, and R22/N1 are skipped then. (3) With the right answers microservices won: R23 now applies to any team of up to 10 without fast growth, whatever qa-scope says (R&F ch.14, 18–19), so service-based is #1. KB 1.2.0; golden G23–G24; details in KNOWLEDGE_BASE_DRAFT §8 "KB 1.2.0" |
 
+## Closed by session 9 (2026-10-22, cloud): usability round 1
+| # | Topic | Outcome |
+|---|---|---|
+| Q34 | "Improve usability and UI" | Owner wants the app to work as a portfolio piece, a study tool and a decision tool, and chose a three-round plan with **round 1 only for now**: result header (Share & save toggle, "Next best"), AI "others" folded, step-1 progress and scroll-to-next. Dark mode already existed. Rounds 2 (style catalog) and 3 (compare + what-if) wait for the owner's go-ahead. Details: UI_UX "As built (v1.3)" |
+
+## Still open
 | # | Topic | Question |
 |---|---|---|
 | Q25 | Upstash | Phase 5 runs without Upstash (owner: "skip unless needed; ask first"). The cache, rate limit, global budget and breaker use an in-memory store per server instance. That is fine locally and for low traffic, but on Vercel each instance keeps its own copy, so limits are per instance. **Owner: add Upstash Redis (Vercel Marketplace, free) before or at launch?** If yes, it's one `KvStore` adapter. Asked again in sessions 4 and 5; no answer yet, nothing blocked |

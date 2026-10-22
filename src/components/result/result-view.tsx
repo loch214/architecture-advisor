@@ -2,6 +2,7 @@
 
 import {
   ArrowDownUpIcon,
+  ChevronDownIcon,
   ChevronRightIcon,
   CompassIcon,
   DownloadIcon,
@@ -9,8 +10,9 @@ import {
   PencilIcon,
   PrinterIcon,
   RotateCcwIcon,
+  Share2Icon,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { kb } from "@/modules/knowledge-base";
 import { plainReasons, topPickChange, type AdvisorResult } from "@/modules/recommendation";
 import { fitFor } from "@/modules/scoring";
@@ -51,7 +53,7 @@ function CopyLink({ result }: { result: AdvisorResult }) {
   const hasNotes = result.input.notes.trim() !== "";
   return (
     <>
-      <Button variant="outline" onClick={() => void copy()}>
+      <Button variant="ghost" onClick={() => void copy()}>
         <LinkIcon aria-hidden /> {state === "copied" ? "Link copied" : "Copy link"}
       </Button>
       <p className="sr-only" aria-live="polite">
@@ -77,6 +79,61 @@ function CopyLink({ result }: { result: AdvisorResult }) {
         </div>
       )}
     </>
+  );
+}
+
+/**
+ * Less-used actions (copy link, JSON, print) behind one toggle, opened inline below the header buttons like the
+ * ⓘ tips, so the header leads with the next step and no positioning library is shipped for a menu.
+ */
+function ShareAndSave({ result }: { result: AdvisorResult }) {
+  const [open, setOpen] = useState(false);
+  const id = useId();
+  return (
+    <>
+      <Button
+        variant="outline"
+        className="group"
+        aria-expanded={open}
+        aria-controls={id}
+        onClick={() => setOpen((o) => !o)}
+      >
+        <Share2Icon aria-hidden /> Share &amp; save
+        <ChevronDownIcon className="transition-transform group-aria-expanded:rotate-180" aria-hidden />
+      </Button>
+      <div id={id} hidden={!open} className="basis-full">
+        <div className="flex flex-wrap gap-2 rounded-lg bg-muted/50 p-2">
+          <CopyLink result={result} />
+          <Button variant="ghost" onClick={() => downloadJson(result)}>
+            <DownloadIcon aria-hidden /> Download JSON
+          </Button>
+          <Button variant="ghost" onClick={() => window.print()}>
+            <PrinterIcon aria-hidden /> Print
+          </Button>
+        </div>
+      </div>
+    </>
+  );
+}
+
+/** "Next best": the #2 and #3 styles right under the top pick, so a close race is visible without scrolling. */
+function RunnersUp({ result }: { result: AdvisorResult }) {
+  const next = result.final.slice(1, 3);
+  if (next.length === 0) return null;
+  return (
+    <p className="text-sm text-muted-foreground">
+      Next best:{" "}
+      {next.map((f, i) => (
+        <span key={f.styleId}>
+          {i > 0 && " · "}#{f.rank} <span className="text-foreground">{styleName(result, f.styleId)}</span>{" "}
+          <span className="tabular-nums">{fmt(f.finalScore)}</span>
+        </span>
+      ))}
+      {" · "}
+      <a href="#ranked-heading" className="no-print underline underline-offset-4 hover:text-foreground">
+        All styles
+      </a>
+    </p>
   );
 }
 
@@ -179,6 +236,7 @@ export function ResultView({
           </p>
         )}
         {topStyle && <p className="max-w-prose">{topStyle.summary}</p>}
+        <RunnersUp result={result} />
         <div className="no-print flex flex-wrap gap-2">
           <Button variant="outline" onClick={onEdit}>
             <PencilIcon aria-hidden /> Edit answers
@@ -186,13 +244,7 @@ export function ResultView({
           <Button variant="outline" onClick={onStartOver}>
             <RotateCcwIcon aria-hidden /> Start over
           </Button>
-          <CopyLink result={result} />
-          <Button variant="outline" onClick={() => downloadJson(result)}>
-            <DownloadIcon aria-hidden /> Download JSON
-          </Button>
-          <Button variant="outline" onClick={() => window.print()}>
-            <PrinterIcon aria-hidden /> Print
-          </Button>
+          <ShareAndSave result={result} />
         </div>
       </header>
 

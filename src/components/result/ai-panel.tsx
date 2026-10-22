@@ -1,9 +1,10 @@
 "use client";
 
-import { InfoIcon, RefreshCwIcon, SparklesIcon } from "lucide-react";
+import { ChevronRightIcon, InfoIcon, RefreshCwIcon, SparklesIcon } from "lucide-react";
 import type { AiBlock } from "@/modules/recommendation";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 const MESSAGES: Partial<Record<AiBlock["status"], { title: string; body: string; retry?: boolean }>> = {
   disabled: {
@@ -86,19 +87,6 @@ export function AiPanel({
         <h3 className="font-medium">Why {nameOf(e.topPick.styleId)}</h3>
         <p>{e.topPick.why}</p>
       </div>
-      {e.others.length > 0 && (
-        <div className="space-y-1">
-          <h3 className="font-medium">Why the others rank lower</h3>
-          <ul className="space-y-1">
-            {e.others.map((o) => (
-              <li key={o.styleId}>
-                <span className="font-medium">{nameOf(o.styleId)}: </span>
-                <span className="text-muted-foreground">{o.why}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
       {e.cautions.length > 0 && (
         <div className="space-y-1">
           <h3 className="font-medium">Watch out for</h3>
@@ -108,6 +96,27 @@ export function AiPanel({
             ))}
           </ul>
         </div>
+      )}
+      {e.others.length > 0 && (
+        // Folded by default: the top pick and its risks read first; the ranked list below already orders the rest.
+        <Collapsible>
+          <h3>
+            <CollapsibleTrigger className="group flex items-center gap-1 font-medium outline-none hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50">
+              <ChevronRightIcon className="size-4 transition-transform group-data-[state=open]:rotate-90" aria-hidden />
+              Why the others rank lower ({e.others.length})
+            </CollapsibleTrigger>
+          </h3>
+          <CollapsibleContent>
+            <ul className="space-y-1 pt-1 pl-5">
+              {e.others.map((o) => (
+                <li key={o.styleId}>
+                  <span className="font-medium">{nameOf(o.styleId)}: </span>
+                  <span className="text-muted-foreground">{o.why}</span>
+                </li>
+              ))}
+            </ul>
+          </CollapsibleContent>
+        </Collapsible>
       )}
       <p className="text-xs text-muted-foreground">
         {ai.provider && <>Explanation by {ai.provider}. </>}

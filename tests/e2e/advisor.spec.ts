@@ -18,6 +18,7 @@ test("an example opens its rules-only result with the AI 'not enabled' state", a
   await axe(page);
 
   const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Share & save" }).click();
   await page.getByRole("button", { name: "Download JSON" }).click();
   const file = await download;
   expect(file.suggestedFilename()).toMatch(/^architecture-advice-\d{4}-\d{2}-\d{2}\.json$/);
@@ -114,6 +115,7 @@ test("Copy link reopens the same result in a fresh browser, and a broken link sa
   await page.context().grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/advisor?example=ticketing");
   await expect(page.getByRole("heading", { level: 1, name: "Space-based architecture" })).toBeVisible();
+  await page.getByRole("button", { name: "Share & save" }).click();
   await page.getByRole("button", { name: "Copy link" }).click();
   await expect(page.getByRole("button", { name: "Link copied" })).toBeVisible();
   const link = await page.evaluate(() => navigator.clipboard.readText());
