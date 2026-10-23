@@ -130,6 +130,7 @@ Details:
 
   Mobile performance is the median of 3 runs for `/` (77–87) and `/advisor` (79–90), one run elsewhere. LCP 1.2–2.3 s and CLS ≈ 0 everywhere; what costs points is total blocking time (300–800 ms, the main thread busy running JavaScript), which swings a lot with this PC's CPU load. Session 4's run (a production build inside the cloud container) scored 96–100, so treat the mobile numbers as a range, not a regression. If mobile performance matters later, the lever is less client JavaScript at start-up (hydration), not images or layout.
 - **Screenshots:** `docs/screenshots/` (landing, form step, result with the AI explanation, trade-off table), taken from the live site by `node scripts/screenshots.mjs` with Playwright's `msedge` channel, so nothing is downloaded.
+- **Link preview (2026-10-23):** `src/app/opengraph-image.png` (1200×630, the top of `docs/screenshots/landing.png`) plus `opengraph-image.alt.txt`. Next.js turns these into `og:image` tags, so a shared link (LinkedIn, chat apps) shows the landing page instead of a blank grey box. If the landing page changes a lot, re-crop it from the new screenshot.
 
 ## As built (v1.1, 2026-10-21): owner feedback on flow and results
 The owner found the flow confusing (examples first, no way to start fresh on `/advisor`, old answers reappearing) and the AI text messy. Changes:
