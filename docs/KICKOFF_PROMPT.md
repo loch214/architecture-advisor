@@ -1,10 +1,10 @@
 # Kickoff prompt for the next build session
 
-Paste everything below the line into a new Claude Code session with the repo `loch214/architecture-advisor` (cloud) or the local folder (VS Code). Work that touches the live site (Vercel dashboard, Lighthouse or screenshots on the real URL) needs the **local** session, because the cloud container can't reach vercel.com or *.vercel.app. (Earlier kickoff prompts are in git history.)
+Paste everything below the line into a new Claude Code session with the repo `lochana-dahanayake/architecture-advisor` (cloud) or the local folder (VS Code). Work that touches the live site (Vercel dashboard, Lighthouse or screenshots on the real URL) needs the **local** session, because the cloud container can't reach vercel.com or *.vercel.app. (Earlier kickoff prompts are in git history.)
 
 ---
 
-Continue Architecture Advisor (repo loch214/architecture-advisor). v1.0 is live at https://architecture-advisor-pink.vercel.app (tag `v1.0.0`). Every push to `main` redeploys it automatically.
+Continue Architecture Advisor (repo lochana-dahanayake/architecture-advisor). v1.0 is live at https://architecture-advisor-pink.vercel.app (tag `v1.0.0`). Every push to `main` redeploys it automatically.
 
 Read first, in this order: `CLAUDE.md` (especially the commit rule: commit and push only as Lochana Dahanayake <loch214@gmail.com>, with no Claude attribution lines in commits or PRs), `docs/HANDOFF.md`, `docs/OPEN_QUESTIONS.md`, `docs/ROADMAP.md`, then `docs/UI_UX.md` and `docs/AI_INTEGRATION.md`.
 

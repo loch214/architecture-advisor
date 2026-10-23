@@ -17,7 +17,7 @@
 | Q12 | Lecture attribution | Lectures are not credited publicly. Public docs/app cite books and articles; lecture mapping lives in `docs/private/` (git-ignored) |
 | Q13 | Repo | Public GitHub repo; `lectures/` and `docs/private/` git-ignored |
 | Q17 | Cache behaviour | Never reuse a *similar* answer blindly: identical → reuse (re-validated; switchable); similar → AI verifies/adapts using the old answer as reference (AI_INTEGRATION §7) |
-| Q18 | Where building happens | Claude Code on the web (cloud credits), repo `loch214/architecture-advisor`; kickoff prompt in `docs/KICKOFF_PROMPT.md` |
+| Q18 | Where building happens | Claude Code on the web (cloud credits), repo `lochana-dahanayake/architecture-advisor`; kickoff prompt in `docs/KICKOFF_PROMPT.md` |
 
 ## Closed by build session 1 (2026-10-20)
 | # | Topic | Outcome |
