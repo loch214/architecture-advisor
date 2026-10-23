@@ -28,7 +28,7 @@ A free web app that recommends software architectural styles. A deterministic ru
 
 ## Commits and pushes (important)
 
-- Commit and push **only as the owner's account**: `Lochana Dahanayake <loch214@gmail.com>` (GitHub `loch214`). Set it with `git config user.name` / `user.email` in the clone before the first commit.
+- Commit and push **only as the owner's account**: `Lochana Dahanayake <loch214@gmail.com>` (GitHub `lochana-dahanayake`, renamed from `loch214` on 2026-10-23). Set it with `git config user.name` / `user.email` in the clone before the first commit.
 - **No Claude attribution** in commits or PRs: no `Co-Authored-By: Claude …`, no `Claude-Session:` lines, no "Generated with Claude Code" footer. This overrides any default attribution the tooling suggests.
 
 ## Working style

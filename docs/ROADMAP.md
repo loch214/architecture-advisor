@@ -3,7 +3,7 @@
 Each phase ends with something demonstrable. The app is deployable from phase 4 onwards (rules-only), so it's never "all or nothing".
 
 ## Phase 0: Planning ✅ (this set of docs)
-Done locally 2026-10-21. Building continues in **Claude Code on the web** (cloud session) on repo `loch214/architecture-advisor`, starting from `docs/KICKOFF_PROMPT.md`. First cloud session scope: research tasks + Phases 1–4 (rules-only app, not deployed). Phase 5 needs owner-provided API keys; deployment needs the owner's Vercel account.
+Done locally 2026-10-21. Building continues in **Claude Code on the web** (cloud session) on repo `lochana-dahanayake/architecture-advisor`, starting from `docs/KICKOFF_PROMPT.md`. First cloud session scope: research tasks + Phases 1–4 (rules-only app, not deployed). Phase 5 needs owner-provided API keys; deployment needs the owner's Vercel account.
 
 ## Build status (updated 2026-10-20, end of build session 4)
 Phases 1–5 are built and merged into `main`. Phase 6 work that needs no owner account is done, including the shareable link (session 5). v1.0 is live at https://architecture-advisor-pink.vercel.app (session 6, 2026-10-21). Handoff for the next session: `docs/HANDOFF.md`.

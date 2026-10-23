@@ -133,7 +133,7 @@ export default function PrivacyPage() {
 
       <p>
         The code is public on{" "}
-        <a href="https://github.com/loch214/architecture-advisor" className={link}>
+        <a href="https://github.com/lochana-dahanayake/architecture-advisor" className={link}>
           GitHub
         </a>
         , so you can check all of this yourself. More about the project is on the{" "}
